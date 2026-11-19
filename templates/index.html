@@ -1855,8 +1855,15 @@
                             <h3>🌐 Visualisasi Permukaan 3D Tegangan Feeder (Waktu vs Jarak vs Tegangan)</h3>
                             <p>Lembah tegangan terbentuk saat jam beban puncak malam (19.00), dan bukit tegangan terbentuk saat siang terik (12.00)</p>
                         </div>
+                        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap;">
+                            <span style="font-size: 11px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">Skenario 3D:</span>
+                            <button class="pv-pill active" id="btn_3d_pv" onclick="switch3DSurfaceMode('pv')">⚡ Dengan PLTS (PV Case)</button>
+                            <button class="pv-pill" id="btn_3d_base" onclick="switch3DSurfaceMode('base')">🔌 Tanpa PLTS (Base Case)</button>
+                            <button class="pv-pill" id="btn_3d_overlay" onclick="switch3DSurfaceMode('overlay')">⚖️ Bandingan Keduanya (3D)</button>
+                            <button class="pv-pill" id="btn_3d_delta" onclick="switch3DSurfaceMode('delta')">📈 Kenaikan Tegangan (ΔV)</button>
+                        </div>
                     </div>
-                    <div id="chart_3d_surface" style="width: 100%; height: 520px;"></div>
+                    <div id="chart_3d_surface" style="width: 100%; height: 540px;"></div>
                 </div>
             </div>
 
@@ -2811,41 +2818,124 @@
             renderVoltageProfileChart(currentHour);
         }
 
-        // Render 3D Surface
+        // Render 3D Surface & Mode Switcher
+        let current3DMode = 'pv'; // 'pv', 'base', 'overlay', 'delta'
+
+        function switch3DSurfaceMode(mode) {
+            current3DMode = mode;
+            document.querySelectorAll('#pane-2 .pv-pill').forEach(btn => btn.classList.remove('active'));
+            if (mode === 'pv') document.getElementById('btn_3d_pv')?.classList.add('active');
+            if (mode === 'base') document.getElementById('btn_3d_base')?.classList.add('active');
+            if (mode === 'overlay') document.getElementById('btn_3d_overlay')?.classList.add('active');
+            if (mode === 'delta') document.getElementById('btn_3d_delta')?.classList.add('active');
+
+            if (currentSimulationData) {
+                render3DSurfaceChart(currentSimulationData);
+            }
+        }
+
         function render3DSurfaceChart(data) {
+            if (!data) return;
             const hours = Array.from({length: 24}, (_, i) => i);
-            const buses = data.bus_list;
-            const zValues = [];
+            const buses = data.bus_list || [];
+
+            const zPV = [];
+            const zBase = [];
+            const zDelta = [];
 
             hours.forEach(h => {
-                const row = [];
+                const rowPV = [];
+                const rowBase = [];
+                const rowDelta = [];
                 buses.forEach(b => {
-                    row.push(data.pv_v_volt[h] ? data.pv_v_volt[h][b] : 220);
+                    const vPv = (data.pv_v_volt && data.pv_v_volt[h] && data.pv_v_volt[h][b] !== undefined) ? data.pv_v_volt[h][b] : 220.0;
+                    const vBase = (data.base_v_volt && data.base_v_volt[h] && data.base_v_volt[h][b] !== undefined) ? data.base_v_volt[h][b] : 220.0;
+                    rowPV.push(vPv);
+                    rowBase.push(vBase);
+                    rowDelta.push(parseFloat((vPv - vBase).toFixed(2)));
                 });
-                zValues.push(row);
+                zPV.push(rowPV);
+                zBase.push(rowBase);
+                zDelta.push(rowDelta);
             });
 
-            const trace3d = {
-                z: zValues,
-                x: buses,
-                y: hours,
-                type: 'surface',
-                colorscale: 'Viridis'
-            };
+            let traces = [];
+            let chartTitle = 'Permukaan 3D: Waktu vs Tiang vs Tegangan (Volt) - Dengan PLTS (PV Case)';
+            let zAxisTitle = 'Tegangan (V)';
+
+            if (current3DMode === 'base') {
+                chartTitle = 'Permukaan 3D: Waktu vs Tiang vs Tegangan (Volt) - Tanpa PLTS (Base Case)';
+                traces.push({
+                    z: zBase,
+                    x: buses,
+                    y: hours,
+                    type: 'surface',
+                    name: 'Tanpa PLTS (Base)',
+                    colorscale: 'Cividis',
+                    colorbar: { title: 'Tegangan Base (V)', len: 0.8 }
+                });
+            } else if (current3DMode === 'overlay') {
+                chartTitle = 'Bandingan Permukaan 3D: Dengan PLTS (Solid) vs Tanpa PLTS (Transparan)';
+                traces.push({
+                    z: zPV,
+                    x: buses,
+                    y: hours,
+                    type: 'surface',
+                    name: 'Dengan PLTS',
+                    colorscale: 'Viridis',
+                    opacity: 0.9,
+                    colorbar: { title: 'Dengan PLTS (V)', len: 0.7, y: 0.65 }
+                });
+                traces.push({
+                    z: zBase,
+                    x: buses,
+                    y: hours,
+                    type: 'surface',
+                    name: 'Tanpa PLTS',
+                    colorscale: 'Cividis',
+                    opacity: 0.55,
+                    showscale: false
+                });
+            } else if (current3DMode === 'delta') {
+                chartTitle = 'Permukaan 3D: Peningkatan Tegangan Akibat PLTS (ΔV = V_PLTS - V_Base)';
+                zAxisTitle = 'Kenaikan ΔV (Volt)';
+                traces.push({
+                    z: zDelta,
+                    x: buses,
+                    y: hours,
+                    type: 'surface',
+                    name: 'Kenaikan Tegangan ΔV',
+                    colorscale: 'Plasma',
+                    colorbar: { title: 'Kenaikan ΔV (V)', len: 0.8 }
+                });
+            } else {
+                // Default: 'pv'
+                chartTitle = 'Permukaan 3D: Waktu vs Tiang vs Tegangan (Volt) - Dengan PLTS (PV Case)';
+                traces.push({
+                    z: zPV,
+                    x: buses,
+                    y: hours,
+                    type: 'surface',
+                    name: 'Dengan PLTS (PV)',
+                    colorscale: 'Viridis',
+                    colorbar: { title: 'Tegangan PLTS (V)', len: 0.8 }
+                });
+            }
 
             const layout = {
-                title: 'Permukaan 3D: Waktu vs Tiang vs Tegangan (Volt)',
+                title: chartTitle,
                 scene: {
-                    xaxis: { title: 'Bus / Tiang' },
-                    yaxis: { title: 'Jam (0-23 WIB)' },
-                    zaxis: { title: 'Tegangan (V)' }
+                    xaxis: { title: 'Tiang Feeder JTR', gridcolor: '#1E2436' },
+                    yaxis: { title: 'Waktu (0-23 WIB)', gridcolor: '#1E2436' },
+                    zaxis: { title: zAxisTitle, gridcolor: '#1E2436' }
                 },
                 paper_bgcolor: 'transparent',
-                font: { color: '#F3F4F6' },
-                margin: { l: 0, r: 0, b: 0, t: 40 }
+                font: { color: '#E2E8F0' },
+                margin: { l: 0, r: 0, b: 0, t: 40 },
+                showlegend: current3DMode === 'overlay'
             };
 
-            Plotly.newPlot('chart_3d_surface', [trace3d], layout, {responsive: true});
+            Plotly.newPlot('chart_3d_surface', traces, layout, {responsive: true});
         }
 
         // Hosting Capacity Scanner
