@@ -8,3 +8,4 @@ networkx
 scipy
 openpyxl
 python-docx
+gunicorn
