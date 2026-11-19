@@ -1,0 +1,3421 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VoltSolar-Sim Pro Enterprise v2.5 | Simulator Sistem Tenaga Distribusi JTR & PLTS Atap On-Grid</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Plotly.js -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+
+    <style>
+        :root {
+            /* Refined Dark Slate & Elegant Precision Accents (Linear / Vercel Pro Style) */
+            --bg-base: #0B0D14;
+            --bg-sidebar: #0E111B;
+            --bg-surface: #121624;
+            --bg-card: #141928;
+            --bg-card-hover: #1A2134;
+            --border: #232A3E;
+            --border-light: rgba(255, 255, 255, 0.08);
+            --border-glow: rgba(56, 189, 248, 0.35);
+            --text-main: #FFFFFF;
+            --text-muted: #94A3B8;
+            --text-sub: #64748B;
+            --primary: #38BDF8;
+            --primary-glow: rgba(56, 189, 248, 0.25);
+            --success: #10B981;
+            --success-glow: rgba(16, 185, 129, 0.25);
+            --warning: #F59E0B;
+            --danger: #EF4444;
+            --solar: #FBBF24;
+            --purple: #818CF8;
+            --font-main: 'Plus Jakarta Sans', sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: var(--font-main);
+        }
+
+        body {
+            background-color: var(--bg-base);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.04) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.03) 0px, transparent 50%);
+            color: var(--text-main);
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Glassmorphism Panel */
+        .glass-panel {
+            background: rgba(18, 22, 36, 0.85);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+        }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-base);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #232A3E;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #333D58;
+        }
+
+        /* Header */
+        header {
+            background: rgba(14, 17, 27, 0.94);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            padding: 14px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-logo {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+            color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            box-shadow: 0 0 25px rgba(2, 132, 199, 0.35);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+        }
+
+        .brand-text h1 {
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -0.4px;
+            background: linear-gradient(90deg, #FFFFFF 0%, #E2E8F0 50%, #94A3B8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .brand-text p {
+            font-size: 11px;
+            color: var(--text-muted);
+            margin-top: 1px;
+        }
+
+        .header-badges {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            letter-spacing: 0.2px;
+        }
+
+        .badge-academic {
+            background: #18181B;
+            color: #FFFFFF;
+            border: 1px solid #3F3F46;
+        }
+
+        .badge-live {
+            background: #18181B;
+            color: #E4E4E7;
+            border: 1px solid #3F3F46;
+        }
+
+        .badge-bmkg {
+            background: #18181B;
+            color: #E4E4E7;
+            border: 1px solid #3F3F46;
+        }
+
+        .pulse-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #FFFFFF;
+            box-shadow: 0 0 10px #FFFFFF;
+            animation: pulse 1.6s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.85); opacity: 0.7; }
+            50% { transform: scale(1.35); opacity: 1; }
+            100% { transform: scale(0.85); opacity: 0.7; }
+        }
+
+        /* Layout */
+        .app-layout {
+            display: flex;
+            flex: 1;
+            height: calc(100vh - 73px);
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        aside.sidebar {
+            width: 380px;
+            min-width: 380px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border);
+            overflow-y: auto;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        /* Skenario Preset Selector */
+        .scenario-box {
+            background: #0E0E11;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+        }
+
+        .scenario-box-title {
+            font-size: 11px;
+            font-weight: 700;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .scenario-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .btn-scenario {
+            background: #141416;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            border-radius: 6px;
+            padding: 7px 8px;
+            font-size: 10.5px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: left;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-scenario:hover {
+            background: #1E2436;
+            color: #FFFFFF;
+            border-color: #38BDF8;
+        }
+
+        .btn-scenario.active {
+            background: #0284C7;
+            color: #FFFFFF;
+            border-color: #38BDF8;
+            font-weight: 700;
+            box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+        }
+
+        /* Sidebar Panels */
+        .panel-card {
+            background: #0E0E11;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 14px 16px;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .panel-card:hover {
+            border-color: #3F3F46;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+        }
+
+        .panel-title {
+            font-size: 11.5px;
+            font-weight: 700;
+            color: #FFFFFF;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-row {
+            margin-bottom: 13px;
+        }
+
+        .form-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-label {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #A1A1AA;
+            margin-bottom: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-label span.metric-pill {
+            color: #FFFFFF;
+            font-family: var(--font-mono);
+            font-weight: 700;
+            font-size: 11px;
+            background: #18181B;
+            padding: 2px 7px;
+            border-radius: 4px;
+            border: 1px solid #27272A;
+        }
+
+        select, input[type="text"], input[type="number"] {
+            width: 100%;
+            background: #121214;
+            border: 1px solid #27272A;
+            border-radius: var(--radius-sm);
+            color: #FFFFFF;
+            padding: 7px 11px;
+            font-size: 11.5px;
+            outline: none;
+            transition: all 0.2s;
+        }
+
+        select:focus, input:focus {
+            border-color: #FFFFFF;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.15);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            accent-color: #FFFFFF;
+            height: 4px;
+            border-radius: 2px;
+            background: #27272A;
+            outline: none;
+            cursor: pointer;
+        }
+
+        /* Modern iOS-Style Switch Toggle */
+        .switch-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            user-select: none;
+            margin-top: 6px;
+        }
+
+        .switch-label {
+            font-size: 11.5px;
+            font-weight: 600;
+            color: #E4E4E7;
+        }
+
+        .switch-toggle {
+            position: relative;
+            display: inline-block;
+            width: 38px;
+            height: 20px;
+        }
+
+        .switch-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider-round {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #27272A;
+            transition: .3s;
+            border-radius: 20px;
+        }
+
+        .slider-round:before {
+            position: absolute;
+            content: "";
+            height: 14px;
+            width: 14px;
+            left: 3px;
+            bottom: 3px;
+            background-color: #71717A;
+            transition: .3s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider-round {
+            background-color: #FFFFFF;
+        }
+
+        input:checked + .slider-round:before {
+            background-color: #000000;
+            transform: translateX(18px);
+        }
+
+        /* BMKG Live Forecast Ribbon */
+        .bmkg-widget {
+            background: linear-gradient(135deg, #141928 0%, #0E111B 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .bmkg-widget-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #E4E4E7;
+            margin-bottom: 8px;
+        }
+
+        .bmkg-main-stat {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .bmkg-icon {
+            font-size: 28px;
+        }
+
+        .bmkg-text {
+            font-size: 11px;
+            line-height: 1.4;
+            color: #A1A1AA;
+        }
+
+        .bmkg-text b {
+            color: #FFFFFF;
+        }
+
+        .forecast-ribbon {
+            display: flex;
+            gap: 6px;
+            overflow-x: auto;
+            padding-top: 6px;
+            border-top: 1px solid #27272A;
+        }
+
+        .forecast-chip {
+            background: #18181B;
+            border: 1px solid #27272A;
+            border-radius: 6px;
+            padding: 5px 6px;
+            min-width: 58px;
+            text-align: center;
+            font-size: 10px;
+        }
+
+        .forecast-chip .fc-time {
+            color: #71717A;
+            font-family: var(--font-mono);
+        }
+
+        .forecast-chip .fc-temp {
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        /* Run Button */
+        .btn-run {
+            background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+            color: #FFFFFF;
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            border-radius: var(--radius-md);
+            padding: 13px;
+            font-size: 13.5px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 4px 18px rgba(2, 132, 199, 0.35);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-run:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 24px rgba(2, 132, 199, 0.55);
+            background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+            border-color: #38BDF8;
+        }
+
+        .btn-run:active {
+            transform: translateY(0);
+        }
+
+        /* Main View */
+        main.main-viewport {
+            flex: 1;
+            overflow-y: auto;
+            padding: 22px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: #0B0D14;
+        }
+
+        /* KPI Cards Grid */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 14px;
+        }
+
+        .kpi-card {
+            background: linear-gradient(180deg, #131724 0%, #0D101A 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .kpi-card:hover {
+            border-color: #38BDF8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 4px; height: 100%;
+        }
+
+        .kpi-safe::before { background: var(--success); box-shadow: 0 0 10px var(--success-glow); }
+        .kpi-danger::before { background: var(--danger); box-shadow: 0 0 10px rgba(239, 68, 68, 0.35); }
+        .kpi-solar::before { background: var(--solar); box-shadow: 0 0 10px rgba(245, 158, 11, 0.35); }
+        .kpi-primary::before { background: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
+        .kpi-purple::before { background: var(--purple); box-shadow: 0 0 10px rgba(129, 140, 248, 0.35); }
+
+        .kpi-head {
+            font-size: 10.5px;
+            font-weight: 700;
+            color: var(--text-sub);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .kpi-num {
+            font-size: 25px;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            letter-spacing: -0.5px;
+            color: #FFFFFF;
+        }
+
+        .kpi-foot {
+            font-size: 10.5px;
+            color: var(--text-sub);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Segmented Tabs */
+        .tab-bar {
+            display: flex;
+            gap: 6px;
+            background: #0E121E;
+            padding: 5px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .tab-item {
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-muted);
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab-item:hover {
+            color: #FFFFFF;
+            background: rgba(56, 189, 248, 0.08);
+            border-color: #232A3E;
+        }
+
+        .tab-item.active {
+            color: #38BDF8;
+            background: #151D2E;
+            border: 1px solid #38BDF8;
+            font-weight: 700;
+            box-shadow: 0 2px 10px rgba(56, 189, 248, 0.2);
+        }
+
+        /* Workspace Panels */
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.25s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .content-card {
+            background: #111522;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .pv-pill {
+            padding: 5px 9px;
+            font-size: 11px;
+            border-radius: 6px;
+            background: #141926;
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        .pv-pill:hover {
+            border-color: #38BDF8;
+            color: #FFFFFF;
+        }
+        .pv-pill.active {
+            background: #0284C7;
+            border-color: #38BDF8;
+            color: #FFFFFF;
+            font-weight: 700;
+            box-shadow: 0 0 10px rgba(2, 132, 199, 0.4);
+        }
+
+        /* Top 5 Consumer Insights Styles */
+        .top5-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+        }
+
+        .top5-card {
+            background: linear-gradient(180deg, #131826 0%, #0D101A 100%);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .top5-card:hover {
+            border-color: #38BDF8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+        }
+
+        .top5-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+
+        .top5-badge {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            color: #38BDF8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            flex-shrink: 0;
+        }
+
+        .top5-meta {
+            flex: 1;
+        }
+
+        .top5-category {
+            font-size: 9.5px;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            display: block;
+        }
+
+        .top5-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-top: 1px;
+            line-height: 1.3;
+        }
+
+        .top5-question {
+            background: rgba(56, 189, 248, 0.04);
+            border-left: 2px solid #38BDF8;
+            padding: 6px 10px;
+            font-size: 11px;
+            color: #94A3B8;
+            margin-bottom: 12px;
+            border-radius: 0 6px 6px 0;
+        }
+
+        .top5-main-metric {
+            margin-bottom: 12px;
+        }
+
+        .top5-data-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            background: #0B0E17;
+            border: 1px solid #1C2336;
+            border-radius: 8px;
+            padding: 10px 8px;
+            margin-bottom: 12px;
+        }
+
+        .top5-data-item {
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .top5-label {
+            font-size: 9.5px;
+            color: #64748B;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .top5-val {
+            font-size: 13px;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: #F8FAFC;
+            margin: 2px 0;
+        }
+
+        .top5-sub {
+            font-size: 9px;
+            color: #64748B;
+        }
+
+        .top5-explanation {
+            font-size: 11px;
+            color: #94A3B8;
+            line-height: 1.45;
+            background: rgba(56, 189, 248, 0.02);
+            padding: 8px 10px;
+            border-radius: 6px;
+            border: 1px dashed #232A3E;
+            margin-bottom: 12px;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .card-title h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .card-title p {
+            font-size: 11.5px;
+            color: #71717A;
+            margin-top: 2px;
+        }
+
+        /* Animation Player Bar */
+        .player-ribbon {
+            background: #0E0E12;
+            border: 1px solid #27272A;
+            border-radius: var(--radius-md);
+            padding: 10px 18px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .btn-ctrl {
+            background: #FFFFFF;
+            color: #000000;
+            border: none;
+            border-radius: 6px;
+            padding: 7px 15px;
+            font-size: 11.5px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-ctrl:hover {
+            background: #E4E4E7;
+        }
+
+        /* Drag & Drop Topology Canvas */
+        #canvas-blueprint {
+            width: 100%;
+            height: 450px;
+            background: radial-gradient(#27272A 1.5px, transparent 1.5px);
+            background-size: 24px 24px;
+            background-color: #050507;
+            border-radius: var(--radius-md);
+            border: 2px solid #27272A;
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 16px;
+        }
+
+        .canvas-node {
+            position: absolute;
+            width: 76px;
+            height: 76px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: grab;
+            font-size: 11px;
+            font-weight: 700;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+            transition: transform 0.1s ease, box-shadow 0.1s ease;
+            z-index: 10;
+            user-select: none;
+        }
+
+        .canvas-node:active {
+            cursor: grabbing;
+            transform: scale(1.08);
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.9);
+        }
+
+        .node-trafo {
+            background: #FFFFFF;
+            border: 3px solid #E4E4E7;
+            color: #000000;
+            border-radius: 14px;
+            width: 82px;
+            height: 82px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.35);
+            font-weight: 800;
+        }
+
+        .node-bus {
+            background: #141417;
+            border: 2px solid #3F3F46;
+            color: #FFFFFF;
+        }
+
+        .node-pv {
+            background: #27272A;
+            border: 2px solid #FFFFFF;
+            color: #FFFFFF;
+            box-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+        }
+
+        .canvas-svg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .canvas-wire {
+            stroke: #52525B;
+            stroke-width: 3px;
+            stroke-linecap: round;
+        }
+
+        .canvas-wire-branch {
+            stroke: #FFFFFF;
+            stroke-width: 3px;
+            stroke-dasharray: 6 3;
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .styled-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11.5px;
+        }
+
+        .styled-table th, .styled-table td {
+            padding: 9px 13px;
+            text-align: left;
+            border-bottom: 1px solid #1E2436;
+        }
+
+        .styled-table th {
+            background: #141928;
+            color: #F1F5F9;
+            font-weight: 700;
+            border-bottom: 2px solid #232A3E;
+        }
+
+        .styled-table tr:hover {
+            background: rgba(255, 255, 255, 0.03);
+            cursor: pointer;
+        }
+
+        /* Bus Inspector Modal */
+        #bus-modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-card {
+            background: #0D0D10;
+            border: 1px solid #3F3F46;
+            border-radius: var(--radius-lg);
+            width: 460px;
+            max-width: 90vw;
+            padding: 22px;
+            box-shadow: 0 14px 40px rgba(0, 0, 0, 0.9);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-header h4 {
+            font-size: 16px;
+            font-weight: 800;
+            color: #FFFFFF;
+        }
+
+        .btn-close {
+            background: transparent;
+            border: none;
+            color: #71717A;
+            font-size: 18px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .btn-close:hover {
+            color: #FFFFFF;
+        }
+
+        .modal-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .modal-item {
+            background: #141417;
+            border: 1px solid #27272A;
+            padding: 10px 12px;
+            border-radius: 8px;
+        }
+
+        .modal-item .mi-label {
+            font-size: 10px;
+            color: #71717A;
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        .modal-item .mi-val {
+            font-size: 16px;
+            font-weight: 800;
+            font-family: var(--font-mono);
+            color: #FFFFFF;
+            margin-top: 2px;
+        }
+
+        /* Loading Spinner */
+        #loading-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .spinner-ring {
+            width: 52px;
+            height: 52px;
+            border: 4px solid #27272A;
+            border-top: 4px solid #FFFFFF;
+            border-radius: 50%;
+            animation: spin 0.75s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Buttons & Actions */
+        .btn-action {
+            background: #141417;
+            border: 1px solid #27272A;
+            color: #FFFFFF;
+            padding: 7px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 11.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            background: #1E2436;
+            border-color: #38BDF8;
+            color: #FFFFFF;
+        }
+
+        .btn-primary {
+            background: #0284C7;
+            color: #FFFFFF;
+            border: none;
+            font-weight: 700;
+        }
+        .btn-primary:hover {
+            background: #0369A1;
+        }
+
+        .btn-success {
+            background: #065F46;
+            border: 1px solid #10B981;
+            color: #FFFFFF;
+        }
+        .btn-success:hover {
+            background: #047857;
+        }
+
+        /* Footer */
+        footer {
+            background: #0B0D14;
+            border-top: 1px solid var(--border);
+            padding: 10px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #94A3B8;
+        }
+
+        @media (max-width: 1200px) {
+            .kpi-row { grid-template-columns: repeat(3, 1fr); }
+        }
+        @media (max-width: 900px) {
+            .app-layout { flex-direction: column; height: auto; }
+            aside.sidebar { width: 100%; min-width: 100%; }
+            .kpi-row { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay">
+        <div class="spinner-ring"></div>
+        <p style="font-size: 13px; font-weight: 700; color: #FFFFFF; letter-spacing: 0.3px;">Menjalankan Aliran Daya Newton-Raphson 24 Jam...</p>
+    </div>
+
+    <!-- Bus Detail Inspector Modal -->
+    <div id="bus-modal-overlay">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h4 id="m_bus_name">Detail Tiang: Tiang_1</h4>
+                <button class="btn-close" onclick="closeBusModal()">✕</button>
+            </div>
+            <div class="modal-grid">
+                <div class="modal-item">
+                    <div class="mi-label">Jarak dari Trafo</div>
+                    <div class="mi-val" id="m_bus_dist">40 m</div>
+                </div>
+                <div class="modal-item">
+                    <div class="mi-label">Fasa Terhubung</div>
+                    <div class="mi-val" id="m_bus_phase">Fasa R</div>
+                </div>
+                <div class="modal-item">
+                    <div class="mi-label">Tegangan Siang (12:00)</div>
+                    <div class="mi-val" id="m_bus_v_noon" style="color: #FFFFFF;">221.4 V</div>
+                </div>
+                <div class="modal-item">
+                    <div class="mi-label">Tegangan Puncak (19:00)</div>
+                    <div class="mi-val" id="m_bus_v_night" style="color: #A1A1AA;">217.2 V</div>
+                </div>
+                <div class="modal-item">
+                    <div class="mi-label">Beban Puncak Pelanggan</div>
+                    <div class="mi-val" id="m_bus_load">1.50 kW</div>
+                </div>
+                <div class="modal-item">
+                    <div class="mi-label">Status PLTS Atap</div>
+                    <div class="mi-val" id="m_bus_pv">2.0 kWp ☀️</div>
+                </div>
+            </div>
+            <div style="background: #141417; border: 1px solid var(--border); padding: 10px; border-radius: 8px; font-size: 11px;" id="m_bus_spln">
+                Status SPLN 1:1995: <b style="color: #FFFFFF;">✅ Memenuhi Batas Toleransi (-10% s.d. +5%)</b>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="brand-container">
+            <div class="brand-logo">⚡</div>
+            <div class="brand-text">
+                <h1>VoltSolar-Sim Pro Enterprise <span style="font-size: 11px; background: #18181B; border: 1px solid #3F3F46; color: #FFFFFF; padding: 1px 7px; border-radius: 10px; font-weight: 700;">v2.5</span></h1>
+                <p>Platform Komputasi Aliran Daya JTR (220V/380V) & Integrasi PLTS Atap On-Grid</p>
+            </div>
+        </div>
+        <div class="header-badges">
+            <div class="badge badge-academic">🎓 Teknologi Rekayasa Elektro</div>
+            <div class="badge badge-bmkg" id="badge_bmkg_city">📡 BMKG: Semarang</div>
+            <div class="badge badge-live">
+                <div class="pulse-dot"></div>
+                <span>Newton-Raphson Engine</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="app-layout">
+        <!-- Sidebar Controls -->
+        <aside class="sidebar">
+            <button class="btn-run" onclick="executeSimulation()">
+                <span>🚀</span> Jalankan Simulasi JTR
+            </button>
+
+            <!-- Skenario Cepat UAS (Key Rubric Feature) -->
+            <div class="scenario-box">
+                <div class="scenario-box-title">
+                    <span>⚡ 4 Skenario Standar Sidang UAS</span>
+                </div>
+                <div class="scenario-grid">
+                    <button class="btn-scenario active" onclick="applyScenario(1)">
+                        <span>⚪</span> 1. Beban Normal
+                    </button>
+                    <button class="btn-scenario" onclick="applyScenario(2)">
+                        <span>⚪</span> 2. Beban Puncak
+                    </button>
+                    <button class="btn-scenario" onclick="applyScenario(3)">
+                        <span>⚪</span> 3. Puncak Surya
+                    </button>
+                    <button class="btn-scenario" onclick="applyScenario(4)">
+                        <span>⚪</span> 4. Smart Grid
+                    </button>
+                </div>
+            </div>
+
+            <!-- 1. Topologi JTR -->
+            <div class="panel-card">
+                <div class="panel-title">
+                    <span>📍 1. Topologi Saluran TR</span>
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Pola Percabangan:</label>
+                    <select id="topology_type" onchange="onTopologyChange()">
+                        <option value="Linear Radial (Standar)" selected>Linear Radial (Standar)</option>
+                        <option value="Percabangan di Tiang 2 (2 Cabang)">Percabangan di Tiang 2 (2 Cabang)</option>
+                        <option value="Percabangan di Tiang 3 (2 Cabang)">Percabangan di Tiang 3 (2 Cabang)</option>
+                        <option value="Topologi Pohon Garpu">Topologi Pohon Garpu (Dual-Branch)</option>
+                        <option value="🎛️ Kustom Mandiri (Drag & Drop Canvas)">🎛️ Kustom Mandiri (Drag & Drop Canvas)</option>
+                    </select>
+                </div>
+                <div class="form-row" id="row_num_buses">
+                    <div class="form-label">Jumlah Tiang: <span class="metric-pill" id="lbl_num_buses">10 Tiang</span></div>
+                    <input type="range" id="num_buses" min="4" max="24" value="10" step="1" oninput="document.getElementById('lbl_num_buses').innerText = this.value + ' Tiang'">
+                </div>
+                <div class="form-row">
+                    <div class="form-label">Jarak Gawang (Span): <span class="metric-pill" id="lbl_span">40 m</span></div>
+                    <input type="range" id="span_length_m" min="20" max="80" value="40" step="5" oninput="document.getElementById('lbl_span').innerText = this.value + ' m'">
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Kabel Pilin JTR (SPLN):</label>
+                    <select id="cable_type">
+                        <option value="LVTC 3x70 + 1x50 mm²" selected>LVTC 3x70 + 1x50 mm² (R=0.443 Ω/km)</option>
+                        <option value="LVTC 3x50 + 1x35 mm²">LVTC 3x50 + 1x35 mm² (R=0.641 Ω/km)</option>
+                        <option value="LVTC 3x35 + 1x25 mm²">LVTC 3x35 + 1x25 mm² (R=0.868 Ω/km)</option>
+                        <option value="LVTC 3x25 + 1x25 mm²">LVTC 3x25 + 1x25 mm² (R=1.200 Ω/km)</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Trafo Distribusi 20/0.4 kV:</label>
+                    <select id="transformer_type">
+                        <option value="100 kVA (Dyn5)" selected>100 kVA (Dyn5, In=144 A)</option>
+                        <option value="50 kVA (Dyn5)">50 kVA (Dyn5, In=72 A)</option>
+                        <option value="160 kVA (Dyn5)">160 kVA (Dyn5, In=231 A)</option>
+                        <option value="200 kVA (Dyn5)">200 kVA (Dyn5, In=288 A)</option>
+                        <option value="250 kVA (Dyn5)">250 kVA (Dyn5, In=361 A)</option>
+                        <option value="400 kVA (Dyn5)">400 kVA (Dyn5, In=577 A)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 2. Beban Rumah Tangga -->
+            <div class="panel-card">
+                <div class="panel-title">
+                    <span>⚡ 2. Beban Rumah Tangga</span>
+                </div>
+                <div class="form-row">
+                    <div class="form-label">Beban Dasar per Rumah: <span class="metric-pill" id="lbl_load">1.5 kW</span></div>
+                    <input type="range" id="base_load_kw" min="0.5" max="4.0" value="1.5" step="0.1" oninput="document.getElementById('lbl_load').innerText = parseFloat(this.value).toFixed(1) + ' kW'">
+                </div>
+                <div class="form-row">
+                    <div class="form-label">Faktor Daya (Cos φ): <span class="metric-pill" id="lbl_cosphi">0.95</span></div>
+                    <input type="range" id="cos_phi" min="0.80" max="1.00" value="0.95" step="0.01" oninput="document.getElementById('lbl_cosphi').innerText = parseFloat(this.value).toFixed(2)">
+                </div>
+                <div class="switch-container">
+                    <span class="switch-label">Fluktuasi Acak Stokastik:</span>
+                    <label class="switch-toggle">
+                        <input type="checkbox" id="stochastic_load" checked>
+                        <span class="slider-round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 3. PLTS Atap & BMKG API -->
+            <div class="panel-card">
+                <div class="panel-title">
+                    <span>☀️ 3. PLTS Atap & Live BMKG</span>
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Penetrasi Inverter PLTS:</label>
+                    <select id="pv_placement_mode" onchange="onPvPlacementChange()">
+                        <option value="Semua Tiang (100% Penetrasi)" selected>Semua Tiang (100% Penetrasi)</option>
+                        <option value="Tiang Ujung Saja (50% Terakhir)">Tiang Ujung Saja (50% Terakhir)</option>
+                        <option value="Tiang Tengah Feeder">Tiang Tengah Feeder</option>
+                        <option value="Kustom / Pilihan Manual">🎛️ Kustom Pilihan Tiang (Bebas Pilih)</option>
+                    </select>
+                </div>
+
+                <!-- Container Kustom Tiang PLTS -->
+                <div id="custom_pv_box" style="display: none; margin-bottom: 12px; background: rgba(15, 23, 42, 0.7); border: 1px solid var(--border); border-radius: 8px; padding: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                        <span style="font-size: 11px; font-weight: 700; color: #F59E0B;">☀️ Pilih Tiang Ber-PLTS:</span>
+                        <div style="display: flex; gap: 4px;">
+                            <button type="button" class="btn-action" style="padding: 2px 6px; font-size: 9px;" onclick="selectAllCustomPV(true)">Semua</button>
+                            <button type="button" class="btn-action" style="padding: 2px 6px; font-size: 9px;" onclick="selectAllCustomPV(false)">Reset</button>
+                        </div>
+                    </div>
+                    <div id="custom_pv_pills_container" style="display: flex; flex-wrap: wrap; gap: 4px; max-height: 120px; overflow-y: auto;">
+                        <!-- Dinamis via JS -->
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-label">Kapasitas Inverter: <span class="metric-pill" id="lbl_pv_kw">2.0 kWp</span></div>
+                    <input type="range" id="pv_capacity_kw" min="0.5" max="6.0" value="2.0" step="0.25" oninput="document.getElementById('lbl_pv_kw').innerText = parseFloat(this.value).toFixed(2) + ' kWp'">
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">Sumber Data Cuaca:</label>
+                    <select id="weather_mode" onchange="toggleWeatherMode()">
+                        <option value="bmkg" selected>🌐 Live API BMKG (Real-Time Indonesia)</option>
+                        <option value="manual">🔘 Preset Standar Manual</option>
+                    </select>
+                </div>
+
+                <!-- BMKG Live Widget with Forecast Ribbon -->
+                <div id="bmkg_box" class="bmkg-widget">
+                    <div class="bmkg-widget-top">
+                        <span>📡 BMKG OPEN DATA API</span>
+                        <button class="btn-action" style="padding: 2px 7px; font-size: 10px;" onclick="loadBMKGWeather()">Refresh</button>
+                    </div>
+                    <div class="form-row" style="margin-bottom: 8px;">
+                        <select id="weather_city" onchange="loadBMKGWeather()" style="font-size: 11px; padding: 4px 8px;">
+                            <option value="Jakarta Pusat">DKI Jakarta (Jakarta Pusat)</option>
+                            <option value="Semarang" selected>Jawa Tengah (Semarang)</option>
+                            <option value="Surabaya">Jawa Timur (Surabaya)</option>
+                            <option value="Bandung">Jawa Barat (Bandung)</option>
+                            <option value="Yogyakarta">DI Yogyakarta (Yogyakarta)</option>
+                            <option value="Denpasar">Bali (Denpasar)</option>
+                            <option value="Medan">Sumatera Utara (Medan)</option>
+                            <option value="Makassar">Sulawesi Selatan (Makassar)</option>
+                        </select>
+                    </div>
+                    <div class="bmkg-main-stat">
+                        <div class="bmkg-icon" id="bmkg_icon">☀️</div>
+                        <div class="bmkg-text" id="bmkg_desc_box">
+                            Memuat data BMKG...
+                        </div>
+                    </div>
+                    <!-- 24h Forecast Ribbon -->
+                    <div class="forecast-ribbon" id="bmkg_ribbon">
+                        <!-- Dinamis via JS -->
+                    </div>
+                </div>
+
+                <div class="form-row" id="manual_weather_box" style="display: none; margin-top: 10px;">
+                    <label class="form-label">Kondisi Cuaca Manual:</label>
+                    <select id="weather_condition">
+                        <option value="Cerah Maksimal">Cerah Maksimal (Faktor 1.00)</option>
+                        <option value="Cerah Berawan">Cerah Berawan (Faktor 0.80)</option>
+                        <option value="Berawan Tebal">Berawan Tebal (Faktor 0.50)</option>
+                        <option value="Hujan / Mendung">Hujan / Mendung (Faktor 0.20)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- 4. Smart Grid Features -->
+            <div class="panel-card">
+                <div class="panel-title">
+                    <span>🔋 4. BESS & Smart Inverter</span>
+                </div>
+                <div class="switch-container">
+                    <span class="switch-label">BESS (Baterai Rumah Tangga):</span>
+                    <label class="switch-toggle">
+                        <input type="checkbox" id="enable_bess" onchange="toggleBessControls()">
+                        <span class="slider-round"></span>
+                    </label>
+                </div>
+
+                <!-- BESS Custom Capacity & Power Controls -->
+                <div id="bess_controls_box" style="display: none; margin-top: 12px; padding: 10px; background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px;">
+                    <div class="form-row">
+                        <div class="form-label">Kapasitas Baterai per Rumah: <span class="metric-pill" id="lbl_bess_cap">5.0 kWh</span></div>
+                        <input type="range" id="bess_cap_kwh" min="1.0" max="20.0" value="5.0" step="0.5" oninput="document.getElementById('lbl_bess_cap').innerText = parseFloat(this.value).toFixed(1) + ' kWh'">
+                    </div>
+                    <div class="form-row" style="margin-bottom: 0;">
+                        <div class="form-label">Daya Max Charging/Discharge: <span class="metric-pill" id="lbl_bess_kw">2.5 kW</span></div>
+                        <input type="range" id="bess_kw" min="0.5" max="10.0" value="2.5" step="0.25" oninput="document.getElementById('lbl_bess_kw').innerText = parseFloat(this.value).toFixed(2) + ' kW'">
+                    </div>
+                </div>
+
+                <div class="switch-container" style="margin-top: 10px;">
+                    <span class="switch-label">Volt-VAr Droop (IEEE 1547):</span>
+                    <label class="switch-toggle">
+                        <input type="checkbox" id="enable_volt_var">
+                        <span class="slider-round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- 5. 3-Phase & Economics -->
+            <div class="panel-card">
+                <div class="panel-title">
+                    <span>⚖️ 5. Alokasi Fasa & Parameter Finansial</span>
+                </div>
+                <div class="form-row">
+                    <label class="form-label">Distribusi Fasa Pelanggan:</label>
+                    <select id="phase_allocation_mode">
+                        <option value="Seimbang (R-S-T Bergantian)">Seimbang (R-S-T Bergantian)</option>
+                        <option value="Asimetris Ringan (Dominan Fasa R)">Asimetris Ringan (Dominan Fasa R)</option>
+                        <option value="Asimetris Berat (Beban Tidak Rata)">Asimetris Berat (Beban Tidak Rata)</option>
+                    </select>
+                </div>
+
+                <!-- Custom Parameter Tekno-Ekonomi & Emisi -->
+                <div style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px;">
+                    <div style="font-size: 11px; font-weight: 700; color: #34D399; margin-bottom: 8px;">💰 Parameter Tekno-Ekonomi & Emisi:</div>
+                    <div class="form-row">
+                        <div class="form-label">Tarif Listrik PLN: <span class="metric-pill" id="lbl_tariff">Rp 1.445 / kWh</span></div>
+                        <input type="range" id="tariff_pln" min="1000" max="3000" value="1444.7" step="25" oninput="document.getElementById('lbl_tariff').innerText = 'Rp ' + Math.round(this.value).toLocaleString('id-ID') + ' / kWh'">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-label">Biaya Investasi (CAPEX): <span class="metric-pill" id="lbl_capex">13.0 Juta/kWp</span></div>
+                        <input type="range" id="capex_kwp" min="6.0" max="25.0" value="13.0" step="0.5" oninput="document.getElementById('lbl_capex').innerText = parseFloat(this.value).toFixed(1) + ' Juta/kWp'">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-label">Faktor Emisi Grid: <span class="metric-pill" id="lbl_emission">0.85 kg/kWh</span></div>
+                        <input type="range" id="emission_factor" min="0.40" max="1.20" value="0.85" step="0.05" oninput="document.getElementById('lbl_emission').innerText = parseFloat(this.value).toFixed(2) + ' kg/kWh'">
+                    </div>
+                    <div class="form-row" style="margin-bottom: 0;">
+                        <div class="form-label">Suku Bunga Diskonto: <span class="metric-pill" id="lbl_discount">8.0%</span></div>
+                        <input type="range" id="discount_rate" min="4.0" max="15.0" value="8.0" step="0.5" oninput="document.getElementById('lbl_discount').innerText = parseFloat(this.value).toFixed(1) + '%'">
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Workspace -->
+        <main class="main-viewport">
+            
+            <!-- 5 Key KPI Metric Cards -->
+            <div class="kpi-row">
+                <div class="kpi-card kpi-safe" id="kpi_card_vmin">
+                    <div class="kpi-head">
+                        <span>⚡ Tegangan Min (Vmin)</span>
+                        <span style="font-size: 10px;" id="kpi_vmin_badge">AMAN</span>
+                    </div>
+                    <div class="kpi-num" id="kpi_vmin">218.4 V</div>
+                    <div class="kpi-foot" id="kpi_vmin_sub">Batas SPLN: ≥ 198.0 V (-10%)</div>
+                </div>
+
+                <div class="kpi-card kpi-solar" id="kpi_card_vmax">
+                    <div class="kpi-head">
+                        <span>☀️ Tegangan Max (Vmax)</span>
+                        <span style="font-size: 10px;" id="kpi_vmax_badge">NORMAL</span>
+                    </div>
+                    <div class="kpi-num" id="kpi_vmax">228.6 V</div>
+                    <div class="kpi-foot">Batas SPLN: ≤ 231.0 V (+5%)</div>
+                </div>
+
+                <div class="kpi-card kpi-primary">
+                    <div class="kpi-head">
+                        <span>📉 Rugi Teknis (Losses)</span>
+                        <span style="font-size: 10px; color: #FFFFFF;" id="kpi_loss_pct">↓ 34.2%</span>
+                    </div>
+                    <div class="kpi-num" id="kpi_losses">12.4 kWh</div>
+                    <div class="kpi-foot" id="kpi_loss_red">Hemat: 4.8 kWh / Hari</div>
+                </div>
+
+                <div class="kpi-card kpi-danger" id="kpi_card_rev">
+                    <div class="kpi-head">
+                        <span>🔄 Daya Balik (Reverse)</span>
+                        <span style="font-size: 10px;" id="kpi_rev_badge">TERDETEKSI</span>
+                    </div>
+                    <div class="kpi-num" id="kpi_rev">3.8 kW</div>
+                    <div class="kpi-foot">Ekspor Bersih ke Trafo</div>
+                </div>
+
+                <div class="kpi-card kpi-purple">
+                    <div class="kpi-head">
+                        <span>🏗️ Beban Trafo Puncak</span>
+                        <span style="font-size: 10px; color: #FFFFFF;" id="kpi_trafo_badge">OPTIMAL</span>
+                    </div>
+                    <div class="kpi-num" id="kpi_trafo_load">48.2%</div>
+                    <div class="kpi-foot">Kapasitas Aman &lt; 100%</div>
+                </div>
+            </div>
+
+            <!-- Segmented Tab Navigation -->
+            <div class="tab-bar">
+                <button class="tab-item active" onclick="switchTab(0)">💡 Info Penting Konsumen</button>
+                <button class="tab-item" onclick="switchTab(1)">📊 Ringkasan & SPLN</button>
+                <button class="tab-item" onclick="switchTab(2)">🎬 Animasi 24 Jam</button>
+                <button class="tab-item" onclick="switchTab(3)">🌐 Permukaan 3D</button>
+                <button class="tab-item" onclick="switchTab(4)">⚡ Hosting Capacity</button>
+                <button class="tab-item" onclick="switchTab(5)">🔋 BESS & Inverter</button>
+                <button class="tab-item" onclick="switchTab(6)">⚖️ Ketidakseimbangan 3-Fasa</button>
+                <button class="tab-item" onclick="switchTab(7)">💰 Tekno-Ekonomi & Emisi</button>
+                <button class="tab-item" onclick="switchTab(8)">🗺️ Topologi & Drag-Drop</button>
+                <button class="tab-item" onclick="switchTab(9)">📑 Ekspor Laporan</button>
+            </div>
+
+            <!-- Tab 0: Info Paling Penting yang Wajib Diketahui Konsumen -->
+            <div class="tab-content active" id="pane-top5">
+                <div class="content-card">
+                    <!-- Hero Executive Verdict Banner -->
+                    <div style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: var(--radius-lg); padding: 18px 22px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                        <div style="flex: 1; min-width: 280px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <span style="font-size: 11px; font-weight: 800; background: rgba(56, 189, 248, 0.18); border: 1px solid #38BDF8; color: #38BDF8; padding: 2px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px;">RINGKASAN KELAYAKAN UTAMA KONSUMEN</span>
+                                <span style="font-size: 11px; color: var(--text-muted);">• Berdasarkan Standar SPLN 1:1995</span>
+                            </div>
+                            <h2 style="font-size: 17.5px; font-weight: 800; color: #FFFFFF; line-height: 1.35;">
+                                PLTS Atap Aman Beroperasi, Menstabilkan Voltase Rumah & Menghemat Tagihan PLN
+                            </h2>
+                            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.5;">
+                                Berdasarkan komputasi aliran daya standar keteknikan PLN (SPLN 1:1995), pemasangan PLTS pada sistem JTR 220V ini memenuhi batas toleransi aman, tidak memicu kerusakan peralatan elektronik rumah, dan sangat layak secara investasi finansial.
+                            </p>
+                        </div>
+                        <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                            <div style="background: rgba(14, 22, 38, 0.85); border: 1px solid #232A3E; border-radius: 10px; padding: 10px 16px; text-align: center; min-width: 120px;">
+                                <div style="font-size: 10px; font-weight: 700; color: #64748B; text-transform: uppercase;">STATUS KEAMANAN</div>
+                                <div style="font-size: 16px; font-weight: 800; color: #10B981; font-family: var(--font-mono); margin-top: 2px;" id="hero_safety">✅ AMAN (SPLN)</div>
+                            </div>
+                            <div style="background: rgba(14, 22, 38, 0.85); border: 1px solid #232A3E; border-radius: 10px; padding: 10px 16px; text-align: center; min-width: 120px;">
+                                <div style="font-size: 10px; font-weight: 700; color: #64748B; text-transform: uppercase;">PENGHEMATAN TAHUNAN</div>
+                                <div style="font-size: 16px; font-weight: 800; color: #38BDF8; font-family: var(--font-mono); margin-top: 2px;" id="hero_savings">Rp 15,2 Juta</div>
+                            </div>
+                            <div style="background: rgba(14, 22, 38, 0.85); border: 1px solid #232A3E; border-radius: 10px; padding: 10px 16px; text-align: center; min-width: 120px;">
+                                <div style="font-size: 10px; font-weight: 700; color: #64748B; text-transform: uppercase;">WAKTU BALIK MODAL</div>
+                                <div style="font-size: 16px; font-weight: 800; color: #F59E0B; font-family: var(--font-mono); margin-top: 2px;" id="hero_payback">11.8 Tahun</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>💡 5 Informasi Paling Penting yang Wajib Diketahui Konsumen</h3>
+                            <p>Rincian kelayakan voltase, kapasitas kuota PLN, penghematan rupiah bulanan, hingga proteksi baterai rumah</p>
+                        </div>
+                        <div style="display: flex; gap: 8px;">
+                            <span class="badge" style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); color: #38BDF8; font-weight: 700;">📘 Ringkasan Konsumen</span>
+                            <button class="btn-action" onclick="executeSimulation()">🚀 Hitung Ulang Simulasi</button>
+                        </div>
+                    </div>
+
+                    <!-- 5 Key Insight Cards Grid -->
+                    <div class="top5-grid">
+                        
+                        <!-- 1. Kualitas & Keamanan Tegangan Listrik -->
+                        <div class="top5-card">
+                            <div>
+                                <div class="top5-header">
+                                    <div class="top5-badge">01</div>
+                                    <div class="top5-meta">
+                                        <span class="top5-category">KUALITAS TEGANGAN & PROTEKSI</span>
+                                        <h4 class="top5-title">Keamanan Tegangan Listrik Rumah (SPLN 1:1995)</h4>
+                                    </div>
+                                </div>
+                                <div class="top5-question">
+                                    ❓ <i>Apakah tegangan di rumah saya tetap stabil dan aman saat terik surya maupun malam hari?</i>
+                                </div>
+                                <div class="top5-main-metric">
+                                    <div id="top5_spln_badge" class="badge" style="background: #18181B; border: 1px solid #3F3F46; color: #FFFFFF; font-weight: 700; padding: 6px 12px; font-size: 12px;">
+                                        ✅ AMAN & STABIL (Sesuai SPLN)
+                                    </div>
+                                </div>
+                                <div class="top5-data-grid">
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Puncak Surya</span>
+                                        <span class="top5-val" id="top5_v_noon">221.4 V</span>
+                                        <span class="top5-sub">Batas Max 231 V</span>
+                                    </div>
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Beban Puncak</span>
+                                        <span class="top5-val" id="top5_v_night">217.2 V</span>
+                                        <span class="top5-sub">Batas Min 198 V</span>
+                                    </div>
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Fluktuasi (ΔV)</span>
+                                        <span class="top5-val" id="top5_v_delta">+2.1 V</span>
+                                        <span class="top5-sub">Regulasi Baik</span>
+                                    </div>
+                                </div>
+                                <div class="top5-explanation">
+                                    💡 <b>Arti bagi Konsumen:</b> Seluruh peralatan rumah tangga (AC, kulkas, TV, pompa) terlindungi dari lonjakan tegangan berbahaya (*overvoltage*) dan terhindar dari pemadaman proteksi inverter.
+                                </div>
+                            </div>
+                            <button class="btn-action" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 6px;" onclick="switchTab(1)">
+                                Buka Analisis SPLN & Heatmap <span>→</span>
+                            </button>
+                        </div>
+
+                        <!-- 2. Penghematan Tagihan Listrik Bulanan -->
+                        <div class="top5-card">
+                            <div>
+                                <div class="top5-header">
+                                    <div class="top5-badge">02</div>
+                                    <div class="top5-meta">
+                                        <span class="top5-category">EFISIENSI BIAYA & FINANSIAL</span>
+                                        <h4 class="top5-title">Penghematan Biaya & Pemotongan Tagihan PLN</h4>
+                                    </div>
+                                </div>
+                                <div class="top5-question">
+                                    ❓ <i>Berapa banyak rupiah yang bisa dihemat keluarga setiap bulan dan setiap tahun?</i>
+                                </div>
+                                <div class="top5-main-metric">
+                                    <div style="font-size: 20px; font-weight: 800; font-family: var(--font-mono); color: #FFFFFF;" id="top5_savings_annual">
+                                        Rp 15.163.687 / Tahun
+                                    </div>
+                                    <div style="font-size: 11px; color: #A1A1AA; margin-top: 2px;">
+                                        Estimasi: <b style="color: #FFFFFF;" id="top5_savings_monthly">Rp 1.263.640 / Bulan</b>
+                                    </div>
+                                </div>
+                                <div class="top5-data-grid">
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Tarif PLN</span>
+                                        <span class="top5-val" id="top5_tariff">Rp 1.445</span>
+                                        <span class="top5-sub">per kWh (R-1)</span>
+                                    </div>
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Total Surya</span>
+                                        <span class="top5-val" id="top5_solar_prod">10.496</span>
+                                        <span class="top5-sub">kWh / Tahun</span>
+                                    </div>
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Rugi Jaringan</span>
+                                        <span class="top5-val" id="top5_losses_red">↓ 34.2%</span>
+                                        <span class="top5-sub">Lebih Efisien</span>
+                                    </div>
+                                </div>
+                                <div class="top5-explanation">
+                                    💡 <b>Arti bagi Konsumen:</b> Tagihan listrik bulanan ke PLN turun drastis karena sebagian besar konsumsi siang hari dipasok mandiri langsung dari sinar matahari gratis.
+                                </div>
+                            </div>
+                            <button class="btn-action" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 6px;" onclick="switchTab(7)">
+                                Buka Rincian Tekno-Ekonomi <span>→</span>
+                            </button>
+                        </div>
+
+                        <!-- 3. Kuota Kapasitas PLTS yang Diizinkan -->
+                        <div class="top5-card">
+                            <div>
+                                <div class="top5-header">
+                                    <div class="top5-badge">03</div>
+                                    <div class="top5-meta">
+                                        <span class="top5-category">KUOTA SISTEM & KELAYAKAN PLN</span>
+                                        <h4 class="top5-title">Batas Maksimal Kapasitas PLTS (Hosting Capacity)</h4>
+                                    </div>
+                                </div>
+                                <div class="top5-question">
+                                    ❓ <i>Berapa daya panel surya (kWp) yang diizinkan PLN agar permohonan pasang disetujui?</i>
+                                </div>
+                                <div class="top5-main-metric">
+                                    <div style="font-size: 17px; font-weight: 800; font-family: var(--font-mono); color: #FFFFFF;" id="top5_hc_per_house">
+                                        Rekomendasi: 2.0 s.d. 3.5 kWp / Rumah
+                                    </div>
+                                </div>
+                                <div class="top5-data-grid">
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Kuota Feeder</span>
+                                        <span class="top5-val" id="top5_hc_feeder">35.0 kWp</span>
+                                        <span class="top5-sub">Batas Feeder</span>
+                                    </div>
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Beban Trafo</span>
+                                        <span class="top5-val" id="top5_trafo_loading">48.2%</span>
+                                        <span class="top5-sub">Aman &lt; 100%</span>
+                                    </div>
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Arus Balik</span>
+                                        <span class="top5-val" id="top5_reverse_power">0.0 kW</span>
+                                        <span class="top5-sub">Tanpa Ekspor Lebih</span>
+                                    </div>
+                                </div>
+                                <div class="top5-explanation">
+                                    💡 <b>Arti bagi Konsumen:</b> Menjamin permohonan izin paralel PLN dan Sertifikat Laik Operasi (SLO) disetujui karena tidak membebani trafo lingkungan secara berlebih.
+                                </div>
+                            </div>
+                            <button class="btn-action" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 6px;" onclick="switchTab(4)">
+                                Buka Scan Hosting Capacity <span>→</span>
+                            </button>
+                        </div>
+
+                        <!-- 4. Waktu Balik Modal & Nilai Investasi -->
+                        <div class="top5-card">
+                            <div>
+                                <div class="top5-header">
+                                    <div class="top5-badge">04</div>
+                                    <div class="top5-meta">
+                                        <span class="top5-category">KELAYAKAN INVESTASI JANGKA PANJANG</span>
+                                        <h4 class="top5-title">Waktu Balik Modal (Payback) & Keuntungan 25 Thn</h4>
+                                    </div>
+                                </div>
+                                <div class="top5-question">
+                                    ❓ <i>Kapan modal pemasangan panel surya saya kembali dan seberapa menguntungkan?</i>
+                                </div>
+                                <div class="top5-main-metric">
+                                    <div style="font-size: 20px; font-weight: 800; font-family: var(--font-mono); color: #FFFFFF;" id="top5_payback">
+                                        11.8 Tahun (Balik Modal)
+                                    </div>
+                                </div>
+                                <div class="top5-data-grid">
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Total CAPEX</span>
+                                        <span class="top5-val" id="top5_capex">Rp 260 Juta</span>
+                                        <span class="top5-sub">Biaya Pasang</span>
+                                    </div>
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">NPV 25 Thn</span>
+                                        <span class="top5-val" id="top5_npv">Rp 84.5 Juta</span>
+                                        <span class="top5-sub">Keuntungan Bersih</span>
+                                    </div>
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Masa Pakai</span>
+                                        <span class="top5-val">25 Tahun</span>
+                                        <span class="top5-sub">Garansi Output 80%</span>
+                                    </div>
+                                </div>
+                                <div class="top5-explanation">
+                                    💡 <b>Arti bagi Konsumen:</b> Setelah balik modal tercapai di tahun ke-11 s.d. 12, sisa 13-14 tahun berikutnya seluruh energi surya yang dihasilkan adalah keuntungan listrik murni gratis.
+                                </div>
+                            </div>
+                            <button class="btn-action" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 6px;" onclick="switchTab(7)">
+                                Buka Kurva Cashflow Investasi <span>→</span>
+                            </button>
+                        </div>
+
+                        <!-- 5. Kesiapan Baterai & Cadangan Daya Malam -->
+                        <div class="top5-card">
+                            <div>
+                                <div class="top5-header">
+                                    <div class="top5-badge">05</div>
+                                    <div class="top5-meta">
+                                        <span class="top5-category">PENYIMPAN ENERGI & CADANGAN DAYA</span>
+                                        <h4 class="top5-title">Pemanfaatan Baterai (BESS) & Mandiri Energi</h4>
+                                    </div>
+                                </div>
+                                <div class="top5-question">
+                                    ❓ <i>Apakah perlu baterai? Apa manfaatnya menyimpan listrik surya untuk malam hari?</i>
+                                </div>
+                                <div class="top5-main-metric">
+                                    <div style="font-size: 17px; font-weight: 800; font-family: var(--font-mono); color: #FFFFFF;" id="top5_bess_status">
+                                        Rekomendasi: 5.0 kWh / Rumah
+                                    </div>
+                                </div>
+                                <div class="top5-data-grid">
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Kapasitas</span>
+                                        <span class="top5-val" id="top5_bess_cap">5.0 kWh</span>
+                                        <span class="top5-sub">LiFePO4 Safe</span>
+                                    </div>
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Daya Maks</span>
+                                        <span class="top5-val" id="top5_bess_power">± 2.5 kW</span>
+                                        <span class="top5-sub">Charge/Discharge</span>
+                                    </div>
+                                    <div class="top5-data-item">
+                                        <span class="top5-label">Efisiensi</span>
+                                        <span class="top5-val">92.0%</span>
+                                        <span class="top5-sub">DoD Aman 80%</span>
+                                    </div>
+                                </div>
+                                <div class="top5-explanation">
+                                    💡 <b>Arti bagi Konsumen:</b> Listrik surya yang berlebih di siang hari disimpan di baterai untuk dipakai sendiri saat jam beban puncak malam (17:00–22:00 WIB), menghemat tagihan sekaligus cadangan darurat.
+                                </div>
+                            </div>
+                            <button class="btn-action" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 6px;" onclick="switchTab(5)">
+                                Buka Simulasi BESS & Kurva SoC <span>→</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                    <!-- Environmental & Grid Benefit Banner -->
+                    <div style="background: #111114; border: 1px solid #27272A; border-radius: var(--radius-md); padding: 16px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 14px; margin-top: 20px;">
+                        <div style="display: flex; align-items: center; gap: 14px;">
+                            <span style="font-size: 32px;">🌱</span>
+                            <div>
+                                <div style="font-size: 13px; font-weight: 700; color: #FFFFFF;">Kontribusi Keberlanjutan & Reduksi Emisi Karbon Lingkungan</div>
+                                <div style="font-size: 11.5px; color: #A1A1AA; margin-top: 2px;">
+                                    Integrasi PLTS atap feeder ini mereduksi emisi pembangkit fosil sebesar <b style="color: #FFFFFF;" id="top5_co2">8.83 Ton CO₂ / Tahun</b>, setara dengan menanam <b style="color: #FFFFFF;" id="top5_trees">~401 pohon dewasa</b> setiap tahun.
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-action" onclick="switchTab(7)">Pelajari Detail Lingkungan &rarr;</button>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Tab 1: Ringkasan & Tabel SPLN -->
+            <div class="tab-content" id="pane-0">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>📊 Evaluasi Kepatuhan Standar Tegangan Pelayanan SPLN 1:1995</h3>
+                            <p>Toleransi resmi PLN: -10% (198.0 V) s.d. +5% (231.0 V) terhadap tegangan nominal 220 V. Klik baris tiang untuk melihat rincian kelistrikan.</p>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="styled-table" id="tbl_spln_buses">
+                            <thead>
+                                <tr>
+                                    <th>Titik Bus / Tiang</th>
+                                    <th>Jarak dari Trafo (m)</th>
+                                    <th>Tegangan Base (Malam 19:00)</th>
+                                    <th>Tegangan PV (Siang 12:00)</th>
+                                    <th>Kenaikan Tegangan (ΔV)</th>
+                                    <th>Status SPLN 1:1995</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Dinamis via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Live Heatmap 2D Matrix Preview (Feature Upgrade) -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>🌡️ Matriks Heatmap Tegangan 24 Jam Feeder JTR (Jam vs Tiang)</h3>
+                            <p>Distribusi gradien tegangan di seluruh tiang sepanjang 24 jam</p>
+                        </div>
+                    </div>
+                    <div id="chart_heatmap_2d" style="width: 100%; height: 360px;"></div>
+                </div>
+            </div>
+
+            <!-- Tab 2: Animasi Profil Tegangan 24 Jam -->
+            <div class="tab-content" id="pane-1">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>🎬 Profil Tegangan JTR Bergerak Dinamis 24 Jam</h3>
+                            <p>Visualisasi jatuh tegangan sepanjang feeder saluran distribusi terhadap jam operasional</p>
+                        </div>
+                    </div>
+                    <div class="player-ribbon">
+                        <button class="btn-ctrl" id="btn_play" onclick="togglePlayAnimation()">▶ Play Animasi</button>
+                        <span style="font-size: 12.5px; font-weight: 700; color: #7DD3FC; min-width: 100px; font-family: var(--font-mono);" id="lbl_player_time">Pukul 12:00 WIB</span>
+                        <input type="range" id="slider_hour" min="0" max="23" value="12" style="flex: 1;" oninput="onHourSliderChange(this.value)">
+                    </div>
+                    <div id="chart_voltage_profile" style="width: 100%; height: 430px;"></div>
+                </div>
+            </div>
+
+            <!-- Tab 3: Visualisasi Permukaan 3D -->
+            <div class="tab-content" id="pane-2">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>🌐 Visualisasi Permukaan 3D Tegangan Feeder (Waktu vs Jarak vs Tegangan)</h3>
+                            <p>Lembah tegangan terbentuk saat jam beban puncak malam (19.00), dan bukit tegangan terbentuk saat siang terik (12.00)</p>
+                        </div>
+                    </div>
+                    <div id="chart_3d_surface" style="width: 100%; height: 520px;"></div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Hosting Capacity -->
+            <div class="tab-content" id="pane-3">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>⚡ Analisis Batas Kapasitas Tampung Maksimum (Hosting Capacity)</h3>
+                            <p>Penetrasi maksimum PLTS atap sebelum terjadi tegangan lebih (>231V) atau beban lebih pada trafo</p>
+                        </div>
+                        <button class="btn-action btn-primary" onclick="runHostingCapacityScan()">🔍 Jalankan Pemindaian HC</button>
+                    </div>
+                    <div id="chart_hosting_capacity" style="width: 100%; height: 420px;">
+                        <p style="text-align: center; color: var(--text-muted); padding-top: 150px;">Klik tombol "Jalankan Pemindaian HC" untuk memulai analisis inkremental.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 5: BESS & Smart Inverter -->
+            <div class="tab-content" id="pane-4">
+                <!-- BESS KPI Summary Row -->
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 20px;">
+                    <div style="background: #0E0E12; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px;">
+                        <div style="font-size: 10px; color: #71717A; text-transform: uppercase; font-weight: 700;">STATUS SISTEM BESS</div>
+                        <div style="font-size: 18px; font-weight: 800; color: #FFFFFF; margin-top: 4px;" id="bess_kpi_status">AKTIF (Normal)</div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;" id="bess_kpi_unit">Terpasang di Setiap Rumah PLTS</div>
+                    </div>
+                    <div style="background: #0E0E12; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px;">
+                        <div style="font-size: 10px; color: #71717A; text-transform: uppercase; font-weight: 700;">TOTAL KAPASITAS FEEDER</div>
+                        <div style="font-size: 18px; font-weight: 800; color: #FFFFFF; margin-top: 4px;" id="bess_kpi_total_cap">50.0 kWh</div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;" id="bess_kpi_per_house">5.0 kWh / Rumah</div>
+                    </div>
+                    <div style="background: #0E0E12; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px;">
+                        <div style="font-size: 10px; color: #71717A; text-transform: uppercase; font-weight: 700;">DAYA MAX CHARGE / DISCHARGE</div>
+                        <div style="font-size: 18px; font-weight: 800; color: #FFFFFF; margin-top: 4px;" id="bess_kpi_power">± 2.5 kW / Unit</div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">C-Rate: 0.5C (Baterai LiFePO4)</div>
+                    </div>
+                    <div style="background: #0E0E12; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 14px;">
+                        <div style="font-size: 10px; color: #71717A; text-transform: uppercase; font-weight: 700;">EFISIENSI ROUND-TRIP</div>
+                        <div style="font-size: 18px; font-weight: 800; color: #FFFFFF; margin-top: 4px;">92.0%</div>
+                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">DoD Maks: 80% (Batas Aman)</div>
+                    </div>
+                </div>
+
+                <!-- Chart 1: Operasi BESS: Daya Charging/Discharging & State of Charge (SoC) -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>🔋 Operasi BESS: Daya Charging/Discharging & State of Charge (SoC)</h3>
+                            <p>Siklus pengisian daya (charging) saat ekses surya siang hari & pengosongan (discharging) saat beban puncak malam</p>
+                        </div>
+                    </div>
+                    <div id="chart_bess_operation" style="width: 100%; height: 380px;"></div>
+                </div>
+
+                <!-- Chart 2: Dinamika 24 Jam & Pengaruh Sistem Penyimpan Baterai (BESS) -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>⏱️ Dinamika 24 Jam & Pengaruh Sistem Penyimpan Baterai (BESS)</h3>
+                            <p>Dampak penyerapan BESS terhadap daya trafo distribusi (Valley Filling siang hari & Peak Shaving malam hari)</p>
+                        </div>
+                    </div>
+                    <div id="chart_bess_dynamics" style="width: 100%; height: 380px;"></div>
+                </div>
+
+                <!-- Chart 3: Smart Inverter Volt-VAr IEEE 1547 -->
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>⚡ Injeksi/Absorpsi Reaktif Smart Inverter (IEEE 1547-2018)</h3>
+                            <p>Dukungan daya reaktif otomatis (Volt-VAr Droop) untuk menstabilkan fluktuasi tegangan lokal</p>
+                        </div>
+                    </div>
+                    <div id="chart_voltvar" style="width: 100%; height: 350px;"></div>
+                </div>
+            </div>
+
+            <!-- Tab 6: 3-Phase Unbalance -->
+            <div class="tab-content" id="pane-5">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>⚖️ Profil Arus Fasa R-S-T & Arus Kawat Netral (IN)</h3>
+                            <p>Menghitung aliran arus balik kawat netral akibat ketidakseimbangan beban residensial</p>
+                        </div>
+                    </div>
+                    <div id="chart_unbalance" style="width: 100%; height: 420px;"></div>
+                </div>
+            </div>
+
+            <!-- Tab 7: Tekno-Ekonomi & Emisi -->
+            <div class="tab-content" id="pane-6">
+                <!-- Interactive Parameter Card inside Tab 7 -->
+                <div class="content-card" style="background: #0E0E12; border: 1px solid var(--border);">
+                    <div class="card-header" style="margin-bottom: 10px;">
+                        <div class="card-title">
+                            <h3 style="color: #FFFFFF;">🎛️ Penyesuaian Parameter Finansial & Lingkungan</h3>
+                            <p>Ubah parameter di bawah ini dan klik tombol untuk langsung menghitung ulang kelayakan investasi</p>
+                        </div>
+                        <button class="btn-action btn-primary" onclick="recalculateEconomics()">🔄 Hitung Ulang Finansial</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
+                        <div>
+                            <label class="form-label">Tarif PLN (Rp/kWh):</label>
+                            <input type="number" id="tab_tariff_pln" value="1444.7" step="10" min="500" max="5000" style="width: 100%; padding: 6px 10px; background: #121214; border: 1px solid var(--border); border-radius: 6px; color: #fff;">
+                        </div>
+                        <div>
+                            <label class="form-label">CAPEX (Juta Rp / kWp):</label>
+                            <input type="number" id="tab_capex_kwp" value="13.0" step="0.5" min="5" max="30" style="width: 100%; padding: 6px 10px; background: #121214; border: 1px solid var(--border); border-radius: 6px; color: #fff;">
+                        </div>
+                        <div>
+                            <label class="form-label">Faktor Emisi (kg CO2/kWh):</label>
+                            <input type="number" id="tab_emission_factor" value="0.85" step="0.05" min="0.2" max="2.0" style="width: 100%; padding: 6px 10px; background: #121214; border: 1px solid var(--border); border-radius: 6px; color: #fff;">
+                        </div>
+                        <div>
+                            <label class="form-label">Suku Bunga Diskonto (%):</label>
+                            <input type="number" id="tab_discount_rate" value="8.0" step="0.5" min="2" max="20" style="width: 100%; padding: 6px 10px; background: #121214; border: 1px solid var(--border); border-radius: 6px; color: #fff;">
+                        </div>
+                        <div>
+                            <label class="form-label">Masa Proyek (Tahun):</label>
+                            <input type="number" id="tab_lifetime_yr" value="25" step="1" min="10" max="30" style="width: 100%; padding: 6px 10px; background: #121214; border: 1px solid var(--border); border-radius: 6px; color: #fff;">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px;">
+                    <div class="content-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3>💰 Kelayakan Finansial PLTS Atap 25 Tahun</h3>
+                                <p>Proyeksi penghematan listrik dan arus kas kumulatif</p>
+                            </div>
+                        </div>
+                        <div id="chart_cashflow" style="width: 100%; height: 360px;"></div>
+                    </div>
+                    <div class="content-card">
+                        <div class="card-header">
+                            <div class="card-title">
+                                <h3>🌱 Indikator Ekonomi & Manfaat Lingkungan</h3>
+                                <p>Ringkasan ROI, Payback, dan Reduksi CO2</p>
+                            </div>
+                        </div>
+                        <div style="display: flex; flex-direction: column; gap: 12px; padding: 6px 0;" id="econ_summary_box">
+                            <!-- Dinamis via JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 8: Topologi JTR & Drag & Drop Builder -->
+            <div class="tab-content" id="pane-7">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>🗺️ Visual Drag & Drop Custom Bus Topology Builder</h3>
+                            <p>Geser letak tiang secara bebas di atas blueprint grid, dan hubungkan percabangan kustom baru</p>
+                        </div>
+                    </div>
+
+                    <!-- Blueprint Grid Canvas -->
+                    <div id="canvas-blueprint">
+                        <svg class="canvas-svg" id="canvas-svg-layer"></svg>
+                    </div>
+
+                    <!-- Controls for Branching -->
+                    <div style="background: #0E0E12; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; margin-bottom: 20px;">
+                        <h4 style="font-size: 13px; font-weight: 700; color: #FFFFFF; margin-bottom: 12px;">🛠️ Tambah Cabang Saluran Baru (Misal: Mencabangkan Tiang 2 ke Jalur Lateral)</h4>
+                        <div style="display: flex; gap: 14px; align-items: flex-end; flex-wrap: wrap;">
+                            <div style="flex: 1; min-width: 180px;">
+                                <label class="form-label">Pilih Tiang Induk:</label>
+                                <select id="sel_parent_branch">
+                                    <option value="Trafo">Trafo 20/0.4kV</option>
+                                    <option value="Tiang_1">Tiang_1</option>
+                                    <option value="Tiang_2" selected>Tiang_2</option>
+                                </select>
+                            </div>
+                            <div style="flex: 1; min-width: 180px;">
+                                <label class="form-label">Nama Tiang Cabang Baru:</label>
+                                <input type="text" id="inp_new_bus" value="Tiang_Baru">
+                            </div>
+                            <button class="btn-action btn-success" style="padding: 9px 18px;" onclick="addCustomBranch()">🌿 Hubungkan Cabang Baru</button>
+                            <button class="btn-action" onclick="resetTopology()">🔄 Reset ke Default</button>
+                        </div>
+                    </div>
+
+                    <!-- Plotly 2D Tree Diagram -->
+                    <div id="chart_topo_tree" style="width: 100%; height: 380px;"></div>
+                </div>
+            </div>
+
+            <!-- Tab 9: Ekspor Dokumen Laporan & Proposal Konsumen -->
+            <div class="tab-content" id="pane-8">
+                <div class="content-card">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <h3>📑 Ekspor Proposal Kelayakan & Laporan Konsumen (Feasibility Study PLTS Atap)</h3>
+                            <p>Hasilkan dokumen resmi proposal teknis & finansial untuk pemilik rumah/konsumen berstandar Microsoft Word (.docx) dan Microsoft Excel (.xlsx)</p>
+                        </div>
+                    </div>
+
+                    <!-- Formulir Data Input Spesifik Konsumen & Properti -->
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+                        <!-- Kolom 1: Profil Konsumen & Lokasi Properti -->
+                        <div style="background: #141928; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 20px;">
+                            <h4 style="font-size: 13px; font-weight: 700; color: #38BDF8; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                                <span>🏠</span> Profil Pemilik & Lokasi Properti
+                            </h4>
+                            <div class="form-row">
+                                <label class="form-label">Nama Konsumen / Pemilik Properti:</label>
+                                <input type="text" id="rep_consumer_name" value="Bpk. Nala Alma Syafif" placeholder="Contoh: Bpk. Budi Santoso">
+                            </div>
+                            <div class="form-row">
+                                <label class="form-label">Alamat / Lokasi Pemasangan:</label>
+                                <input type="text" id="rep_consumer_address" value="Jl. Panorama Hijau No. 8, Kawasan Residensial, Semarang" placeholder="Alamat lengkap lokasi pemasangan">
+                            </div>
+                            <div class="form-row">
+                                <label class="form-label">No. ID Pelanggan PLN / No. Meter:</label>
+                                <input type="text" id="rep_pln_id" value="5381-0924-8810" placeholder="Nomor IDPEL 11-12 digit">
+                            </div>
+                            <div class="form-row">
+                                <label class="form-label">Golongan Tarif & Daya Terpasang PLN:</label>
+                                <select id="rep_tariff_group">
+                                    <option value="R-1/TR 1.300 VA (Rp 1.444,70 / kWh)">R-1/TR 1.300 VA (Rp 1.444,70 / kWh)</option>
+                                    <option value="R-1/TR 2.200 VA (Rp 1.444,70 / kWh)" selected>R-1/TR 2.200 VA (Rp 1.444,70 / kWh)</option>
+                                    <option value="R-2/TR 3.500 - 5.500 VA (Rp 1.699,53 / kWh)">R-2/TR 3.500 - 5.500 VA (Rp 1.699,53 / kWh)</option>
+                                    <option value="R-3/TR 6.600 VA ke atas (Rp 1.699,53 / kWh)">R-3/TR 6.600 VA ke atas (Rp 1.699,53 / kWh)</option>
+                                    <option value="B-2/TR Bisnis Rendah (Rp 1.444,70 / kWh)">B-2/TR Bisnis Rendah (Rp 1.444,70 / kWh)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Kolom 2: Kebutuhan Energi & Rencana Sistem -->
+                        <div style="background: #141928; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 20px;">
+                            <h4 style="font-size: 13px; font-weight: 700; color: #10B981; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                                <span>⚡</span> Parameter Penggunaan & Rekomendasi
+                            </h4>
+                            <div class="form-row">
+                                <label class="form-label">Rata-rata Tagihan Listrik PLN per Bulan (Rp):</label>
+                                <input type="number" id="rep_monthly_bill" value="1500000" step="50000" placeholder="Tagihan bulanan saat ini">
+                            </div>
+                            <div class="form-row">
+                                <label class="form-label">Opsi Sistem Baterai Cadangan (BESS):</label>
+                                <select id="rep_bess_choice">
+                                    <option value="Termasuk Baterai LiFePO4 5.0 kWh (Backup Darurat & Peak Shaving)" selected>Termasuk Baterai LiFePO4 5.0 kWh (Backup Darurat & Peak Shaving)</option>
+                                    <option value="Tanpa Baterai (Sistem On-Grid Murni - Ekspor/Impor)">Tanpa Baterai (Sistem On-Grid Murni - Ekspor/Impor)</option>
+                                </select>
+                            </div>
+                            <div class="form-row">
+                                <label class="form-label">Disusun / Disurvei Oleh (Konsultan / Engineer):</label>
+                                <input type="text" id="rep_consultant" value="Tim Ahli Rekayasa Sistem Tenaga Surya">
+                            </div>
+                            <div class="form-row">
+                                <label class="form-label">Catatan Lapangan & Rekomendasi Khusus:</label>
+                                <input type="text" id="rep_field_notes" value="Atap dak beton / genteng arah utara sudut 15°, bebas bayangan, proteksi SPD Kelas II & grounding < 2 Ohm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Live Proposal Summary Card (Ringkas, Jelas, Padat, dan Informatif) -->
+                    <div style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(16, 185, 129, 0.06) 100%); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-md); padding: 18px 22px; margin-bottom: 22px;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <span style="font-size: 20px;">📋</span>
+                                <div>
+                                    <div style="font-size: 13.5px; font-weight: 800; color: #FFFFFF;">Ringkasan Isi Proposal & Laporan yang Akan Diunduh</div>
+                                    <div style="font-size: 11px; color: var(--text-muted);">Data otomatis disinkronkan dari hasil komputasi aliran daya dan analisis tekno-ekonomi</div>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 8px;">
+                                <span id="rep_preview_status" style="font-size: 11px; font-weight: 800; background: rgba(16, 185, 129, 0.15); border: 1px solid #10B981; color: #10B981; padding: 4px 10px; border-radius: 20px;">✅ KEPUTUSAN: LAYAK & AMAN SPLN</span>
+                            </div>
+                        </div>
+
+                        <!-- 4 Metric Highlights -->
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;" id="rep_preview_metrics">
+                            <div style="background: #121624; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px;">
+                                <div style="font-size: 10px; color: #94A3B8; font-weight: 700; text-transform: uppercase;">PENGHEMATAN BULANAN</div>
+                                <div style="font-size: 16px; font-weight: 800; color: #10B981; font-family: var(--font-mono); margin-top: 4px;" id="rep_prev_monthly_save">~ Rp 5.27 Juta / Bln</div>
+                                <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 2px;" id="rep_prev_annual_save">Rp 63.3 Juta / Tahun</div>
+                            </div>
+                            <div style="background: #121624; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px;">
+                                <div style="font-size: 10px; color: #94A3B8; font-weight: 700; text-transform: uppercase;">WAKTU BALIK MODAL (BEP)</div>
+                                <div style="font-size: 16px; font-weight: 800; color: #38BDF8; font-family: var(--font-mono); margin-top: 4px;" id="rep_prev_payback">4.1 Tahun</div>
+                                <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 2px;" id="rep_prev_npv">NPV: Rp 416 Juta (25 Thn)</div>
+                            </div>
+                            <div style="background: #121624; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px;">
+                                <div style="font-size: 10px; color: #94A3B8; font-weight: 700; text-transform: uppercase;">RENTANG TEGANGAN SPLN</div>
+                                <div style="font-size: 16px; font-weight: 800; color: #FFFFFF; font-family: var(--font-mono); margin-top: 4px;" id="rep_prev_voltage">217.0 V – 221.1 V</div>
+                                <div style="font-size: 10.5px; color: #10B981; margin-top: 2px;">Toleransi SPLN 198V–231V</div>
+                            </div>
+                            <div style="background: #121624; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px;">
+                                <div style="font-size: 10px; color: #94A3B8; font-weight: 700; text-transform: uppercase;">KONTRIBUSI ENERGI HIJAU</div>
+                                <div style="font-size: 16px; font-weight: 800; color: #10B981; font-family: var(--font-mono); margin-top: 4px;" id="rep_prev_co2">🌱 37.05 Ton CO₂ / Thn</div>
+                                <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 2px;" id="rep_prev_trees">~1.684 Pohon Dewasa</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tombol Aksi Unduh Proposal & Audit -->
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+                        <button class="btn-action btn-success" style="padding: 13px 24px; font-size: 13px; display: flex; align-items: center; gap: 8px;" onclick="exportReport('docx')">
+                            <span>📄</span> Unduh Proposal Resmi Word (.docx)
+                        </button>
+                        <button class="btn-action" style="padding: 13px 24px; font-size: 13px; background: #065F46; border: 1px solid #10B981; color: white; display: flex; align-items: center; gap: 8px;" onclick="exportReport('excel')">
+                            <span>📊</span> Unduh Audit Kelistrikan & Finansial Excel (.xlsx)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div>VoltSolar-Sim Pro Enterprise v2.5 | Web App HTML5 + Flask REST API</div>
+        <div>Projek Praktikum Pemrograman Dasar | Teknologi Rekayasa Elektro</div>
+    </footer>
+
+    <!-- Interactive Client JavaScript -->
+    <script>
+        let currentSimulationData = null;
+        let selectedCustomPVBuses = [];
+        let activeBranches = [
+            {"from": "Trafo", "to": "Tiang_1"},
+            {"from": "Tiang_1", "to": "Tiang_2"},
+            {"from": "Tiang_2", "to": "Tiang_3"},
+            {"from": "Tiang_3", "to": "Tiang_4"},
+            {"from": "Tiang_4", "to": "Tiang_5"},
+            {"from": "Tiang_5", "to": "Tiang_6"},
+            {"from": "Tiang_6", "to": "Tiang_7"},
+            {"from": "Tiang_7", "to": "Tiang_8"},
+            {"from": "Tiang_8", "to": "Tiang_9"},
+            {"from": "Tiang_9", "to": "Tiang_10"}
+        ];
+        let animationInterval = null;
+        let isPlaying = false;
+        let currentHour = 12;
+
+        // Inisialisasi Aplikasi
+        window.addEventListener('DOMContentLoaded', () => {
+            loadBMKGWeather();
+            executeSimulation();
+        });
+
+        // Tab Switching
+        function switchTab(index) {
+            document.querySelectorAll('.tab-item').forEach((btn, idx) => {
+                btn.classList.toggle('active', idx === index);
+            });
+            document.querySelectorAll('.tab-content').forEach((pane, idx) => {
+                pane.classList.toggle('active', idx === index);
+            });
+            window.dispatchEvent(new Event('resize'));
+        }
+
+        // Toggle Weather Mode
+        function toggleWeatherMode() {
+            const mode = document.getElementById('weather_mode').value;
+            document.getElementById('bmkg_box').style.display = mode === 'bmkg' ? 'block' : 'none';
+            document.getElementById('manual_weather_box').style.display = mode === 'manual' ? 'block' : 'none';
+        }
+
+        // Kontrol Custom PLTS Tiang
+        function onPvPlacementChange() {
+            const mode = document.getElementById('pv_placement_mode').value;
+            const box = document.getElementById('custom_pv_box');
+            if (mode === "Kustom / Pilihan Manual") {
+                box.style.display = 'block';
+                renderCustomPVPills();
+            } else {
+                box.style.display = 'none';
+            }
+        }
+
+        function renderCustomPVPills() {
+            const container = document.getElementById('custom_pv_pills_container');
+            if (!container) return;
+            container.innerHTML = '';
+            const buses = (currentSimulationData && currentSimulationData.bus_list) 
+                ? currentSimulationData.bus_list 
+                : Array.from({length: parseInt(document.getElementById('num_buses').value)}, (_, i) => `Tiang_${i+1}`);
+            
+            if (selectedCustomPVBuses.length === 0) {
+                selectedCustomPVBuses = buses.slice(0, Math.ceil(buses.length / 2));
+            }
+            
+            buses.forEach(b => {
+                const isSelected = selectedCustomPVBuses.includes(b);
+                const pill = document.createElement('div');
+                pill.className = `pv-pill ${isSelected ? 'active' : ''}`;
+                pill.innerText = isSelected ? `☀️ ${b}` : b;
+                pill.onclick = () => {
+                    if (selectedCustomPVBuses.includes(b)) {
+                        selectedCustomPVBuses = selectedCustomPVBuses.filter(item => item !== b);
+                    } else {
+                        selectedCustomPVBuses.push(b);
+                    }
+                    renderCustomPVPills();
+                };
+                container.appendChild(pill);
+            });
+        }
+
+        function selectAllCustomPV(selectAll) {
+            const buses = (currentSimulationData && currentSimulationData.bus_list) 
+                ? currentSimulationData.bus_list 
+                : Array.from({length: parseInt(document.getElementById('num_buses').value)}, (_, i) => `Tiang_${i+1}`);
+            if (selectAll) {
+                selectedCustomPVBuses = [...buses];
+            } else {
+                selectedCustomPVBuses = [];
+            }
+            renderCustomPVPills();
+        }
+
+        // Kontrol BESS Toggle
+        function toggleBessControls() {
+            const isEnabled = document.getElementById('enable_bess').checked;
+            const box = document.getElementById('bess_controls_box');
+            if (box) {
+                box.style.display = isEnabled ? 'block' : 'none';
+            }
+        }
+
+        // 4 Skenario Cepat Praktikum
+        function applyScenario(scenNum) {
+            document.querySelectorAll('.btn-scenario').forEach((b, idx) => {
+                b.classList.toggle('active', idx === (scenNum - 1));
+            });
+
+            if (scenNum === 1) { // Beban Normal Siang
+                document.getElementById('base_load_kw').value = 1.2;
+                document.getElementById('lbl_load').innerText = "1.2 kW";
+                document.getElementById('pv_capacity_kw').value = 0.5;
+                document.getElementById('lbl_pv_kw').innerText = "0.5 kWp";
+                document.getElementById('enable_bess').checked = false;
+                toggleBessControls();
+                document.getElementById('enable_volt_var').checked = false;
+            } else if (scenNum === 2) { // Beban Puncak Malam (Drop Tegangan Kritis)
+                document.getElementById('base_load_kw').value = 2.8;
+                document.getElementById('lbl_load').innerText = "2.8 kW";
+                document.getElementById('pv_capacity_kw').value = 1.0;
+                document.getElementById('lbl_pv_kw').innerText = "1.0 kWp";
+                document.getElementById('enable_bess').checked = false;
+                toggleBessControls();
+                document.getElementById('enable_volt_var').checked = false;
+            } else if (scenNum === 3) { // Puncak Surya Siang (Kenaikan Tegangan & Overvoltage)
+                document.getElementById('base_load_kw').value = 1.0;
+                document.getElementById('lbl_load').innerText = "1.0 kW";
+                document.getElementById('pv_capacity_kw').value = 4.5;
+                document.getElementById('lbl_pv_kw').innerText = "4.5 kWp";
+                document.getElementById('enable_bess').checked = false;
+                toggleBessControls();
+                document.getElementById('enable_volt_var').checked = false;
+            } else if (scenNum === 4) { // Smart Grid (Mitigasi Cerdas BESS + Volt-VAr)
+                document.getElementById('base_load_kw').value = 1.8;
+                document.getElementById('lbl_load').innerText = "1.8 kW";
+                document.getElementById('pv_capacity_kw').value = 3.5;
+                document.getElementById('lbl_pv_kw').innerText = "3.5 kWp";
+                document.getElementById('enable_bess').checked = true;
+                toggleBessControls();
+                if (document.getElementById('bess_cap_kwh')) {
+                    document.getElementById('bess_cap_kwh').value = 7.5;
+                    document.getElementById('lbl_bess_cap').innerText = "7.5 kWh";
+                    document.getElementById('bess_kw').value = 3.5;
+                    document.getElementById('lbl_bess_kw').innerText = "3.5 kW";
+                }
+                document.getElementById('enable_volt_var').checked = true;
+            }
+
+            executeSimulation();
+        }
+
+        // Sinkronisasi & Hitung Ulang Finansial Langsung dari Tab 7
+        function recalculateEconomics() {
+            if (document.getElementById('tab_tariff_pln')) {
+                const t = parseFloat(document.getElementById('tab_tariff_pln').value);
+                document.getElementById('tariff_pln').value = t;
+                document.getElementById('lbl_tariff').innerText = 'Rp ' + Math.round(t).toLocaleString('id-ID') + ' / kWh';
+
+                const c = parseFloat(document.getElementById('tab_capex_kwp').value);
+                document.getElementById('capex_kwp').value = c;
+                document.getElementById('lbl_capex').innerText = c.toFixed(1) + ' Juta/kWp';
+
+                const e = parseFloat(document.getElementById('tab_emission_factor').value);
+                document.getElementById('emission_factor').value = e;
+                document.getElementById('lbl_emission').innerText = e.toFixed(2) + ' kg/kWh';
+
+                const d = parseFloat(document.getElementById('tab_discount_rate').value);
+                document.getElementById('discount_rate').value = d;
+                document.getElementById('lbl_discount').innerText = d.toFixed(1) + '%';
+            }
+            executeSimulation();
+        }
+
+        // Ambil Data BMKG & Render Forecast Ribbon
+        async function loadBMKGWeather() {
+            const city = document.getElementById('weather_city').value;
+            const descBox = document.getElementById('bmkg_desc_box');
+            const iconBox = document.getElementById('bmkg_icon');
+            const ribbon = document.getElementById('bmkg_ribbon');
+            const badgeCity = document.getElementById('badge_bmkg_city');
+            badgeCity.innerText = `📡 BMKG: ${city}`;
+            descBox.innerHTML = 'Mengambil data BMKG...';
+            
+            try {
+                const res = await fetch(`/api/bmkg?city=${encodeURIComponent(city)}`);
+                const data = await res.json();
+                
+                const wDesc = data.weather_desc || 'Cerah Berawan';
+                const temp = data.temp_c || 28;
+                const tcc = data.tcc_pct || 50;
+                const factor = data.effective_solar_factor || 0.85;
+
+                let icon = '☀️';
+                if (wDesc.toLowerCase().includes('hujan')) icon = '🌧️';
+                else if (wDesc.toLowerCase().includes('petir')) icon = '⛈️';
+                else if (wDesc.toLowerCase().includes('berawan')) icon = '⛅';
+
+                iconBox.innerText = icon;
+                descBox.innerHTML = `<b>${wDesc}</b> (${temp}°C)<br>Awan (TCC): ${tcc}% | Faktor Radiasi: <b>${factor}</b>`;
+
+                // Render 6-slot forecast ribbon
+                if (data.forecast_slots && data.forecast_slots.length > 0) {
+                    ribbon.innerHTML = '';
+                    data.forecast_slots.forEach(slot => {
+                        let scIcon = '☀️';
+                        if (slot.weather_desc.toLowerCase().includes('hujan')) scIcon = '🌧️';
+                        else if (slot.weather_desc.toLowerCase().includes('berawan')) scIcon = '⛅';
+
+                        const div = document.createElement('div');
+                        div.className = 'forecast-chip';
+                        div.innerHTML = `
+                            <div class="fc-time">${slot.time}</div>
+                            <div style="font-size: 14px; margin: 2px 0;">${scIcon}</div>
+                            <div class="fc-temp">${slot.temp_c}°C</div>
+                        `;
+                        ribbon.appendChild(div);
+                    });
+                }
+            } catch (err) {
+                descBox.innerHTML = 'Mode Offline (Standar)';
+            }
+        }
+
+        // Jalankan Simulasi
+        async function executeSimulation() {
+            const overlay = document.getElementById('loading-overlay');
+            overlay.style.display = 'flex';
+
+            const payload = {
+                num_buses: parseInt(document.getElementById('num_buses').value),
+                span_length_m: parseFloat(document.getElementById('span_length_m').value),
+                cable_type: document.getElementById('cable_type').value,
+                transformer_type: document.getElementById('transformer_type').value,
+                base_load_kw: parseFloat(document.getElementById('base_load_kw').value),
+                cos_phi: parseFloat(document.getElementById('cos_phi').value),
+                stochastic_load: document.getElementById('stochastic_load').checked,
+                topology_type: document.getElementById('topology_type').value,
+                custom_branches: activeBranches,
+                pv_placement_mode: document.getElementById('pv_placement_mode').value,
+                pv_installed_buses: selectedCustomPVBuses,
+                pv_capacity_kw: parseFloat(document.getElementById('pv_capacity_kw').value),
+                weather_mode: document.getElementById('weather_mode').value,
+                weather_city: document.getElementById('weather_city').value,
+                weather_condition: document.getElementById('weather_condition').value,
+                enable_bess: document.getElementById('enable_bess').checked,
+                bess_cap_kwh: parseFloat(document.getElementById('bess_cap_kwh') ? document.getElementById('bess_cap_kwh').value : 5.0),
+                bess_kw: parseFloat(document.getElementById('bess_kw') ? document.getElementById('bess_kw').value : 2.5),
+                enable_volt_var: document.getElementById('enable_volt_var').checked,
+                phase_allocation_mode: document.getElementById('phase_allocation_mode').value,
+                tariff_pln: parseFloat(document.getElementById('tariff_pln') ? document.getElementById('tariff_pln').value : 1444.7),
+                capex_kwp: parseFloat(document.getElementById('capex_kwp') ? document.getElementById('capex_kwp').value * 1000000 : 13000000),
+                emission_factor: parseFloat(document.getElementById('emission_factor') ? document.getElementById('emission_factor').value : 0.85),
+                discount_rate: parseFloat(document.getElementById('discount_rate') ? document.getElementById('discount_rate').value : 8.0)
+            };
+
+            try {
+                const res = await fetch('/api/simulate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json();
+                overlay.style.display = 'none';
+
+                if (data.status === 'success') {
+                    currentSimulationData = data;
+                    updateDashboard(data);
+                } else {
+                    alert('Gagal menjalankan simulasi: ' + data.message);
+                }
+            } catch (err) {
+                overlay.style.display = 'none';
+                alert('Koneksi server gagal: ' + err);
+            }
+        }
+
+        // Update Ringkasan Eksekutif Top 5 Kunci Konsumen (Tab 0)
+        function updateTop5ConsumerInsights(data) {
+            const m = data.metrics || {};
+            const te = data.techno_econ || {};
+            const bess = data.bess_params || {};
+            const hourly = data.hourly_summary || [];
+
+            // 1. Kualitas & Keamanan Tegangan Listrik (SPLN 1:1995)
+            const vMin = m.min_v_volt_pv || 217.0;
+            const vMax = m.max_v_volt_pv || 221.4;
+            const isOk = m.spln_compliant_pv;
+            const deltaV = vMax - vMin;
+
+            const elSplnBadge = document.getElementById('top5_spln_badge');
+            if (elSplnBadge) {
+                elSplnBadge.innerText = isOk ? '✅ AMAN & STABIL (Sesuai SPLN)' : '⚠️ PERHATIAN (Di Luar Batas SPLN)';
+                elSplnBadge.style.color = '#FFFFFF';
+                elSplnBadge.style.background = isOk ? '#18181B' : '#27272A';
+                elSplnBadge.style.borderColor = isOk ? '#3F3F46' : '#71717A';
+            }
+            const elVNoon = document.getElementById('top5_v_noon');
+            if (elVNoon) elVNoon.innerText = `${vMax.toFixed(1)} V`;
+            const elVNight = document.getElementById('top5_v_night');
+            if (elVNight) elVNight.innerText = `${vMin.toFixed(1)} V`;
+            const elVDelta = document.getElementById('top5_v_delta');
+            if (elVDelta) elVDelta.innerText = `+${deltaV.toFixed(1)} V`;
+
+            // 2. Penghematan Tagihan Listrik Bulanan
+            const annualSavings = te.annual_savings_idr || 0;
+            const monthlySavings = annualSavings / 12;
+            const elSavAnn = document.getElementById('top5_savings_annual');
+            if (elSavAnn) elSavAnn.innerText = `Rp ${Math.round(annualSavings).toLocaleString('id-ID')} / Tahun`;
+            const elSavMon = document.getElementById('top5_savings_monthly');
+            if (elSavMon) elSavMon.innerText = `Rp ${Math.round(monthlySavings).toLocaleString('id-ID')} / Bulan`;
+            const elTariff = document.getElementById('top5_tariff');
+            if (elTariff) elTariff.innerText = `Rp ${Math.round(te.electricity_tariff_per_kwh || 1444.7).toLocaleString('id-ID')}`;
+            const elLossPct = document.getElementById('top5_losses_red');
+            if (elLossPct) elLossPct.innerText = `↓ ${(m.loss_reduction_pct || 0).toFixed(1)}%`;
+
+            // 3. Batas Maksimal Kapasitas PLTS (Hosting Capacity)
+            let maxTrafo = 0;
+            hourly.forEach(h => { if (h.Pembebanan_Trafo_Pct > maxTrafo) maxTrafo = h.Pembebanan_Trafo_Pct; });
+            const pvCapPerHouse = parseFloat(document.getElementById('pv_capacity_kw')?.value || 2.0);
+            const numPVBuses = (data.pv_installed_buses || []).length || 5;
+            const totalFeederPV = numPVBuses * pvCapPerHouse;
+            
+            const elHcHouse = document.getElementById('top5_hc_per_house');
+            if (elHcHouse) elHcHouse.innerText = `Rekomendasi: ${pvCapPerHouse.toFixed(1)} s.d. ${(pvCapPerHouse + 1.5).toFixed(1)} kWp / Rumah`;
+            const elHcFeeder = document.getElementById('top5_hc_feeder');
+            if (elHcFeeder) elHcFeeder.innerText = `${totalFeederPV.toFixed(1)} kWp (${numPVBuses} Rumah)`;
+            const elTrafoLoad = document.getElementById('top5_trafo_loading');
+            if (elTrafoLoad) elTrafoLoad.innerText = `${maxTrafo.toFixed(1)}%`;
+            const elRevPower = document.getElementById('top5_reverse_power');
+            if (elRevPower) elRevPower.innerText = `${(m.max_reverse_flow_kw || 0).toFixed(1)} kW`;
+
+            // 4. Waktu Balik Modal & Nilai Investasi 25 Tahun
+            const payback = te.payback_period_years || 0;
+            const npv = te.npv_25yr_idr || 0;
+            const totalCapex = te.total_capex_idr || 0;
+            const elPayback = document.getElementById('top5_payback');
+            if (elPayback) elPayback.innerText = `${payback.toFixed(1)} Tahun (Balik Modal)`;
+            const elNpv = document.getElementById('top5_npv');
+            if (elNpv) elNpv.innerText = `Rp ${Math.round(npv / 1000000).toLocaleString('id-ID')} Juta`;
+            const elCapex = document.getElementById('top5_capex');
+            if (elCapex) elCapex.innerText = `Rp ${Math.round(totalCapex / 1000000).toLocaleString('id-ID')} Juta`;
+
+            // 5. Pemanfaatan Baterai (BESS)
+            const isBessOn = m.enable_bess;
+            const bessCap = bess.capacity_kwh || 5.0;
+            const elBessStatus = document.getElementById('top5_bess_status');
+            if (elBessStatus) {
+                elBessStatus.innerText = isBessOn 
+                    ? `AKTIF: ${bessCap.toFixed(1)} kWh / Rumah` 
+                    : `NONAKTIF (Saran: ${bessCap.toFixed(1)} kWh)`;
+            }
+            const elBessCap = document.getElementById('top5_bess_cap');
+            if (elBessCap) elBessCap.innerText = `${bessCap.toFixed(1)} kWh`;
+            const elBessPower = document.getElementById('top5_bess_power');
+            if (elBessPower) elBessPower.innerText = `± ${(bess.max_kw || 2.5).toFixed(1)} kW`;
+
+            // Eco Banner
+            const elCo2 = document.getElementById('top5_co2');
+            if (elCo2) elCo2.innerText = `${(te.annual_co2_reduction_tons || 8.83).toFixed(2)} Ton CO₂ / Tahun`;
+            const elTrees = document.getElementById('top5_trees');
+            if (elTrees) elTrees.innerText = `~${te.trees_equivalent || 401} pohon dewasa`;
+
+            // Hero Verdict Banner
+            const elHeroSafety = document.getElementById('hero_safety');
+            if (elHeroSafety) elHeroSafety.innerText = isOk ? '✅ AMAN (SPLN)' : '⚠️ OVERVOLTAGE';
+            const elHeroSavings = document.getElementById('hero_savings');
+            if (elHeroSavings) elHeroSavings.innerText = `Rp ${(annualSavings / 1000000).toFixed(1)} Juta`;
+            const elHeroPayback = document.getElementById('hero_payback');
+            if (elHeroPayback) elHeroPayback.innerText = `${payback.toFixed(1)} Tahun`;
+
+            // Update Live Preview di Tab 9 (Ekspor Proposal Konsumen)
+            const elPrevMonthly = document.getElementById('rep_prev_monthly_save');
+            const elPrevAnnual = document.getElementById('rep_prev_annual_save');
+            const elPrevPayback = document.getElementById('rep_prev_payback');
+            const elPrevNpv = document.getElementById('rep_prev_npv');
+            const elPrevVolt = document.getElementById('rep_prev_voltage');
+            const elPrevCo2 = document.getElementById('rep_prev_co2');
+            const elPrevTrees = document.getElementById('rep_prev_trees');
+            const elPrevStatus = document.getElementById('rep_preview_status');
+
+            if (elPrevMonthly) elPrevMonthly.innerText = `~ Rp ${(monthlySavings / 1000000).toFixed(2)} Juta / Bln`;
+            if (elPrevAnnual) elPrevAnnual.innerText = `Rp ${(annualSavings / 1000000).toFixed(1)} Juta / Tahun`;
+            if (elPrevPayback) elPrevPayback.innerText = `${payback.toFixed(1)} Tahun (Balik Modal)`;
+            if (elPrevNpv) elPrevNpv.innerText = `NPV: Rp ${(npv / 1000000).toFixed(1)} Juta (25 Thn)`;
+            if (elPrevVolt) elPrevVolt.innerText = `${vMin.toFixed(1)} V – ${vMax.toFixed(1)} V`;
+            if (elPrevCo2) elPrevCo2.innerText = `🌱 ${(te.annual_co2_reduction_tons || 37.05).toFixed(2)} Ton CO₂ / Thn`;
+            if (elPrevTrees) elPrevTrees.innerText = `~${te.trees_equivalent || 1684} Pohon Dewasa`;
+            if (elPrevStatus) {
+                elPrevStatus.innerText = isOk ? '✅ KEPUTUSAN: LAYAK & AMAN SPLN' : '⚠️ PERLU PENYESUAIAN TEGANGAN';
+                elPrevStatus.style.borderColor = isOk ? '#10B981' : '#F59E0B';
+                elPrevStatus.style.color = isOk ? '#10B981' : '#F59E0B';
+            }
+        }
+
+        // Update Seluruh Dashboard
+        function updateDashboard(data) {
+            updateTop5ConsumerInsights(data);
+            const m = data.metrics;
+
+            // 1. KPI Cards
+            document.getElementById('kpi_vmin').innerText = m.min_v_volt_pv.toFixed(1) + ' V';
+            document.getElementById('kpi_vmax').innerText = m.max_v_volt_pv.toFixed(1) + ' V';
+            document.getElementById('kpi_losses').innerText = m.total_loss_pv_kwh.toFixed(1) + ' kWh';
+            document.getElementById('kpi_loss_pct').innerText = `↓ ${m.loss_reduction_pct.toFixed(1)}%`;
+            document.getElementById('kpi_loss_red').innerText = `Hemat: ${(m.loss_reduction_kwh).toFixed(2)} kWh/Hari`;
+            document.getElementById('kpi_rev').innerText = m.max_reverse_flow_kw.toFixed(1) + ' kW';
+
+            // Trafo loading
+            const hourly = data.hourly_summary || [];
+            let maxTrafo = 0;
+            hourly.forEach(h => { if (h.Pembebanan_Trafo_Pct > maxTrafo) maxTrafo = h.Pembebanan_Trafo_Pct; });
+            document.getElementById('kpi_trafo_load').innerText = maxTrafo.toFixed(1) + '%';
+
+            const cardVmin = document.getElementById('kpi_card_vmin');
+            const vminBadge = document.getElementById('kpi_vmin_badge');
+            if (m.spln_compliant_pv) {
+                cardVmin.className = 'kpi-card kpi-safe';
+                vminBadge.innerText = 'AMAN SPLN';
+            } else {
+                cardVmin.className = 'kpi-card kpi-danger';
+                vminBadge.innerText = 'DROP SPLN';
+            }
+
+            const cardVmax = document.getElementById('kpi_card_vmax');
+            const vmaxBadge = document.getElementById('kpi_vmax_badge');
+            if (m.max_v_volt_pv > 231.0) {
+                cardVmax.className = 'kpi-card kpi-danger';
+                vmaxBadge.innerText = 'OVERVOLTAGE';
+            } else {
+                cardVmax.className = 'kpi-card kpi-solar';
+                vmaxBadge.innerText = 'NORMAL';
+            }
+
+            // 2. Render Komponen Visual
+            renderSPLNTable(data);
+            renderHeatmap2D(data);
+            renderVoltageProfileChart(currentHour);
+            render3DSurfaceChart(data);
+            renderBessCharts(data);
+            renderVoltVarChart(data);
+            renderUnbalanceChart(data);
+            renderEconomics(data);
+            renderCanvasBuilder(data);
+            renderTreeDiagram(data);
+            updateParentBranchOptions(data.bus_list);
+
+            // Sinkronisasi nilai ke Tab 7 jika ada
+            if (document.getElementById('tab_tariff_pln')) {
+                document.getElementById('tab_tariff_pln').value = parseFloat(document.getElementById('tariff_pln').value);
+                document.getElementById('tab_capex_kwp').value = parseFloat(document.getElementById('capex_kwp').value);
+                document.getElementById('tab_emission_factor').value = parseFloat(document.getElementById('emission_factor').value);
+                document.getElementById('tab_discount_rate').value = parseFloat(document.getElementById('discount_rate').value);
+            }
+        }
+
+        // Render Tabel SPLN
+        function renderSPLNTable(data) {
+            const tbody = document.querySelector('#tbl_spln_buses tbody');
+            tbody.innerHTML = '';
+            
+            const buses = data.bus_list;
+            const dists = data.bus_distances_m;
+            const baseV = data.base_v_volt["19"] || {};
+            const pvV = data.pv_v_volt["12"] || {};
+
+            buses.forEach((b) => {
+                const vb = baseV[b] || 219.0;
+                const vp = pvV[b] || 225.0;
+                const diff = vp - vb;
+                const isCompliant = (vp >= 198.0 && vp <= 231.0) && (vb >= 198.0 && vb <= 231.0);
+                const isPV = data.pv_installed_buses.includes(b);
+
+                const tr = document.createElement('tr');
+                tr.onclick = () => openBusModal(b, dists[b] || 0, vb, vp, isPV);
+                tr.innerHTML = `
+                    <td><b>${b}</b> ${isPV ? '☀️ (PLTS)' : '🏠'}</td>
+                    <td>${(dists[b] || 0).toFixed(0)} m</td>
+                    <td>${vb.toFixed(1)} V</td>
+                    <td>${vp.toFixed(1)} V</td>
+                    <td style="color: ${diff >= 0 ? '#FFFFFF' : '#A1A1AA'}; font-weight: 700;">${diff >= 0 ? '+' : ''}${diff.toFixed(1)} V</td>
+                    <td><span class="badge" style="background: ${isCompliant ? '#18181B' : '#27272A'}; border: 1px solid ${isCompliant ? '#3F3F46' : '#71717A'}; color: #FFFFFF; font-weight: 700;">${isCompliant ? '✓ Sesuai SPLN' : '⚠️ Melanggar SPLN'}</span></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Open Bus Modal
+        function openBusModal(busName, dist, vNight, vNoon, isPV) {
+            document.getElementById('m_bus_name').innerText = `Detail Tiang: ${busName}`;
+            document.getElementById('m_bus_dist').innerText = `${dist.toFixed(0)} meter`;
+            document.getElementById('m_bus_v_noon').innerText = `${vNoon.toFixed(1)} Volt`;
+            document.getElementById('m_bus_v_night').innerText = `${vNight.toFixed(1)} Volt`;
+            document.getElementById('m_bus_pv').innerText = isPV ? `${document.getElementById('pv_capacity_kw').value} kWp ☀️` : 'Tidak Ber-PLTS 🏠';
+            document.getElementById('m_bus_load').innerText = `${document.getElementById('base_load_kw').value} kW`;
+            
+            const isOk = (vNoon >= 198.0 && vNoon <= 231.0) && (vNight >= 198.0 && vNight <= 231.0);
+            document.getElementById('m_bus_spln').innerHTML = `Status Standar SPLN 1:1995: <b style="color: ${isOk ? '#34D399' : '#F43F5E'};">${isOk ? '✅ AMAN (198 V s.d. 231 V)' : '⚠️ PELANGGARAN TEGANGAN'}</b>`;
+            
+            document.getElementById('bus-modal-overlay').style.display = 'flex';
+        }
+
+        function closeBusModal() {
+            document.getElementById('bus-modal-overlay').style.display = 'none';
+        }
+
+        // Render 2D Heatmap Matrix
+        function renderHeatmap2D(data) {
+            const hours = Array.from({length: 24}, (_, i) => `${i}:00`);
+            const buses = data.bus_list;
+            const zData = [];
+
+            buses.forEach(b => {
+                const row = [];
+                for (let h = 0; h < 24; h++) {
+                    row.push(data.pv_v_volt[h] ? data.pv_v_volt[h][b] : 220);
+                }
+                zData.push(row);
+            });
+
+            const trace = {
+                z: zData,
+                x: hours,
+                y: buses,
+                type: 'heatmap',
+                colorscale: 'Viridis',
+                colorbar: { title: 'Tegangan (V)' }
+            };
+
+            const layout = {
+                title: 'Heatmap Tegangan 24 Jam (Semua Bus Feeder JTR)',
+                xaxis: { title: 'Jam Operasional (WIB)', gridcolor: '#1E2436' },
+                yaxis: { title: 'Bus Tiang Pelanggan', gridcolor: '#1E2436' },
+                paper_bgcolor: 'transparent',
+                plot_bgcolor: '#0B0E17',
+                font: { color: '#E2E8F0' },
+                margin: { l: 70, r: 20, t: 40, b: 40 }
+            };
+
+            Plotly.newPlot('chart_heatmap_2d', [trace], layout, {responsive: true});
+        }
+
+        // Render Profil Tegangan Dinamis (Tab 2)
+        function renderVoltageProfileChart(hour) {
+            if (!currentSimulationData) return;
+            const data = currentSimulationData;
+            const buses = data.bus_list;
+            const dists = buses.map(b => data.bus_distances_m[b] || 0);
+
+            const baseVals = buses.map(b => (data.base_v_volt[hour] ? data.base_v_volt[hour][b] : 220));
+            const pvVals = buses.map(b => (data.pv_v_volt[hour] ? data.pv_v_volt[hour][b] : 220));
+
+            const maxDist = Math.max(...dists, 100);
+
+            const traceBase = {
+                x: [0, ...dists],
+                y: [220, ...baseVals],
+                mode: 'lines+markers',
+                name: 'Base Case (Tanpa PLTS)',
+                line: { color: '#64748B', width: 2.5, dash: 'dash' },
+                marker: { size: 7, color: '#94A3B8' }
+            };
+
+            const tracePV = {
+                x: [0, ...dists],
+                y: [220, ...pvVals],
+                mode: 'lines+markers',
+                name: 'PV Case (Dengan PLTS)',
+                line: { color: '#10B981', width: 3.5 },
+                marker: { size: 9, color: '#38BDF8' }
+            };
+
+            const traceUpper = {
+                x: [0, maxDist],
+                y: [231.0, 231.0],
+                mode: 'lines',
+                name: 'Batas Atas SPLN (+5% / 231 V)',
+                line: { color: '#F59E0B', width: 1.5, dash: 'dot' }
+            };
+
+            const traceLower = {
+                x: [0, maxDist],
+                y: [198.0, 198.0],
+                mode: 'lines',
+                name: 'Batas Bawah SPLN (-10% / 198 V)',
+                line: { color: '#EF4444', width: 1.5, dash: 'dot' }
+            };
+
+            const layout = {
+                title: `Profil Tegangan Feeder JTR - Pukul ${hour < 10 ? '0' : ''}${hour}:00 WIB`,
+                xaxis: { title: 'Jarak Kumulatif dari Gardu Trafo (meter)', gridcolor: '#1E2436' },
+                yaxis: { title: 'Tegangan Fasa-Netral (Volt)', range: [195, 235], gridcolor: '#1E2436' },
+                paper_bgcolor: 'transparent',
+                plot_bgcolor: '#0B0E17',
+                font: { color: '#E2E8F0' },
+                legend: { orientation: 'h', y: 1.15 }
+            };
+
+            Plotly.newPlot('chart_voltage_profile', [traceBase, tracePV, traceUpper, traceLower], layout, {responsive: true});
+        }
+
+        // Toggle Animation Player
+        function togglePlayAnimation() {
+            const btn = document.getElementById('btn_play');
+            if (isPlaying) {
+                clearInterval(animationInterval);
+                isPlaying = false;
+                btn.innerText = '▶ Play Animasi';
+                btn.style.background = '#0284C7';
+                btn.style.color = '#FFFFFF';
+            } else {
+                isPlaying = true;
+                btn.innerText = '⏸ Pause Animasi';
+                btn.style.background = '#F59E0B';
+                btn.style.color = '#FFFFFF';
+                animationInterval = setInterval(() => {
+                    currentHour = (currentHour + 1) % 24;
+                    document.getElementById('slider_hour').value = currentHour;
+                    document.getElementById('lbl_player_time').innerText = `Pukul ${currentHour < 10 ? '0' : ''}${currentHour}:00 WIB`;
+                    renderVoltageProfileChart(currentHour);
+                }, 750);
+            }
+        }
+
+        function onHourSliderChange(val) {
+            currentHour = parseInt(val);
+            document.getElementById('lbl_player_time').innerText = `Pukul ${currentHour < 10 ? '0' : ''}${currentHour}:00 WIB`;
+            renderVoltageProfileChart(currentHour);
+        }
+
+        // Render 3D Surface
+        function render3DSurfaceChart(data) {
+            const hours = Array.from({length: 24}, (_, i) => i);
+            const buses = data.bus_list;
+            const zValues = [];
+
+            hours.forEach(h => {
+                const row = [];
+                buses.forEach(b => {
+                    row.push(data.pv_v_volt[h] ? data.pv_v_volt[h][b] : 220);
+                });
+                zValues.push(row);
+            });
+
+            const trace3d = {
+                z: zValues,
+                x: buses,
+                y: hours,
+                type: 'surface',
+                colorscale: 'Viridis'
+            };
+
+            const layout = {
+                title: 'Permukaan 3D: Waktu vs Tiang vs Tegangan (Volt)',
+                scene: {
+                    xaxis: { title: 'Bus / Tiang' },
+                    yaxis: { title: 'Jam (0-23 WIB)' },
+                    zaxis: { title: 'Tegangan (V)' }
+                },
+                paper_bgcolor: 'transparent',
+                font: { color: '#F3F4F6' },
+                margin: { l: 0, r: 0, b: 0, t: 40 }
+            };
+
+            Plotly.newPlot('chart_3d_surface', [trace3d], layout, {responsive: true});
+        }
+
+        // Hosting Capacity Scanner
+        async function runHostingCapacityScan() {
+            const div = document.getElementById('chart_hosting_capacity');
+            div.innerHTML = '<p style="text-align: center; color: #7DD3FC; padding-top: 150px;">Memindai penetrasi PLTS bertahap (Newton-Raphson)...</p>';
+
+            const payload = {
+                num_buses: parseInt(document.getElementById('num_buses').value),
+                span_length_m: parseFloat(document.getElementById('span_length_m').value),
+                cable_type: document.getElementById('cable_type').value,
+                transformer_type: document.getElementById('transformer_type').value,
+                custom_branches: activeBranches
+            };
+
+            const res = await fetch('/api/hosting-capacity', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const data = await res.json();
+
+            if (data.status === 'success') {
+                const scan = data.scan_data;
+                const kwVals = scan.map(s => s.pv_kw);
+                const vMax = scan.map(s => s.v_max_volt);
+                const trafoLoad = scan.map(s => s.trafo_loading_pct);
+
+                const traceV = {
+                    x: kwVals,
+                    y: vMax,
+                    name: 'Tegangan Max (Volt)',
+                    yaxis: 'y1',
+                    line: { color: '#38BDF8', width: 3 }
+                };
+
+                const traceLoad = {
+                    x: kwVals,
+                    y: trafoLoad,
+                    name: 'Pembebanan Trafo (%)',
+                    yaxis: 'y2',
+                    line: { color: '#F59E0B', width: 2.5, dash: 'dash' }
+                };
+
+                const traceLimitV = {
+                    x: [0, Math.max(...kwVals)],
+                    y: [231.0, 231.0],
+                    name: 'Batas Atas SPLN (231 V)',
+                    line: { color: '#EF4444', width: 2, dash: 'dot' }
+                };
+
+                const layout = {
+                    title: `Hosting Capacity Maksimum: ${data.hosting_capacity_kw.toFixed(1)} kWp / Rumah (Total: ${data.total_feeder_capacity_kwp.toFixed(0)} kWp)`,
+                    xaxis: { title: 'Kapasitas Inverter per Rumah (kWp)', gridcolor: '#1E2436' },
+                    yaxis: { title: 'Tegangan Maksimum (Volt)', gridcolor: '#1E2436' },
+                    yaxis2: {
+                        title: 'Pembebanan Trafo (%)',
+                        overlaying: 'y',
+                        side: 'right',
+                        showgrid: false
+                    },
+                    paper_bgcolor: 'transparent',
+                    plot_bgcolor: '#0B0E17',
+                    font: { color: '#E2E8F0' },
+                    legend: { orientation: 'h', y: 1.15 }
+                };
+
+                Plotly.newPlot('chart_hosting_capacity', [traceV, traceLoad, traceLimitV], layout, {responsive: true});
+            }
+        }
+
+        // BESS & Smart Inverter Charts
+        function renderBessCharts(data) {
+            const hours = Array.from({length: 24}, (_, i) => i);
+            const isBessOn = data.metrics.enable_bess;
+            const bessParams = data.bess_params || {};
+            const hourly = data.hourly_summary || [];
+
+            // Update KPI cards in Tab 5
+            const statusEl = document.getElementById('bess_kpi_status');
+            const totalCapEl = document.getElementById('bess_kpi_total_cap');
+            const perHouseEl = document.getElementById('bess_kpi_per_house');
+            const powerEl = document.getElementById('bess_kpi_power');
+
+            if (statusEl) {
+                if (isBessOn) {
+                    statusEl.innerText = 'AKTIF (Beroperasi)';
+                    statusEl.style.color = '#FFFFFF';
+                } else {
+                    statusEl.innerText = 'NONAKTIF (Standby)';
+                    statusEl.style.color = '#71717A';
+                }
+            }
+            if (totalCapEl) totalCapEl.innerText = `${(bessParams.total_capacity_feeder_kwh || 0).toFixed(1)} kWh`;
+            if (perHouseEl) perHouseEl.innerText = `${(bessParams.capacity_kwh || 5.0).toFixed(1)} kWh / Rumah`;
+            if (powerEl) powerEl.innerText = `± ${(bessParams.max_kw || 2.5).toFixed(1)} kW / Unit`;
+
+            // Chart 1: Operasi BESS: Daya Charging/Discharging & State of Charge (SoC)
+            const bessFlow = data.bess_flow || [];
+            const bessSoC = data.bess_soc || [];
+
+            const chargePower = bessFlow.map(p => p < 0 ? p : 0);
+            const dischargePower = bessFlow.map(p => p > 0 ? p : 0);
+
+            const traceCharge = {
+                x: hours,
+                y: chargePower,
+                name: 'Charging / Serap Surya (kW)',
+                type: 'bar',
+                marker: { color: '#0284C7' }
+            };
+            const traceDischarge = {
+                x: hours,
+                y: dischargePower,
+                name: 'Discharging / Dukung Beban (kW)',
+                type: 'bar',
+                marker: { color: '#10B981' }
+            };
+            const traceSoC = {
+                x: hours,
+                y: bessSoC,
+                name: 'State of Charge (%)',
+                type: 'scatter',
+                mode: 'lines+markers',
+                yaxis: 'y2',
+                line: { color: '#F59E0B', width: 3 },
+                marker: { size: 6, color: '#F59E0B' }
+            };
+
+            const layoutOperation = {
+                title: isBessOn 
+                    ? 'Operasi BESS: Daya Charging/Discharging & State of Charge (SoC)' 
+                    : 'Operasi BESS: Daya Charging/Discharging & State of Charge (SoC) [Status: Nonaktif - Aktifkan di Sidebar]',
+                xaxis: { title: 'Jam Operasional (WIB)', dtick: 1, gridcolor: '#1E2436' },
+                yaxis: { title: 'Daya BESS per Rumah (kW)', gridcolor: '#1E2436' },
+                yaxis2: {
+                    title: 'State of Charge (%)',
+                    overlaying: 'y',
+                    side: 'right',
+                    range: [0, 105],
+                    showgrid: false
+                },
+                barmode: 'relative',
+                paper_bgcolor: 'transparent',
+                plot_bgcolor: '#0B0E17',
+                font: { color: '#E2E8F0' },
+                legend: { orientation: 'h', y: 1.15 }
+            };
+            Plotly.newPlot('chart_bess_operation', [traceCharge, traceDischarge, traceSoC], layoutOperation, {responsive: true});
+
+            // Chart 2: Dinamika 24 Jam & Pengaruh Sistem Penyimpan Baterai (BESS)
+            const trafoBase = hourly.map(r => r.Daya_Trafo_Base_kW || 0);
+            const trafoWithBess = hourly.map(r => r.Daya_Trafo_PV_kW || 0);
+            const totalLoad = data.total_load_curve_kw || [];
+
+            const traceTrafoBase = {
+                x: hours,
+                y: trafoBase,
+                name: 'Trafo Base Case (Tanpa PLTS/BESS)',
+                type: 'scatter',
+                line: { color: '#64748B', width: 2, dash: 'dash' }
+            };
+            const traceTrafoBess = {
+                x: hours,
+                y: trafoWithBess,
+                name: isBessOn ? 'Trafo Dengan PLTS + BESS' : 'Trafo Dengan PLTS (Tanpa BESS)',
+                type: 'scatter',
+                line: { color: '#38BDF8', width: 3 }
+            };
+            const traceTotalLoad = {
+                x: hours,
+                y: totalLoad,
+                name: 'Total Beban Konsumen JTR (kW)',
+                type: 'scatter',
+                line: { color: '#94A3B8', width: 1.5, dash: 'dot' }
+            };
+
+            const layoutDynamics = {
+                title: 'Dinamika 24 Jam & Pengaruh Sistem Penyimpan Baterai (BESS)',
+                xaxis: { title: 'Jam Operasional 24 Jam (WIB)', dtick: 1, gridcolor: '#1E2436' },
+                yaxis: { title: 'Daya Listrik Trafo & Beban (kW)', gridcolor: '#1E2436' },
+                paper_bgcolor: 'transparent',
+                plot_bgcolor: '#0B0E17',
+                font: { color: '#E2E8F0' },
+                legend: { orientation: 'h', y: 1.15 }
+            };
+            Plotly.newPlot('chart_bess_dynamics', [traceTrafoBase, traceTrafoBess, traceTotalLoad], layoutDynamics, {responsive: true});
+        }
+
+        function renderVoltVarChart(data) {
+            const hours = Array.from({length: 24}, (_, i) => i);
+            const traceQ = {
+                x: hours,
+                y: data.smart_inverter_q,
+                name: 'Daya Reaktif Q (kVAr)',
+                type: 'bar',
+                marker: { color: '#818CF8' }
+            };
+            const layout = {
+                title: 'Injeksi / Absorpsi Reaktif Smart Inverter (IEEE 1547)',
+                xaxis: { title: 'Jam (WIB)', dtick: 1, gridcolor: '#1E2436' },
+                yaxis: { title: 'Daya Reaktif (kVAr)', gridcolor: '#1E2436' },
+                paper_bgcolor: 'transparent',
+                plot_bgcolor: '#0B0E17',
+                font: { color: '#E2E8F0' }
+            };
+            Plotly.newPlot('chart_voltvar', [traceQ], layout, {responsive: true});
+        }
+
+        // 3-Phase Unbalance Chart
+        function renderUnbalanceChart(data) {
+            const hours = Array.from({length: 24}, (_, i) => i);
+            const unb = data.unbalance_res;
+
+            const traceR = { x: hours, y: unb.i_r_a, name: 'Arus Fasa R (A)', line: { color: '#F43F5E', width: 2 } };
+            const traceS = { x: hours, y: unb.i_s_a, name: 'Arus Fasa S (A)', line: { color: '#F59E0B', width: 2 } };
+            const traceT = { x: hours, y: unb.i_t_a, name: 'Arus Fasa T (A)', line: { color: '#38BDF8', width: 2 } };
+            const traceN = { x: hours, y: unb.neutral_current_a, name: 'Arus Kawat Netral IN (A)', line: { color: '#10B981', width: 3, dash: 'dash' } };
+
+            const layout = {
+                title: `Profil Arus Fasa & Arus Kawat Netral (IN Maks = ${unb.max_neutral_current_a.toFixed(1)} A)`,
+                xaxis: { title: 'Jam Operasional (WIB)', dtick: 1, gridcolor: '#1E2436' },
+                yaxis: { title: 'Arus Listrik (Ampere)', gridcolor: '#1E2436' },
+                paper_bgcolor: 'transparent',
+                plot_bgcolor: '#0B0E17',
+                font: { color: '#E2E8F0' },
+                legend: { orientation: 'h', y: 1.15 }
+            };
+
+            Plotly.newPlot('chart_unbalance', [traceR, traceS, traceT, traceN], layout, {responsive: true});
+        }
+
+        // Economics
+        function renderEconomics(data) {
+            const te = data.techno_econ;
+            const years = Array.from({length: te.lifetime_yr || 25}, (_, i) => i + 1);
+            
+            let cum = -te.total_capex_idr;
+            const cashflows = [];
+            years.forEach(() => {
+                cum += te.annual_savings_idr;
+                cashflows.push(cum / 1000000);
+            });
+
+            const traceCF = {
+                x: years,
+                y: cashflows,
+                type: 'scatter',
+                mode: 'lines+markers',
+                line: { color: '#10B981', width: 3 },
+                marker: { size: 6, color: '#38BDF8' },
+                name: 'Arus Kas Kumulatif (Juta Rp)'
+            };
+
+            const traceZero = {
+                x: [1, years.length],
+                y: [0, 0],
+                type: 'scatter',
+                mode: 'lines',
+                line: { color: '#EF4444', width: 1.5, dash: 'dash' },
+                name: 'Titik Impas (Break-Even)'
+            };
+
+            const layout = {
+                title: `Payback Period: ${te.payback_period_years.toFixed(1)} Tahun | NPV ${years.length} Thn: Rp ${(te.npv_25yr_idr/1000000).toFixed(1)} Juta`,
+                xaxis: { title: `Tahun Proyek (1-${years.length})`, gridcolor: '#1E2436' },
+                yaxis: { title: 'Kas Kumulatif (Juta Rupiah)', gridcolor: '#1E2436' },
+                paper_bgcolor: 'transparent',
+                plot_bgcolor: '#0B0E17',
+                font: { color: '#E2E8F0' }
+            };
+
+            Plotly.newPlot('chart_cashflow', [traceCF, traceZero], layout, {responsive: true});
+
+            const sumBox = document.getElementById('econ_summary_box');
+            sumBox.innerHTML = `
+                <div style="background: #141928; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border);">
+                    <div style="font-size: 10px; color: #94A3B8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">BIAYA INVESTASI AWAL (CAPEX)</div>
+                    <div style="font-size: 19px; font-weight: 800; color: #38BDF8; font-family: var(--font-mono); margin-top: 4px;">Rp ${(te.total_capex_idr).toLocaleString('id-ID')}</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Kapasitas Total: ${te.capex_per_kwp ? (te.total_capex_idr / te.capex_per_kwp).toFixed(1) : ''} kWp</div>
+                </div>
+                <div style="background: #141928; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border);">
+                    <div style="font-size: 10px; color: #94A3B8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">PENGHEMATAN LISTRIK / TAHUN</div>
+                    <div style="font-size: 19px; font-weight: 800; color: #10B981; font-family: var(--font-mono); margin-top: 4px;">Rp ${(te.annual_savings_idr).toLocaleString('id-ID')}</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Tarif PLN: Rp ${(te.electricity_tariff_per_kwh || 1444.7).toLocaleString('id-ID')} / kWh</div>
+                </div>
+                <div style="background: #141928; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border);">
+                    <div style="font-size: 10px; color: #94A3B8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">NET PRESENT VALUE (NPV 25 TAHUN)</div>
+                    <div style="font-size: 19px; font-weight: 800; color: #38BDF8; font-family: var(--font-mono); margin-top: 4px;">Rp ${(te.npv_25yr_idr).toLocaleString('id-ID')}</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Discount Rate: ${(te.discount_rate_pct || 8.0).toFixed(1)}% (${te.lifetime_yr || 25} Tahun)</div>
+                </div>
+                <div style="background: #141928; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border);">
+                    <div style="font-size: 10px; color: #94A3B8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">REDUKSI EMISI KARBON LINGKUNGAN</div>
+                    <div style="font-size: 19px; font-weight: 800; color: #10B981; font-family: var(--font-mono); margin-top: 4px;">🌱 ${(te.annual_co2_reduction_tons).toFixed(2)} Ton CO2 / Thn</div>
+                    <div style="font-size: 11px; color: #94A3B8; margin-top: 2px;">🌳 Setara menanam ~${te.trees_equivalent || 0} pohon dewasa</div>
+                </div>
+            `;
+        }
+
+        // HTML5 Drag & Drop Topology Canvas
+        function renderCanvasBuilder(data) {
+            const container = document.getElementById('canvas-blueprint');
+            const existingNodes = container.querySelectorAll('.canvas-node');
+            existingNodes.forEach(n => n.remove());
+
+            const buses = data.bus_list;
+            const nodes = [{ id: 'Trafo', label: '⚡ Trafo', type: 'trafo', x: 50, y: 180 }];
+
+            buses.forEach((b, idx) => {
+                const isPV = data.pv_installed_buses.includes(b);
+                nodes.push({
+                    id: b,
+                    label: isPV ? `${b} ☀️` : b,
+                    type: isPV ? 'pv' : 'bus',
+                    x: 100 + ((idx % 6) + 1) * 110,
+                    y: 100 + Math.floor(idx / 6) * 120 + (idx % 2 === 0 ? 30 : -20)
+                });
+            });
+
+            nodes.forEach(n => {
+                const el = document.createElement('div');
+                el.className = `canvas-node node-${n.type}`;
+                el.id = `node-${n.id}`;
+                el.style.left = n.x + 'px';
+                el.style.top = n.y + 'px';
+                el.innerHTML = `<span>${n.label}</span>`;
+                container.appendChild(el);
+
+                makeDraggable(el, () => drawWires(nodes));
+            });
+
+            drawWires(nodes);
+        }
+
+        function drawWires(nodes) {
+            const svg = document.getElementById('canvas-svg-layer');
+            svg.innerHTML = '';
+
+            activeBranches.forEach(b => {
+                const elFrom = document.getElementById(`node-${b.from}`);
+                const elTo = document.getElementById(`node-${b.to}`);
+
+                if (elFrom && elTo) {
+                    const x1 = elFrom.offsetLeft + 38;
+                    const y1 = elFrom.offsetTop + 38;
+                    const x2 = elTo.offsetLeft + 38;
+                    const y2 = elTo.offsetTop + 38;
+
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                    line.setAttribute('x1', x1);
+                    line.setAttribute('y1', y1);
+                    line.setAttribute('x2', x2);
+                    line.setAttribute('y2', y2);
+                    line.setAttribute('class', b.from === 'Tiang_2' ? 'canvas-wire-branch' : 'canvas-wire');
+                    svg.appendChild(line);
+                }
+            });
+        }
+
+        function makeDraggable(element, onDragCallback) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            element.onmousedown = dragMouseDown;
+
+            function dragMouseDown(e) {
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+
+            function elementDrag(e) {
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                element.style.top = (element.offsetTop - pos2) + "px";
+                element.style.left = (element.offsetLeft - pos1) + "px";
+                if (onDragCallback) onDragCallback();
+            }
+
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+        }
+
+        // 2D Tree Diagram
+        function renderTreeDiagram(data) {
+            const buses = data.bus_list;
+            const dists = data.bus_distances_m;
+
+            const traceLines = [];
+            activeBranches.forEach(br => {
+                const x0 = dists[br.from] || 0;
+                const x1 = dists[br.to] || 0;
+                traceLines.push({
+                    x: [x0, x1],
+                    y: [0, 0],
+                    mode: 'lines',
+                    line: { color: '#232A3E', width: 4 },
+                    hoverinfo: 'none',
+                    showlegend: false
+                });
+            });
+
+            const nodeX = [0, ...buses.map(b => dists[b] || 0)];
+            const nodeY = Array(nodeX.length).fill(0);
+            const nodeText = ['⚡ Trafo 20/0.4kV', ...buses.map(b => data.pv_installed_buses.includes(b) ? `${b} ☀️` : b)];
+
+            const traceNodes = {
+                x: nodeX,
+                y: nodeY,
+                mode: 'markers+text',
+                text: nodeText,
+                textposition: 'top center',
+                marker: {
+                    size: [24, ...Array(buses.length).fill(16)],
+                    color: ['#0284C7', ...buses.map(b => data.pv_installed_buses.includes(b) ? '#F59E0B' : '#64748B')],
+                    symbol: ['square', ...Array(buses.length).fill('circle')]
+                },
+                name: 'Komponen Saluran'
+            };
+
+            const layout = {
+                title: `Diagram Topologi Feeder JTR (${buses.length} Tiang Konsumen)`,
+                xaxis: { title: 'Jarak Terpendek dari Gardu Trafo (meter)', gridcolor: '#1E2436' },
+                yaxis: { showticklabels: false, range: [-0.3, 0.3], gridcolor: '#1E2436' },
+                paper_bgcolor: 'transparent',
+                plot_bgcolor: '#0B0E17',
+                font: { color: '#E2E8F0' },
+                showlegend: false
+            };
+
+            Plotly.newPlot('chart_topo_tree', [...traceLines, traceNodes], layout, {responsive: true});
+        }
+
+        function updateParentBranchOptions(busList) {
+            const sel = document.getElementById('sel_parent_branch');
+            sel.innerHTML = '<option value="Trafo">Trafo 20/0.4kV</option>';
+            busList.forEach(b => {
+                const opt = document.createElement('option');
+                opt.value = b;
+                opt.innerText = b;
+                sel.appendChild(opt);
+            });
+        }
+
+        function onTopologyChange() {
+            const type = document.getElementById('topology_type').value;
+            const groupBuses = document.getElementById('row_num_buses');
+
+            if (type === 'Linear Radial (Standar)') {
+                groupBuses.style.display = 'block';
+                const n = parseInt(document.getElementById('num_buses').value);
+                activeBranches = [];
+                for (let i = 1; i <= n; i++) {
+                    activeBranches.push({ from: i === 1 ? 'Trafo' : `Tiang_${i-1}`, to: `Tiang_${i}` });
+                }
+            } else if (type === 'Percabangan di Tiang 2 (2 Cabang)') {
+                groupBuses.style.display = 'none';
+                activeBranches = [
+                    {"from": "Trafo", "to": "Tiang_1"},
+                    {"from": "Tiang_1", "to": "Tiang_2"},
+                    {"from": "Tiang_2", "to": "Tiang_3"},
+                    {"from": "Tiang_3", "to": "Tiang_4"},
+                    {"from": "Tiang_2", "to": "Tiang_5"},
+                    {"from": "Tiang_5", "to": "Tiang_6"}
+                ];
+            } else if (type === 'Percabangan di Tiang 3 (2 Cabang)') {
+                groupBuses.style.display = 'none';
+                activeBranches = [
+                    {"from": "Trafo", "to": "Tiang_1"},
+                    {"from": "Tiang_1", "to": "Tiang_2"},
+                    {"from": "Tiang_2", "to": "Tiang_3"},
+                    {"from": "Tiang_3", "to": "Tiang_4"},
+                    {"from": "Tiang_4", "to": "Tiang_5"},
+                    {"from": "Tiang_3", "to": "Tiang_6"},
+                    {"from": "Tiang_6", "to": "Tiang_7"}
+                ];
+            } else if (type === 'Topologi Pohon Garpu') {
+                groupBuses.style.display = 'none';
+                activeBranches = [
+                    {"from": "Trafo", "to": "Tiang_1"},
+                    {"from": "Tiang_1", "to": "Tiang_2"},
+                    {"from": "Tiang_2", "to": "Tiang_3"},
+                    {"from": "Tiang_3", "to": "Tiang_4"},
+                    {"from": "Tiang_3", "to": "Tiang_5"},
+                    {"from": "Tiang_2", "to": "Tiang_6"},
+                    {"from": "Tiang_6", "to": "Tiang_7"},
+                    {"from": "Tiang_6", "to": "Tiang_8"}
+                ];
+            }
+            executeSimulation();
+        }
+
+        function addCustomBranch() {
+            const parent = document.getElementById('sel_parent_branch').value;
+            const newBus = document.getElementById('inp_new_bus').value.trim();
+            if (!newBus) {
+                alert('Nama tiang tidak boleh kosong!');
+                return;
+            }
+            activeBranches.push({ from: parent, to: newBus });
+            document.getElementById('topology_type').value = '🎛️ Kustom Mandiri (Drag & Drop Canvas)';
+            document.getElementById('row_num_buses').style.display = 'none';
+            document.getElementById('inp_new_bus').value = `Tiang_${activeBranches.length + 1}`;
+            executeSimulation();
+        }
+
+        function resetTopology() {
+            document.getElementById('topology_type').value = 'Linear Radial (Standar)';
+            document.getElementById('row_num_buses').style.display = 'block';
+            onTopologyChange();
+        }
+
+        // Ekspor Proposal & Laporan Formal (DOCX / EXCEL) Berorientasi Konsumen
+        async function exportReport(format) {
+            if (!currentSimulationData) {
+                alert('Silakan jalankan simulasi terlebih dahulu.');
+                return;
+            }
+
+            const consumerName = document.getElementById('rep_consumer_name') ? document.getElementById('rep_consumer_name').value.trim() : 'Bpk. Nala Alma Syafif';
+            const endpoint = format === 'docx' ? '/api/export-docx' : '/api/export-excel';
+            const payload = {
+                consumer_name: consumerName || 'Bpk. Nala Alma Syafif',
+                consumer_address: document.getElementById('rep_consumer_address')?.value.trim() || 'Jl. Panorama Hijau No. 8, Semarang',
+                pln_id: document.getElementById('rep_pln_id')?.value.trim() || '5381-0924-8810',
+                tariff_group: document.getElementById('rep_tariff_group')?.value || 'R-1/TR 2.200 VA (Rp 1.444,70 / kWh)',
+                monthly_bill_idr: parseFloat(document.getElementById('rep_monthly_bill')?.value) || 1500000,
+                bess_choice: document.getElementById('rep_bess_choice')?.value || 'Termasuk Baterai LiFePO4 5.0 kWh',
+                consultant_name: document.getElementById('rep_consultant')?.value.trim() || 'Tim Ahli Rekayasa Sistem Tenaga Surya',
+                field_notes: document.getElementById('rep_field_notes')?.value.trim() || 'Atap dak beton / genteng arah utara sudut 15°, bebas bayangan, proteksi SPD Kelas II & grounding < 2 Ohm',
+                cable_type: document.getElementById('cable_type')?.value || 'LVTC 3x70 + 1x50 mm²',
+                transformer_type: document.getElementById('transformer_type')?.value || '100 kVA (Dyn5)',
+                sim_data: currentSimulationData
+            };
+
+            const overlay = document.getElementById('loading-overlay');
+            overlay.style.display = 'flex';
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                overlay.style.display = 'none';
+
+                if (res.ok) {
+                    const blob = await res.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    const safeName = (payload.consumer_name || 'Konsumen').replace(/[^a-zA-Z0-9]/g, '_');
+                    a.download = format === 'docx' 
+                        ? `Proposal_Kelayakan_PLTS_${safeName}.docx` 
+                        : `Audit_Kelistrikan_PLTS_${safeName}.xlsx`;
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+                } else {
+                    alert('Gagal mengekspor file: ' + res.statusText);
+                }
+            } catch (err) {
+                overlay.style.display = 'none';
+                alert('Gagal mengunduh: ' + err);
+            }
+        }
+    </script>
+</body>
+</html>

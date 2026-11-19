@@ -1,0 +1,10 @@
+pandapower
+flask
+plotly
+pandas
+numpy
+matplotlib
+networkx
+scipy
+openpyxl
+python-docx

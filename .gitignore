@@ -1,0 +1,24 @@
+# Virtual Environment (JANGAN di-upload ke GitHub karena ukurannya ratusan MB)
+.venv/
+venv/
+ENV/
+env/
+
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Temporary / Output Files
+*.csv
+*.xlsx
+*.docx
+!sample_*.csv
+
+# OS & Editor Files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+
