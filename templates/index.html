@@ -21,18 +21,18 @@
             --bg-card-hover: #1A2134;
             --border: #232A3E;
             --border-light: rgba(255, 255, 255, 0.08);
-            --border-glow: rgba(56, 189, 248, 0.35);
+            --border-glow: rgba(255, 255, 255, 0.25);
             --text-main: #FFFFFF;
             --text-muted: #94A3B8;
             --text-sub: #64748B;
-            --primary: #38BDF8;
-            --primary-glow: rgba(56, 189, 248, 0.25);
+            --primary: #FFFFFF;
+            --primary-glow: rgba(255, 255, 255, 0.2);
             --success: #10B981;
             --success-glow: rgba(16, 185, 129, 0.25);
             --warning: #F59E0B;
             --danger: #EF4444;
             --solar: #FBBF24;
-            --purple: #818CF8;
+            --purple: #E2E8F0;
             --font-main: 'Plus Jakarta Sans', sans-serif;
             --font-mono: 'JetBrains Mono', monospace;
             --radius-sm: 8px;
@@ -50,7 +50,7 @@
         body {
             background-color: var(--bg-base);
             background-image: 
-                radial-gradient(at 0% 0%, rgba(56, 189, 248, 0.04) 0px, transparent 50%),
+                radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.03) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.03) 0px, transparent 50%);
             color: var(--text-main);
             overflow-x: hidden;
@@ -109,14 +109,14 @@
             width: 44px;
             height: 44px;
             border-radius: 12px;
-            background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
-            color: #FFFFFF;
+            background: linear-gradient(135deg, #FFFFFF 0%, #D4D4D8 100%);
+            color: #0B0D14;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 22px;
-            box-shadow: 0 0 25px rgba(2, 132, 199, 0.35);
-            border: 1px solid rgba(56, 189, 248, 0.4);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         .brand-text h1 {
@@ -255,15 +255,15 @@
         .btn-scenario:hover {
             background: #1E2436;
             color: #FFFFFF;
-            border-color: #38BDF8;
+            border-color: #FFFFFF;
         }
 
         .btn-scenario.active {
-            background: #0284C7;
-            color: #FFFFFF;
-            border-color: #38BDF8;
+            background: #FFFFFF;
+            color: #000000;
+            border-color: #FFFFFF;
             font-weight: 700;
-            box-shadow: 0 0 14px rgba(56, 189, 248, 0.35);
+            box-shadow: 0 0 14px rgba(255, 255, 255, 0.35);
         }
 
         /* Sidebar Panels */
@@ -477,15 +477,15 @@
 
         /* Run Button */
         .btn-run {
-            background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
-            color: #FFFFFF;
-            border: 1px solid rgba(56, 189, 248, 0.4);
+            background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 100%);
+            color: #0B0D14;
+            border: 1px solid rgba(255, 255, 255, 0.4);
             border-radius: var(--radius-md);
             padding: 13px;
             font-size: 13.5px;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 4px 18px rgba(2, 132, 199, 0.35);
+            box-shadow: 0 4px 18px rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -496,9 +496,10 @@
 
         .btn-run:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 24px rgba(2, 132, 199, 0.55);
-            background: linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
-            border-color: #38BDF8;
+            box-shadow: 0 6px 24px rgba(255, 255, 255, 0.35);
+            background: #FFFFFF;
+            color: #000000;
+            border-color: #FFFFFF;
         }
 
         .btn-run:active {
@@ -537,9 +538,9 @@
         }
 
         .kpi-card:hover {
-            border-color: #38BDF8;
+            border-color: #FFFFFF;
             transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 8px 24px rgba(255, 255, 255, 0.12);
         }
 
         .kpi-card::before {
@@ -552,7 +553,7 @@
         .kpi-danger::before { background: var(--danger); box-shadow: 0 0 10px rgba(239, 68, 68, 0.35); }
         .kpi-solar::before { background: var(--solar); box-shadow: 0 0 10px rgba(245, 158, 11, 0.35); }
         .kpi-primary::before { background: var(--primary); box-shadow: 0 0 10px var(--primary-glow); }
-        .kpi-purple::before { background: var(--purple); box-shadow: 0 0 10px rgba(129, 140, 248, 0.35); }
+        .kpi-purple::before { background: var(--purple); box-shadow: 0 0 10px rgba(255, 255, 255, 0.25); }
 
         .kpi-head {
             font-size: 10.5px;
@@ -610,16 +611,16 @@
 
         .tab-item:hover {
             color: #FFFFFF;
-            background: rgba(56, 189, 248, 0.08);
-            border-color: #232A3E;
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .tab-item.active {
-            color: #38BDF8;
-            background: #151D2E;
-            border: 1px solid #38BDF8;
+            color: #FFFFFF;
+            background: #1C2333;
+            border: 1px solid #FFFFFF;
             font-weight: 700;
-            box-shadow: 0 2px 10px rgba(56, 189, 248, 0.2);
+            box-shadow: 0 2px 10px rgba(255, 255, 255, 0.15);
         }
 
         /* Workspace Panels */
@@ -652,15 +653,15 @@
             user-select: none;
         }
         .pv-pill:hover {
-            border-color: #38BDF8;
+            border-color: #FFFFFF;
             color: #FFFFFF;
         }
         .pv-pill.active {
-            background: #0284C7;
-            border-color: #38BDF8;
-            color: #FFFFFF;
+            background: #FFFFFF;
+            border-color: #FFFFFF;
+            color: #000000;
             font-weight: 700;
-            box-shadow: 0 0 10px rgba(2, 132, 199, 0.4);
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.35);
         }
 
         /* Top 5 Consumer Insights Styles */
@@ -684,7 +685,7 @@
         }
 
         .top5-card:hover {
-            border-color: #38BDF8;
+            border-color: #FFFFFF;
             transform: translateY(-2px);
             box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
         }
@@ -700,9 +701,9 @@
             width: 36px;
             height: 36px;
             border-radius: 8px;
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            color: #38BDF8;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            color: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -734,8 +735,8 @@
         }
 
         .top5-question {
-            background: rgba(56, 189, 248, 0.04);
-            border-left: 2px solid #38BDF8;
+            background: rgba(255, 255, 255, 0.04);
+            border-left: 2px solid #FFFFFF;
             padding: 6px 10px;
             font-size: 11px;
             color: #94A3B8;
@@ -788,7 +789,7 @@
             font-size: 11px;
             color: #94A3B8;
             line-height: 1.45;
-            background: rgba(56, 189, 248, 0.02);
+            background: rgba(255, 255, 255, 0.02);
             padding: 8px 10px;
             border-radius: 6px;
             border: 1px dashed #232A3E;
@@ -1074,18 +1075,18 @@
 
         .btn-action:hover {
             background: #1E2436;
-            border-color: #38BDF8;
+            border-color: #FFFFFF;
             color: #FFFFFF;
         }
 
         .btn-primary {
-            background: #0284C7;
-            color: #FFFFFF;
+            background: #FFFFFF;
+            color: #000000;
             border: none;
             font-weight: 700;
         }
         .btn-primary:hover {
-            background: #0369A1;
+            background: #E2E8F0;
         }
 
         .btn-success {
@@ -1503,10 +1504,10 @@
             <div class="tab-content active" id="pane-top5">
                 <div class="content-card">
                     <!-- Hero Executive Verdict Banner -->
-                    <div style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(56, 189, 248, 0.35); border-radius: var(--radius-lg); padding: 18px 22px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                    <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: var(--radius-lg); padding: 18px 22px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
                         <div style="flex: 1; min-width: 280px;">
                             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                                <span style="font-size: 11px; font-weight: 800; background: rgba(56, 189, 248, 0.18); border: 1px solid #38BDF8; color: #38BDF8; padding: 2px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px;">RINGKASAN KELAYAKAN UTAMA KONSUMEN</span>
+                                <span style="font-size: 11px; font-weight: 800; background: rgba(255, 255, 255, 0.12); border: 1px solid #FFFFFF; color: #FFFFFF; padding: 2px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px;">RINGKASAN KELAYAKAN UTAMA KONSUMEN</span>
                                 <span style="font-size: 11px; color: var(--text-muted);">• Berdasarkan Standar SPLN 1:1995</span>
                             </div>
                             <h2 style="font-size: 17.5px; font-weight: 800; color: #FFFFFF; line-height: 1.35;">
@@ -1523,7 +1524,7 @@
                             </div>
                             <div style="background: rgba(14, 22, 38, 0.85); border: 1px solid #232A3E; border-radius: 10px; padding: 10px 16px; text-align: center; min-width: 120px;">
                                 <div style="font-size: 10px; font-weight: 700; color: #64748B; text-transform: uppercase;">PENGHEMATAN TAHUNAN</div>
-                                <div style="font-size: 16px; font-weight: 800; color: #38BDF8; font-family: var(--font-mono); margin-top: 2px;" id="hero_savings">Rp 15,2 Juta</div>
+                                <div style="font-size: 16px; font-weight: 800; color: #FFFFFF; font-family: var(--font-mono); margin-top: 2px;" id="hero_savings">Rp 15,2 Juta</div>
                             </div>
                             <div style="background: rgba(14, 22, 38, 0.85); border: 1px solid #232A3E; border-radius: 10px; padding: 10px 16px; text-align: center; min-width: 120px;">
                                 <div style="font-size: 10px; font-weight: 700; color: #64748B; text-transform: uppercase;">WAKTU BALIK MODAL</div>
@@ -1538,7 +1539,7 @@
                             <p>Rincian kelayakan voltase, kapasitas kuota PLN, penghematan rupiah bulanan, hingga proteksi baterai rumah</p>
                         </div>
                         <div style="display: flex; gap: 8px;">
-                            <span class="badge" style="background: rgba(56, 189, 248, 0.1); border: 1px solid rgba(56, 189, 248, 0.3); color: #38BDF8; font-weight: 700;">📘 Ringkasan Konsumen</span>
+                            <span class="badge" style="background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.25); color: #FFFFFF; font-weight: 700;">📘 Ringkasan Konsumen</span>
                             <button class="btn-action" onclick="executeSimulation()">🚀 Hitung Ulang Simulasi</button>
                         </div>
                     </div>
@@ -1839,7 +1840,7 @@
                     </div>
                     <div class="player-ribbon">
                         <button class="btn-ctrl" id="btn_play" onclick="togglePlayAnimation()">▶ Play Animasi</button>
-                        <span style="font-size: 12.5px; font-weight: 700; color: #7DD3FC; min-width: 100px; font-family: var(--font-mono);" id="lbl_player_time">Pukul 12:00 WIB</span>
+                        <span style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; min-width: 100px; font-family: var(--font-mono);" id="lbl_player_time">Pukul 12:00 WIB</span>
                         <input type="range" id="slider_hour" min="0" max="23" value="12" style="flex: 1;" oninput="onHourSliderChange(this.value)">
                     </div>
                     <div id="chart_voltage_profile" style="width: 100%; height: 430px;"></div>
@@ -2062,7 +2063,7 @@
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
                         <!-- Kolom 1: Profil Konsumen & Lokasi Properti -->
                         <div style="background: #141928; border: 1px solid var(--border); border-radius: var(--radius-md); padding: 18px 20px;">
-                            <h4 style="font-size: 13px; font-weight: 700; color: #38BDF8; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
+                            <h4 style="font-size: 13px; font-weight: 700; color: #FFFFFF; margin-bottom: 14px; display: flex; align-items: center; gap: 8px;">
                                 <span>🏠</span> Profil Pemilik & Lokasi Properti
                             </h4>
                             <div class="form-row">
@@ -2117,7 +2118,7 @@
                     </div>
 
                     <!-- Live Proposal Summary Card (Ringkas, Jelas, Padat, dan Informatif) -->
-                    <div style="background: linear-gradient(135deg, rgba(2, 132, 199, 0.08) 0%, rgba(16, 185, 129, 0.06) 100%); border: 1px solid rgba(56, 189, 248, 0.3); border-radius: var(--radius-md); padding: 18px 22px; margin-bottom: 22px;">
+                    <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(16, 185, 129, 0.06) 100%); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: var(--radius-md); padding: 18px 22px; margin-bottom: 22px;">
                         <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--border); padding-bottom: 12px;">
                             <div style="display: flex; align-items: center; gap: 10px;">
                                 <span style="font-size: 20px;">📋</span>
@@ -2140,7 +2141,7 @@
                             </div>
                             <div style="background: #121624; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px;">
                                 <div style="font-size: 10px; color: #94A3B8; font-weight: 700; text-transform: uppercase;">WAKTU BALIK MODAL (BEP)</div>
-                                <div style="font-size: 16px; font-weight: 800; color: #38BDF8; font-family: var(--font-mono); margin-top: 4px;" id="rep_prev_payback">4.1 Tahun</div>
+                                <div style="font-size: 16px; font-weight: 800; color: #FFFFFF; font-family: var(--font-mono); margin-top: 4px;" id="rep_prev_payback">4.1 Tahun</div>
                                 <div style="font-size: 10.5px; color: var(--text-muted); margin-top: 2px;" id="rep_prev_npv">NPV: Rp 416 Juta (25 Thn)</div>
                             </div>
                             <div style="background: #121624; border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px;">
@@ -2749,7 +2750,7 @@
                 mode: 'lines+markers',
                 name: 'PV Case (Dengan PLTS)',
                 line: { color: '#10B981', width: 3.5 },
-                marker: { size: 9, color: '#38BDF8' }
+                marker: { size: 9, color: '#FFFFFF' }
             };
 
             const traceUpper = {
@@ -2788,8 +2789,8 @@
                 clearInterval(animationInterval);
                 isPlaying = false;
                 btn.innerText = '▶ Play Animasi';
-                btn.style.background = '#0284C7';
-                btn.style.color = '#FFFFFF';
+                btn.style.background = '#FFFFFF';
+                btn.style.color = '#000000';
             } else {
                 isPlaying = true;
                 btn.innerText = '⏸ Pause Animasi';
@@ -2850,7 +2851,7 @@
         // Hosting Capacity Scanner
         async function runHostingCapacityScan() {
             const div = document.getElementById('chart_hosting_capacity');
-            div.innerHTML = '<p style="text-align: center; color: #7DD3FC; padding-top: 150px;">Memindai penetrasi PLTS bertahap (Newton-Raphson)...</p>';
+            div.innerHTML = '<p style="text-align: center; color: #FFFFFF; padding-top: 150px;">Memindai penetrasi PLTS bertahap (Newton-Raphson)...</p>';
 
             const payload = {
                 num_buses: parseInt(document.getElementById('num_buses').value),
@@ -2878,7 +2879,7 @@
                     y: vMax,
                     name: 'Tegangan Max (Volt)',
                     yaxis: 'y1',
-                    line: { color: '#38BDF8', width: 3 }
+                    line: { color: '#FFFFFF', width: 3 }
                 };
 
                 const traceLoad = {
@@ -2954,7 +2955,7 @@
                 y: chargePower,
                 name: 'Charging / Serap Surya (kW)',
                 type: 'bar',
-                marker: { color: '#0284C7' }
+                marker: { color: '#E2E8F0' }
             };
             const traceDischarge = {
                 x: hours,
@@ -3012,7 +3013,7 @@
                 y: trafoWithBess,
                 name: isBessOn ? 'Trafo Dengan PLTS + BESS' : 'Trafo Dengan PLTS (Tanpa BESS)',
                 type: 'scatter',
-                line: { color: '#38BDF8', width: 3 }
+                line: { color: '#FFFFFF', width: 3 }
             };
             const traceTotalLoad = {
                 x: hours,
@@ -3041,7 +3042,7 @@
                 y: data.smart_inverter_q,
                 name: 'Daya Reaktif Q (kVAr)',
                 type: 'bar',
-                marker: { color: '#818CF8' }
+                marker: { color: '#E2E8F0' }
             };
             const layout = {
                 title: 'Injeksi / Absorpsi Reaktif Smart Inverter (IEEE 1547)',
@@ -3061,7 +3062,7 @@
 
             const traceR = { x: hours, y: unb.i_r_a, name: 'Arus Fasa R (A)', line: { color: '#F43F5E', width: 2 } };
             const traceS = { x: hours, y: unb.i_s_a, name: 'Arus Fasa S (A)', line: { color: '#F59E0B', width: 2 } };
-            const traceT = { x: hours, y: unb.i_t_a, name: 'Arus Fasa T (A)', line: { color: '#38BDF8', width: 2 } };
+            const traceT = { x: hours, y: unb.i_t_a, name: 'Arus Fasa T (A)', line: { color: '#FFFFFF', width: 2 } };
             const traceN = { x: hours, y: unb.neutral_current_a, name: 'Arus Kawat Netral IN (A)', line: { color: '#10B981', width: 3, dash: 'dash' } };
 
             const layout = {
@@ -3095,7 +3096,7 @@
                 type: 'scatter',
                 mode: 'lines+markers',
                 line: { color: '#10B981', width: 3 },
-                marker: { size: 6, color: '#38BDF8' },
+                marker: { size: 6, color: '#FFFFFF' },
                 name: 'Arus Kas Kumulatif (Juta Rp)'
             };
 
@@ -3123,7 +3124,7 @@
             sumBox.innerHTML = `
                 <div style="background: #141928; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border);">
                     <div style="font-size: 10px; color: #94A3B8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">BIAYA INVESTASI AWAL (CAPEX)</div>
-                    <div style="font-size: 19px; font-weight: 800; color: #38BDF8; font-family: var(--font-mono); margin-top: 4px;">Rp ${(te.total_capex_idr).toLocaleString('id-ID')}</div>
+                    <div style="font-size: 19px; font-weight: 800; color: #FFFFFF; font-family: var(--font-mono); margin-top: 4px;">Rp ${(te.total_capex_idr).toLocaleString('id-ID')}</div>
                     <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Kapasitas Total: ${te.capex_per_kwp ? (te.total_capex_idr / te.capex_per_kwp).toFixed(1) : ''} kWp</div>
                 </div>
                 <div style="background: #141928; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border);">
@@ -3133,7 +3134,7 @@
                 </div>
                 <div style="background: #141928; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border);">
                     <div style="font-size: 10px; color: #94A3B8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">NET PRESENT VALUE (NPV 25 TAHUN)</div>
-                    <div style="font-size: 19px; font-weight: 800; color: #38BDF8; font-family: var(--font-mono); margin-top: 4px;">Rp ${(te.npv_25yr_idr).toLocaleString('id-ID')}</div>
+                    <div style="font-size: 19px; font-weight: 800; color: #FFFFFF; font-family: var(--font-mono); margin-top: 4px;">Rp ${(te.npv_25yr_idr).toLocaleString('id-ID')}</div>
                     <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Discount Rate: ${(te.discount_rate_pct || 8.0).toFixed(1)}% (${te.lifetime_yr || 25} Tahun)</div>
                 </div>
                 <div style="background: #141928; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border);">
@@ -3264,7 +3265,7 @@
                 textposition: 'top center',
                 marker: {
                     size: [24, ...Array(buses.length).fill(16)],
-                    color: ['#0284C7', ...buses.map(b => data.pv_installed_buses.includes(b) ? '#F59E0B' : '#64748B')],
+                    color: ['#FFFFFF', ...buses.map(b => data.pv_installed_buses.includes(b) ? '#F59E0B' : '#64748B')],
                     symbol: ['square', ...Array(buses.length).fill('circle')]
                 },
                 name: 'Komponen Saluran'
