@@ -479,6 +479,6 @@ if __name__ == "__main__":
     print("\n" + "="*65)
     print("  ⚡ VoltSolar-Sim Pro Enterprise (Web Server HTML5 & Flask)")
     print("  Projek Praktikum Pemrograman Dasar - Teknologi Rekayasa Elektro")
-    print(f"  Server berjalan pada: http://0.0.0.0:{port}")
+    print(f"  Server berjalan pada port: {port}")
     print("="*65 + "\n")
     app.run(host="0.0.0.0", port=port, debug=False)
