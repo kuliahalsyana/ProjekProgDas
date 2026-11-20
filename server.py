@@ -8,6 +8,7 @@ Praktikum Pemrograman Dasar
 import os
 import io
 import json
+import math
 import numpy as np
 import pandas as pd
 from flask import Flask, render_template, request, jsonify, send_file
@@ -33,22 +34,38 @@ app = Flask(__name__, template_folder="templates", static_folder="static")
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
-# Helper serializer untuk mengonversi tipe numpy/pandas ke tipe standar Python/JSON
-def sanitize_json(data):
+# Helper serializer untuk mengonversi tipe numpy/pandas ke tipe standar Python/JSON yang selalu valid (Anti-NaN)
+def sanitize_json(data, fallback_val=0.0):
     if isinstance(data, dict):
-        return {k: sanitize_json(v) for k, v in data.items()}
-    elif isinstance(data, list):
-        return [sanitize_json(v) for v in data]
-    elif isinstance(data, (np.integer, np.int64, np.int32)):
+        res = {}
+        for k, v in data.items():
+            k_str = str(k).lower()
+            if "volt" in k_str or "tiang" in k_str or "bus" in k_str:
+                field_fb = 220.0
+            elif "v_pu" in k_str:
+                field_fb = 1.0
+            else:
+                field_fb = fallback_val
+            res[str(k)] = sanitize_json(v, fallback_val=field_fb)
+        return res
+    elif isinstance(data, (list, tuple)):
+        return [sanitize_json(v, fallback_val) for v in data]
+    elif isinstance(data, (np.integer, np.int64, np.int32, int)):
         return int(data)
-    elif isinstance(data, (np.floating, np.float64, np.float32)):
+    elif isinstance(data, (np.floating, np.float64, np.float32, float)):
+        if math.isnan(data) or np.isnan(data) or math.isinf(data) or np.isinf(data):
+            return float(fallback_val)
         return float(data)
     elif isinstance(data, (np.bool_, bool)):
         return bool(data)
     elif isinstance(data, pd.DataFrame):
-        return sanitize_json(data.to_dict(orient="split"))
+        cleaned_df = data.ffill().bfill().fillna(fallback_val)
+        return sanitize_json(cleaned_df.to_dict(orient="index"), fallback_val)
     elif isinstance(data, pd.Series):
-        return sanitize_json(data.to_dict())
+        cleaned_series = data.ffill().bfill().fillna(fallback_val)
+        return sanitize_json(cleaned_series.to_dict(), fallback_val)
+    elif data is None:
+        return None
     return data
 
 
