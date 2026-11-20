@@ -1414,10 +1414,25 @@
 
                 <!-- Custom Parameter Tekno-Ekonomi & Emisi -->
                 <div style="margin-top: 12px; border-top: 1px solid var(--border); padding-top: 10px;">
-                    <div style="font-size: 11px; font-weight: 700; color: #34D399; margin-bottom: 8px;">💰 Parameter Tekno-Ekonomi & Emisi:</div>
+                    <div style="font-size: 11px; font-weight: 700; color: #10B981; margin-bottom: 8px;">💰 Parameter Tekno-Ekonomi & Emisi:</div>
                     <div class="form-row">
-                        <div class="form-label">Tarif Listrik PLN: <span class="metric-pill" id="lbl_tariff">Rp 1.445 / kWh</span></div>
-                        <input type="range" id="tariff_pln" min="1000" max="3000" value="1444.7" step="25" oninput="document.getElementById('lbl_tariff').innerText = 'Rp ' + Math.round(this.value).toLocaleString('id-ID') + ' / kWh'">
+                        <label class="form-label">Golongan Daya & Tarif PLN:</label>
+                        <select id="sel_tariff_preset" onchange="onTariffPresetChange(this.value)" style="width: 100%; margin-bottom: 6px; padding: 6px; background: #121624; border: 1px solid var(--border); border-radius: 6px; color: #FFFFFF; font-size: 11.5px;">
+                            <option value="415.0">R-1/TR 450 VA Bersubsidi (Rp 415 / kWh)</option>
+                            <option value="605.0">R-1/TR 900 VA Bersubsidi (Rp 605 / kWh)</option>
+                            <option value="1352.0">R-1/TR 900 VA RTM Non-Subsidi (Rp 1.352 / kWh)</option>
+                            <option value="1444.7">R-1/TR 1.300 VA (Rp 1.444,70 / kWh)</option>
+                            <option value="1444.7" selected>R-1/TR 2.200 VA (Rp 1.444,70 / kWh)</option>
+                            <option value="1699.53">R-2/TR 3.500 - 5.500 VA (Rp 1.699,53 / kWh)</option>
+                            <option value="1699.53">R-3/TR 6.600 VA ke atas (Rp 1.699,53 / kWh)</option>
+                            <option value="1444.7">B-2/TR Bisnis Rendah (Rp 1.444,70 / kWh)</option>
+                            <option value="custom">Kustom (Gunakan Slider Bebas)</option>
+                        </select>
+                        <div class="form-label" style="display: flex; justify-content: space-between; margin-top: 4px;">
+                            <span>Nilai Tarif Berlaku:</span>
+                            <span class="metric-pill" id="lbl_tariff">Rp 1.445 / kWh</span>
+                        </div>
+                        <input type="range" id="tariff_pln" min="400" max="3000" value="1444.7" step="5" oninput="onTariffSliderInput(this.value)">
                     </div>
                     <div class="form-row">
                         <div class="form-label">Biaya Investasi (CAPEX): <span class="metric-pill" id="lbl_capex">13.0 Juta/kWp</span></div>
@@ -1970,7 +1985,7 @@
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px;">
                         <div>
                             <label class="form-label">Tarif PLN (Rp/kWh):</label>
-                            <input type="number" id="tab_tariff_pln" value="1444.7" step="10" min="500" max="5000" style="width: 100%; padding: 6px 10px; background: #121214; border: 1px solid var(--border); border-radius: 6px; color: #fff;">
+                            <input type="number" id="tab_tariff_pln" value="1444.7" step="5" min="300" max="5000" style="width: 100%; padding: 6px 10px; background: #121214; border: 1px solid var(--border); border-radius: 6px; color: #fff;">
                         </div>
                         <div>
                             <label class="form-label">CAPEX (Juta Rp / kWp):</label>
@@ -2087,7 +2102,10 @@
                             </div>
                             <div class="form-row">
                                 <label class="form-label">Golongan Tarif & Daya Terpasang PLN:</label>
-                                <select id="rep_tariff_group">
+                                <select id="rep_tariff_group" onchange="onReportTariffChange(this.value)">
+                                    <option value="R-1/TR 450 VA Bersubsidi (Rp 415,00 / kWh)">R-1/TR 450 VA Bersubsidi (Rp 415,00 / kWh)</option>
+                                    <option value="R-1/TR 900 VA Bersubsidi (Rp 605,00 / kWh)">R-1/TR 900 VA Bersubsidi (Rp 605,00 / kWh)</option>
+                                    <option value="R-1/TR 900 VA RTM Non-Subsidi (Rp 1.352,00 / kWh)">R-1/TR 900 VA RTM Non-Subsidi (Rp 1.352,00 / kWh)</option>
                                     <option value="R-1/TR 1.300 VA (Rp 1.444,70 / kWh)">R-1/TR 1.300 VA (Rp 1.444,70 / kWh)</option>
                                     <option value="R-1/TR 2.200 VA (Rp 1.444,70 / kWh)" selected>R-1/TR 2.200 VA (Rp 1.444,70 / kWh)</option>
                                     <option value="R-2/TR 3.500 - 5.500 VA (Rp 1.699,53 / kWh)">R-2/TR 3.500 - 5.500 VA (Rp 1.699,53 / kWh)</option>
@@ -2358,6 +2376,48 @@
                 const d = parseFloat(document.getElementById('tab_discount_rate').value);
                 document.getElementById('discount_rate').value = d;
                 document.getElementById('lbl_discount').innerText = d.toFixed(1) + '%';
+            }
+            executeSimulation();
+        }
+
+        // Handler Pilihan Preset Golongan Tarif PLN
+        function onTariffPresetChange(val) {
+            if (val !== 'custom') {
+                const num = parseFloat(val);
+                document.getElementById('tariff_pln').value = num;
+                document.getElementById('lbl_tariff').innerText = 'Rp ' + Math.round(num).toLocaleString('id-ID') + ' / kWh';
+                if (document.getElementById('tab_tariff_pln')) {
+                    document.getElementById('tab_tariff_pln').value = num;
+                }
+                executeSimulation();
+            }
+        }
+
+        function onTariffSliderInput(val) {
+            document.getElementById('lbl_tariff').innerText = 'Rp ' + Math.round(val).toLocaleString('id-ID') + ' / kWh';
+            if (document.getElementById('sel_tariff_preset')) {
+                document.getElementById('sel_tariff_preset').value = 'custom';
+            }
+            if (document.getElementById('tab_tariff_pln')) {
+                document.getElementById('tab_tariff_pln').value = val;
+            }
+        }
+
+        function onReportTariffChange(val) {
+            let tariff = 1444.7;
+            if (val.includes('450 VA')) tariff = 415.0;
+            else if (val.includes('900 VA Bersubsidi')) tariff = 605.0;
+            else if (val.includes('900 VA RTM')) tariff = 1352.0;
+            else if (val.includes('1.300 VA') || val.includes('2.200 VA') || val.includes('B-2')) tariff = 1444.70;
+            else if (val.includes('3.500') || val.includes('6.600')) tariff = 1699.53;
+
+            document.getElementById('tariff_pln').value = tariff;
+            document.getElementById('lbl_tariff').innerText = 'Rp ' + Math.round(tariff).toLocaleString('id-ID') + ' / kWh';
+            if (document.getElementById('sel_tariff_preset')) {
+                document.getElementById('sel_tariff_preset').value = tariff.toString();
+            }
+            if (document.getElementById('tab_tariff_pln')) {
+                document.getElementById('tab_tariff_pln').value = tariff;
             }
             executeSimulation();
         }
