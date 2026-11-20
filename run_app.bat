@@ -152,7 +152,7 @@ if not exist "%~dp0.venv\Scripts\python.exe" goto VENV_FAIL
 echo.
 echo [2/3] Mengunduh dan memasang library otomatis dari requirements.txt...
 echo       (Proses ini hanya berlangsung sekali saat pertama kali diinstal)
-echo       Harap tunggu hingga proses download selesai...
+echo       Harap tunggu hingga proses download selesai...Ukuran File Sekitar 500MB
 echo.
 
 "%~dp0.venv\Scripts\python.exe" -m pip install --upgrade pip
