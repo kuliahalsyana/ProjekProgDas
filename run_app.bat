@@ -10,11 +10,11 @@ echo   Projek Praktikum Pemrograman Dasar / Teknologi Rekayasa Elektro
 echo ===================================================================
 echo.
 
-:: 1. Jika .venv sudah terpasang, langsung jalankan server
+:: 1. Jika .venv sudah terpasang dan berfungsi, langsung jalankan server
 if exist "%~dp0.venv\Scripts\python.exe" goto START_SERVER
 
 echo [!] Virtual environment (.venv) belum ada pada folder ini.
-echo [*] Memulai proses pendeteksian Python ^& instalasi otomatis...
+echo [*] Memulai proses pendeteksian Python ^& konfigurasi otomatis...
 echo.
 
 :CHECK_PYTHON
@@ -61,49 +61,70 @@ for /d %%D in (
 
 if defined PY_EXE goto CREATE_VENV
 
-:: 4. Jika Python belum terdeteksi sama sekali, coba gunakan winget bila ada
-where winget >nul 2>&1
-if !ERRORLEVEL! equ 0 (
-    echo [!] Python belum terdeteksi pada sistem Windows Anda.
-    echo [*] Fitur Windows Package Manager (winget) tersedia pada PC ini.
-    echo.
-    set /p "INSTALL_CHOICE=Apakah Anda ingin menginstal Python 3.11 secara otomatis via winget? (Y/T): "
-    if /i "!INSTALL_CHOICE!"=="Y" (
-        echo.
-        echo [*] Mengunduh dan menginstal Python 3.11 dari python.org...
-        winget install Python.Python.3.11 --silent --accept-source-agreements --accept-package-agreements
-        echo [*] Menunggu penyelesaian instalasi...
-        timeout /t 6 >nul
-        goto CHECK_PYTHON
-    )
+:: Jika Python belum ada sama sekali di komputer:
+echo ===================================================================
+echo [!] PERINGATAN: Python belum terinstal pada komputer ini!
+echo -------------------------------------------------------------------
+echo Sistem mendeteksi bahwa komputer ini belum memiliki Python atau
+echo hanya memiliki pintasan Microsoft Store yang belum aktif.
+echo.
+echo Sistem dapat mengunduh dan memasang Python 3.11 secara OTOMATIS
+echo langsung dari situs resmi python.org tanpa perlu konfigurasi rumit.
+echo ===================================================================
+echo.
+set /p "AUTO_INSTALL=Apakah Anda ingin mengunduh & menginstal Python otomatis sekarang? (Y/T): "
+if /i "!AUTO_INSTALL!"=="T" goto MANUAL_INSTRUCTIONS
+
+echo.
+echo [*] Memulai pengunduhan Python 3.11 resmi dari python.org...
+echo     File installer: ~25 MB. Mohon tunggu beberapa saat...
+set "PY_SETUP=%TEMP%\python_311_installer.exe"
+
+:: Coba unduh via curl (bawaan Windows 10/11)
+curl.exe -L -o "!PY_SETUP!" "https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe" >nul 2>&1
+if not exist "!PY_SETUP!" (
+    :: Jika curl gagal, coba unduh via PowerShell bawaan Windows
+    echo [*] Mencoba pengunduhan via PowerShell...
+    powershell -Command "[Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12; (New-Object System.Net.WebClient).DownloadFile('https://www.python.org/ftp/python/3.11.9/python-3.11.9-amd64.exe', '$env:TEMP\python_311_installer.exe')" >nul 2>&1
 )
 
+if exist "!PY_SETUP!" (
+    echo [*] Pengunduhan berhasil. Memasang Python 3.11 ke sistem...
+    echo     (Pemasangan berjalan di latar belakang, mohon tunggu sekitar 1 menit)
+    "!PY_SETUP!" /quiet InstallAllUsers=0 PrependPath=1 Include_pip=1 Include_test=0
+    del "!PY_SETUP!" >nul 2>&1
+    
+    timeout /t 6 >nul
+    
+    for /d %%D in ("%LOCALAPPDATA%\Programs\Python\Python3*") do (
+        if exist "%%D\python.exe" (
+            set "PY_EXE=%%D\python.exe"
+            echo [*] Python 3.11 berhasil terpasang di: "!PY_EXE!"
+            goto CREATE_VENV
+        )
+    )
+) else (
+    echo [ERROR] Gagal mengunduh installer Python otomatis.
+)
+
+:MANUAL_INSTRUCTIONS
+echo.
 echo ===================================================================
-echo [ERROR] Python belum terinstal atau tidak terdeteksi pada PC ini!
+echo CARA INSTALASI MANUAL PYTHON (Sangat Mudah):
 echo -------------------------------------------------------------------
-echo Penyebab yang sering terjadi di Windows 10/11:
-echo 1. Windows mendeteksi pintasan Microsoft Store (WindowsApps alias).
-echo 2. Python belum diinstal atau opsi "Add python.exe to PATH" lupa dicentang.
-echo.
-echo CARA MENGATASI (PILIH SALAH SATU):
-echo.
-echo Opsi 1 (Unduh Installer Resmi - Sangat Direkomendasikan):
-echo   1. Buka browser: https://www.python.org/downloads/
-echo   2. Unduh dan jalankan installer Python (versi 3.10 atau 3.11).
-echo   3. PENTING: Di awal jendela instalasi, WAJIB CENTANG kotak:
-echo      [X] "Add python.exe to PATH"
-echo   4. Klik "Install Now", lalu klik ganda kembali run_app.bat ini.
-echo.
-echo Opsi 2 (Matikan Pintasan Palsu Microsoft Store):
-echo   1. Buka Settings Windows (Tekan Win + I).
-echo   2. Masuk ke: Apps ^> Advanced app settings ^> App execution aliases.
-echo   3. Matikan (Off) tombol switch untuk "App Installer (python.exe)".
+echo 1. Buka browser: https://www.python.org/downloads/
+echo 2. Unduh dan jalankan installer Python (versi 3.10 atau 3.11).
+echo 3. PENTING: Pada jendela pertama instalasi, WAJIB CENTANG kotak bawah:
+echo       [X] "Add python.exe to PATH"
+echo 4. Klik "Install Now" hingga selesai.
+echo 5. Setelah selesai, klik ganda kembali file run_app.bat ini.
 echo ===================================================================
 echo.
 pause
 exit /b 1
 
 :CREATE_VENV
+echo.
 echo [1/3] Membuat virtual environment (.venv)...
 if defined PY_EXE goto MAKE_VENV_EXE
 if "!PY_MODE!"=="py" goto MAKE_VENV_PY
@@ -131,7 +152,7 @@ if not exist "%~dp0.venv\Scripts\python.exe" goto VENV_FAIL
 echo.
 echo [2/3] Mengunduh dan memasang library otomatis dari requirements.txt...
 echo       (Proses ini hanya berlangsung sekali saat pertama kali diinstal)
-echo       Harap tunggu hingga proses download selesai... Besar file sekitar 500MB
+echo       Harap tunggu hingga proses download selesai...
 echo.
 
 "%~dp0.venv\Scripts\python.exe" -m pip install --upgrade pip
@@ -152,7 +173,7 @@ goto START_SERVER
 :VENV_FAIL
 echo.
 echo [ERROR] Gagal membuat virtual environment (.venv).
-echo Silakan buka CMD dan jalankan: python -m venv .venv
+echo Pastikan Python telah terinstal dengan benar dan opsi "Add to PATH" dicentang.
 pause
 exit /b 1
 
