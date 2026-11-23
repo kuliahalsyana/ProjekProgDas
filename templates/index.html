@@ -222,8 +222,6 @@
             gap: 16px;
             flex-shrink: 0;
         }
-            gap: 16px;
-        }
 
         /* Skenario Preset Selector */
         .scenario-box {
@@ -2961,7 +2959,7 @@
             const distObj = currentDistricts.find(d => d.id === distId);
             currentBMKGDistrictName = distObj ? distObj.name : 'Kecamatan';
             currentBMKGDistrictId = distId;
-            currentBMKGAdm4 = distId;
+            currentBMKGAdm4 = null; // Reset agar backend me-resolve ADM4 10-digit resmi
 
             const badgeName = document.getElementById('bmkg_location_name');
             if (badgeName) {
@@ -3028,9 +3026,11 @@
                 const queryParams = new URLSearchParams({
                     city: currentBMKGCityName,
                     day: dayIdx,
-                    district_id: currentBMKGDistrictId,
-                    adm4: currentBMKGAdm4
+                    district_id: currentBMKGDistrictId
                 });
+                if (currentBMKGAdm4 && currentBMKGAdm4.split('.').length === 4) {
+                    queryParams.append('adm4', currentBMKGAdm4);
+                }
                 const res = await fetch(`/api/bmkg?${queryParams.toString()}`);
                 let rawText = await res.text();
                 rawText = rawText.replace(/:\s*NaN\b/g, ': 0.0').replace(/:\s*-?Infinity\b/g, ': 0.0');
