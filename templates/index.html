@@ -47,16 +47,25 @@
             font-family: var(--font-main);
         }
 
+        html, body {
+            height: 100%;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
         body {
             background-color: var(--bg-base);
             background-image: 
                 radial-gradient(at 0% 0%, rgba(255, 255, 255, 0.03) 0px, transparent 50%),
                 radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.03) 0px, transparent 50%);
             color: var(--text-main);
-            overflow-x: hidden;
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            height: 100vh;
+            max-height: 100vh;
+            overflow: hidden;
         }
 
         /* Glassmorphism Panel */
@@ -90,12 +99,12 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid var(--border);
-            padding: 14px 28px;
+            padding: 10px 24px;
+            height: 64px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            position: sticky;
-            top: 0;
+            flex-shrink: 0;
             z-index: 1000;
         }
 
@@ -110,6 +119,8 @@
             height: 44px;
             border-radius: 12px;
             background: linear-gradient(135deg, #FFFFFF 0%, #D4D4D8 100%);
+            -webkit-background-clip: padding-box;
+            background-clip: padding-box;
             color: #0B0D14;
             display: flex;
             align-items: center;
@@ -123,10 +134,7 @@
             font-size: 19px;
             font-weight: 800;
             letter-spacing: -0.4px;
-            background: linear-gradient(90deg, #FFFFFF 0%, #E2E8F0 50%, #94A3B8 100%);
-            -webkit-background-clip: text;
-            background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: #FFFFFF;
             display: flex;
             align-items: center;
             gap: 8px;
@@ -193,20 +201,27 @@
         .app-layout {
             display: flex;
             flex: 1;
-            height: calc(100vh - 73px);
+            min-height: 0;
+            height: calc(100vh - 64px);
             overflow: hidden;
         }
 
-        /* Sidebar */
+        /* OUTLINE BIRU: Sidebar Controls - Scroll Sendiri Independen */
         aside.sidebar {
             width: 380px;
             min-width: 380px;
+            max-width: 380px;
+            height: 100%;
             background-color: var(--bg-sidebar);
             border-right: 1px solid var(--border);
             overflow-y: auto;
-            padding: 18px;
+            overflow-x: hidden;
+            padding: 18px 16px;
             display: flex;
             flex-direction: column;
+            gap: 16px;
+            flex-shrink: 0;
+        }
             gap: 16px;
         }
 
@@ -461,23 +476,83 @@
             border: 1px solid #27272A;
             border-radius: 6px;
             padding: 5px 6px;
-            min-width: 58px;
+            min-width: 62px;
             text-align: center;
             font-size: 10px;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .forecast-chip:hover {
+            border-color: rgba(255, 255, 255, 0.4);
+            background: #222227;
         }
 
         .forecast-chip .fc-time {
-            color: #71717A;
+            color: #A1A1AA;
             font-family: var(--font-mono);
+            font-size: 9.5px;
+            font-weight: 600;
+        }
+
+        .forecast-chip .fc-desc {
+            color: #D4D4D8;
+            font-size: 9px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 62px;
+            margin: 1px 0;
         }
 
         .forecast-chip .fc-temp {
             font-weight: 700;
             color: #FFFFFF;
+            font-size: 10px;
+        }
+
+        .forecast-chip .fc-factor {
+            font-size: 9px;
+            color: #FBBF24;
+            font-weight: 700;
+        }
+
+        .slot-editor-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10.5px;
+            margin-top: 4px;
+        }
+
+        .slot-editor-table th, .slot-editor-table td {
+            padding: 4px 6px;
+            border-bottom: 1px solid #27272A;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        .slot-editor-table th {
+            color: #A1A1AA;
+            font-weight: 600;
+            background: #12151E;
+        }
+
+        .slot-editor-table select, .slot-editor-table input {
+            font-size: 10px;
+            padding: 2px 4px;
+            background: #18181B;
+            color: #FFFFFF;
+            border: 1px solid #3F3F46;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         /* Run Button */
         .btn-run {
+            position: sticky;
+            top: 0;
+            z-index: 20;
             background: linear-gradient(135deg, #FFFFFF 0%, #E2E8F0 100%);
             color: #0B0D14;
             border: 1px solid rgba(255, 255, 255, 0.4);
@@ -486,7 +561,7 @@
             font-size: 13.5px;
             font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 4px 18px rgba(255, 255, 255, 0.2);
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -507,15 +582,40 @@
             transform: translateY(0);
         }
 
-        /* Main View */
+        /* Main View Container */
         main.main-viewport {
             flex: 1;
-            overflow-y: auto;
-            padding: 22px 28px;
+            min-width: 0;
+            height: 100%;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            overflow: hidden; /* Kontainer utama TIDAK scroll */
             background: #0B0D14;
+            padding: 0;
+        }
+
+        /* OUTLINE MERAH: Header Metrik KPI & Segmented Tab Navigation - TETAP TIDAK BERGERAK */
+        .main-fixed-header {
+            flex-shrink: 0;
+            background: #0E111B;
+            border-bottom: 1px solid var(--border);
+            padding: 14px 24px 10px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.4);
+        }
+
+        /* OUTLINE KUNING: Workspace Tab Content Area - SCROLL SENDIRI TIDAK NYATU */
+        .main-scroll-content {
+            flex: 1;
+            min-height: 0;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 18px 24px 30px 24px;
+            display: flex;
+            flex-direction: column;
         }
 
         /* KPI Cards Grid */
@@ -1101,14 +1201,17 @@
 
         /* Footer */
         footer {
-            background: #0B0D14;
-            border-top: 1px solid var(--border);
-            padding: 10px 28px;
+            background: #0E111B;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 12px 20px;
+            margin-top: 24px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             font-size: 11px;
             color: #94A3B8;
+            flex-shrink: 0;
         }
 
         @media (max-width: 1200px) {
@@ -1173,7 +1276,7 @@
         <div class="brand-container">
             <div class="brand-logo">⚡</div>
             <div class="brand-text">
-                <h1>VoltSolar-Sim Pro Enterprise <span style="font-size: 11px; background: #18181B; border: 1px solid #3F3F46; color: #FFFFFF; padding: 1px 7px; border-radius: 10px; font-weight: 700;">v2.5</span></h1>
+                <h1>VoltSolar-Sim Pro Enterprise <span style="font-size: 11px; background: #18181B; border: 1px solid #3F3F46; color: #FFFFFF; padding: 1px 7px; border-radius: 10px; font-weight: 700;">v3.0</span></h1>
                 <p>Platform Komputasi Aliran Daya JTR (220V/380V) & Integrasi PLTS Atap On-Grid</p>
             </div>
         </div>
@@ -1319,49 +1422,129 @@
                 <div class="form-row">
                     <label class="form-label">Sumber Data Cuaca:</label>
                     <select id="weather_mode" onchange="toggleWeatherMode()">
-                        <option value="bmkg" selected>🌐 Live API BMKG (Real-Time Indonesia)</option>
-                        <option value="manual">🔘 Preset Standar Manual</option>
+                        <option value="bmkg" selected>📡 Live BMKG API (Resolusi 3 Jam - Kab / Kota)</option>
+                        <option value="manual">⚙️ Preset Standar Manual (Resolusi 3 Jam)</option>
                     </select>
                 </div>
 
-                <!-- BMKG Live Widget with Forecast Ribbon -->
+                <!-- BMKG Live Widget with 8-slot 3H Forecast Ribbon & 3-Level Administrative Cascading (Provinsi, Kab/Kota, Kecamatan) -->
                 <div id="bmkg_box" class="bmkg-widget">
                     <div class="bmkg-widget-top">
-                        <span>📡 BMKG OPEN DATA API</span>
+                        <span>📡 BMKG OPEN DATA API (3 JAM)</span>
                         <button class="btn-action" style="padding: 2px 7px; font-size: 10px;" onclick="loadBMKGWeather()">Refresh</button>
                     </div>
-                    <div class="form-row" style="margin-bottom: 8px;">
-                        <select id="weather_city" onchange="loadBMKGWeather()" style="font-size: 11px; padding: 4px 8px;">
-                            <option value="Jakarta Pusat">DKI Jakarta (Jakarta Pusat)</option>
-                            <option value="Semarang" selected>Jawa Tengah (Semarang)</option>
-                            <option value="Surabaya">Jawa Timur (Surabaya)</option>
-                            <option value="Bandung">Jawa Barat (Bandung)</option>
-                            <option value="Yogyakarta">DI Yogyakarta (Yogyakarta)</option>
-                            <option value="Denpasar">Bali (Denpasar)</option>
-                            <option value="Medan">Sumatera Utara (Medan)</option>
-                            <option value="Makassar">Sulawesi Selatan (Makassar)</option>
+
+                    <!-- 1. Dropdown Provinsi (38 Provinsi Indonesia) -->
+                    <div class="form-row" style="margin-bottom: 5px;">
+                        <label class="form-label" style="font-size: 10px; color: var(--text-muted);">1. Provinsi (38 Provinsi):</label>
+                        <select id="bmkg_provinsi" onchange="onProvinceChange()" style="font-size: 11px; padding: 4px 8px; width: 100%;">
+                            <option value="33" selected>Jawa Tengah</option>
                         </select>
                     </div>
+
+                    <!-- 2. Dropdown Kabupaten / Kota (514 Kab/Kota) -->
+                    <div class="form-row" style="margin-bottom: 5px;">
+                        <label class="form-label" style="font-size: 10px; color: var(--text-muted);">2. Kabupaten / Kota:</label>
+                        <select id="bmkg_kabkota" onchange="onRegencyChange()" style="font-size: 11px; padding: 4px 8px; width: 100%;">
+                            <option value="33.74" selected>Kota Semarang</option>
+                        </select>
+                    </div>
+
+                    <!-- 3. Dropdown Kecamatan (7.200+ Kecamatan) -->
+                    <div class="form-row" style="margin-bottom: 5px;">
+                        <label class="form-label" style="font-size: 10px; color: var(--text-muted);">3. Kecamatan (Tingkat ADM3/ADM4):</label>
+                        <select id="bmkg_kecamatan" onchange="onDistrictChange()" style="font-size: 11px; padding: 4px 8px; width: 100%;">
+                            <option value="33.74.01" selected>Semarang Tengah</option>
+                        </select>
+                    </div>
+
+                    <!-- Filter Pencarian Cepat Wilayah -->
+                    <div class="form-row" style="margin-bottom: 6px;">
+                        <input type="text" id="bmkg_quick_search" placeholder="🔍 Cari Kec / Kab / Kota instan..." oninput="onWilayahQuickSearch(this.value)" style="font-size: 10px; padding: 3px 8px; width: 100%; border-radius: 6px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-main);">
+                    </div>
+
+                    <!-- Tag Status Wilayah & Kode ADM4 Kemendagri / BMKG -->
+                    <div id="bmkg_location_badge" style="font-size: 10px; color: #10B981; padding: 4px 8px; background: rgba(16, 185, 129, 0.08); border-radius: 6px; border: 1px solid rgba(16, 185, 129, 0.25); margin-bottom: 7px; display: flex; align-items: center; justify-content: space-between;">
+                        <span id="bmkg_location_name">📍 <b>Semarang Tengah</b>, Kota Semarang</span>
+                        <span id="bmkg_adm4_code_tag" style="font-family: monospace; font-size: 9px; opacity: 0.85;">33.74.06.1001</span>
+                    </div>
+
+                    <!-- Hari Prakiraan -->
+                    <div class="form-row" style="margin-bottom: 8px;">
+                        <label class="form-label" style="font-size: 10px; color: var(--text-muted);">Hari Prakiraan:</label>
+                        <select id="weather_bmkg_day" onchange="loadBMKGWeather()" style="font-size: 11px; padding: 4px 8px; width: 100%;">
+                            <option value="0" selected>Hari Ini (Hari ke-1)</option>
+                            <option value="1">Besok (Hari ke-2)</option>
+                            <option value="2">Lusa (Hari ke-3)</option>
+                        </select>
+                    </div>
+
+                    <!-- Cuaca Utama Stat -->
                     <div class="bmkg-main-stat">
                         <div class="bmkg-icon" id="bmkg_icon">☀️</div>
                         <div class="bmkg-text" id="bmkg_desc_box">
                             Memuat data BMKG...
                         </div>
                     </div>
-                    <!-- 24h Forecast Ribbon -->
+
+                    <!-- 8-slot 3H Forecast Ribbon BMKG -->
+                    <div style="font-size: 9.5px; color: var(--text-muted); margin-bottom: 4px; display: flex; justify-content: space-between;">
+                        <span>Prakiraan 8 Periode 3-Jam (24 Jam):</span>
+                        <span style="color: #FBBF24;">☀️ Efisiensi Surya</span>
+                    </div>
                     <div class="forecast-ribbon" id="bmkg_ribbon">
                         <!-- Dinamis via JS -->
                     </div>
                 </div>
 
-                <div class="form-row" id="manual_weather_box" style="display: none; margin-top: 10px;">
-                    <label class="form-label">Kondisi Cuaca Manual:</label>
-                    <select id="weather_condition">
-                        <option value="Cerah Maksimal">Cerah Maksimal (Faktor 1.00)</option>
-                        <option value="Cerah Berawan">Cerah Berawan (Faktor 0.80)</option>
-                        <option value="Berawan Tebal">Berawan Tebal (Faktor 0.50)</option>
-                        <option value="Hujan / Mendung">Hujan / Mendung (Faktor 0.20)</option>
-                    </select>
+                <!-- Manual 3-Hour Preset & Interactive Slot Editor -->
+                <div class="bmkg-widget" id="manual_weather_box" style="display: none; margin-top: 10px;">
+                    <div class="bmkg-widget-top">
+                        <span>⚙️ PRESET STANDAR MANUAL (3 JAM)</span>
+                    </div>
+                    <div class="form-row" style="margin-bottom: 8px;">
+                        <label class="form-label" style="font-size: 10.5px;">Pilih Skenario Dinamis 3-Jam:</label>
+                        <select id="weather_3h_preset" onchange="onManualPresetChange()" style="font-size: 11px; padding: 4px 8px;">
+                            <option value="Tipikal Tropis Indonesia (Pagi Cerah -> Siang Berawan -> Sore Hujan)" selected>Tipikal Tropis (Pagi Cerah, Siang Awan, Sore Hujan)</option>
+                            <option value="Cerah Terik Seharian (Musim Kemarau / Peak Solar)">Cerah Terik Seharian (Kemarau Penuh)</option>
+                            <option value="Musim Hujan Basah (Mendung & Hujan Seharian)">Musim Hujan Basah (Mendung & Redup)</option>
+                            <option value="Badai Ekstrem Siang Hari (Pagi Terik -> Badai Petir Siang)">Badai Ekstrem Siang (Petir Pukul 12-15)</option>
+                            <option value="Berawan Tebal Stabil (Diffuse Radiation)">Berawan Tebal Stabil (Cahaya Baur)</option>
+                            <option value="custom">🛠️ Kustom Sendiri (Atur Tiap Slot 3 Jam)</option>
+                        </select>
+                    </div>
+                    <div id="manual_preset_desc" style="font-size: 10.5px; color: #A1A1AA; line-height: 1.35; margin-bottom: 8px; background: rgba(0,0,0,0.25); padding: 6px; border-radius: 4px; border-left: 2px solid #FFFFFF;">
+                        Pola iklim tropis umum di Indonesia: pagi hari cerah terik, siang mulai berawan konvektif, sore hujan lokal.
+                    </div>
+                    <!-- 8-slot 3H Forecast Ribbon Manual -->
+                    <div style="font-size: 9.5px; color: var(--text-muted); margin-bottom: 4px; display: flex; justify-content: space-between;">
+                        <span>Profil 8 Periode 3-Jam (24 Jam):</span>
+                        <span style="color: #FBBF24;">☀️ Faktor Surya</span>
+                    </div>
+                    <div class="forecast-ribbon" id="manual_ribbon">
+                        <!-- Dinamis via JS -->
+                    </div>
+                    <!-- Tombol Toggle Editor 8 Slot -->
+                    <div style="margin-top: 10px;">
+                        <button type="button" class="btn-action" style="width: 100%; font-size: 10.5px; padding: 5px;" onclick="toggleManualSlotsEditor()">
+                            <span id="manual_editor_toggle_icon">🔽</span> Buka / Tutup Editor Rinci Tiap 3 Jam
+                        </button>
+                    </div>
+                    <!-- Collapsible Table Editor 8 Slots -->
+                    <div id="manual_slots_container" style="display: none; margin-top: 8px; max-height: 280px; overflow-y: auto;">
+                        <table class="slot-editor-table">
+                            <thead>
+                                <tr>
+                                    <th style="width: 25%;">Jam</th>
+                                    <th style="width: 50%;">Cuaca</th>
+                                    <th style="width: 25%;">Suhu</th>
+                                </tr>
+                            </thead>
+                            <tbody id="manual_slots_tbody">
+                                <!-- Dinamis via JS -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -1454,8 +1637,10 @@
         <!-- Main Workspace -->
         <main class="main-viewport">
             
-            <!-- 5 Key KPI Metric Cards -->
-            <div class="kpi-row">
+            <!-- AREA WARNA MERAH: Header Metrik KPI & Navigasi Tab (TETAP TIDAK BERGERAK) -->
+            <div class="main-fixed-header">
+                <!-- 5 Key KPI Metric Cards -->
+                <div class="kpi-row">
                 <div class="kpi-card kpi-safe" id="kpi_card_vmin">
                     <div class="kpi-head">
                         <span>⚡ Tegangan Min (Vmin)</span>
@@ -1515,6 +1700,11 @@
                 <button class="tab-item" onclick="switchTab(8)">🗺️ Topologi & Drag-Drop</button>
                 <button class="tab-item" onclick="switchTab(9)">📑 Ekspor Laporan</button>
             </div>
+            <!-- TUTUP AREA WARNA MERAH: TETAP TIDAK BERGERAK -->
+            </div>
+
+            <!-- AREA WARNA KUNING: Workspace Tab Content Area (BISA DI-SCROLL SENDIRI TIDAK NYATU) -->
+            <div class="main-scroll-content" id="main_scroll_content">
 
             <!-- Tab 0: Info Paling Penting yang Wajib Diketahui Konsumen -->
             <div class="tab-content active" id="pane-top5">
@@ -1858,6 +2048,9 @@
                         <button class="btn-ctrl" id="btn_play" onclick="togglePlayAnimation()">▶ Play Animasi</button>
                         <span style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; min-width: 100px; font-family: var(--font-mono);" id="lbl_player_time">Pukul 12:00 WIB</span>
                         <input type="range" id="slider_hour" min="0" max="23" value="12" style="flex: 1;" oninput="onHourSliderChange(this.value)">
+                        <span id="lbl_player_weather" style="font-size: 11px; font-weight: 600; color: #FFFFFF; background: #18181B; padding: 4px 10px; border-radius: 6px; border: 1px solid #3F3F46; white-space: nowrap; display: flex; align-items: center; gap: 6px;">
+                            <span id="lbl_player_wicon">☀️</span> <span id="lbl_player_wtext">Cerah Terik (32.0°C)</span>
+                        </span>
                     </div>
                     <div id="chart_voltage_profile" style="width: 100%; height: 430px;"></div>
                 </div>
@@ -2195,14 +2388,16 @@
                 </div>
             </div>
 
+            <!-- Footer di bagian bawah konten tab yang dapat di-scroll -->
+            <footer>
+                <div>VoltSolar-Sim Pro Enterprise v3.0 | Web App HTML5 + Flask REST API</div>
+                <div>Projek Praktikum Pemrograman Dasar | Teknologi Rekayasa Elektro</div>
+            </footer>
+            <!-- TUTUP AREA WARNA KUNING: Workspace Tab Content Area -->
+            </div>
+
         </main>
     </div>
-
-    <!-- Footer -->
-    <footer>
-        <div>VoltSolar-Sim Pro Enterprise v2.5 | Web App HTML5 + Flask REST API</div>
-        <div>Projek Praktikum Pemrograman Dasar | Teknologi Rekayasa Elektro</div>
-    </footer>
 
     <!-- Interactive Client JavaScript -->
     <script>
@@ -2226,7 +2421,8 @@
 
         // Inisialisasi Aplikasi
         window.addEventListener('DOMContentLoaded', () => {
-            loadBMKGWeather();
+            initManualWeather3H();
+            initWilayahCascading();
             executeSimulation();
         });
 
@@ -2238,6 +2434,8 @@
             document.querySelectorAll('.tab-content').forEach((pane, idx) => {
                 pane.classList.toggle('active', idx === index);
             });
+            const sc = document.getElementById('main_scroll_content');
+            if (sc) sc.scrollTop = 0;
             window.dispatchEvent(new Event('resize'));
         }
 
@@ -2423,60 +2621,481 @@
             executeSimulation();
         }
 
-        // Ambil Data BMKG & Render Forecast Ribbon
+        // -------------------------------------------------------------
+        // DATABASE PRESET STANDAR 3-JAM & LOGIKA CUACA RESOLUSI 3 JAM
+        // -------------------------------------------------------------
+        const WEATHER_OPTIONS_LIST = [
+            "Cerah Maksimal",
+            "Cerah",
+            "Cerah Berawan",
+            "Berawan Ringan",
+            "Berawan",
+            "Berawan Tebal",
+            "Hujan Ringan",
+            "Hujan Sedang",
+            "Hujan Lebat",
+            "Hujan Petir / Badai"
+        ];
+
+        const WEATHER_FACTORS_MAP = {
+            "Cerah Maksimal": 1.00,
+            "Cerah": 1.00,
+            "Cerah Berawan": 0.85,
+            "Berawan Ringan": 0.70,
+            "Berawan": 0.60,
+            "Berawan Tebal": 0.45,
+            "Hujan Ringan": 0.25,
+            "Hujan Sedang": 0.20,
+            "Hujan Lebat": 0.12,
+            "Hujan Petir / Badai": 0.10
+        };
+
+        const PRESETS_3H_DATA = {
+            "Tipikal Tropis Indonesia (Pagi Cerah -> Siang Berawan -> Sore Hujan)": {
+                desc: "Pola iklim tropis umum di Indonesia: pagi hari cerah terik, siang mulai berawan konvektif, sore hujan lokal.",
+                slots: [
+                    { time: "00:00 - 03:00", weather: "Cerah Berawan", temp_c: 25.0, tcc_pct: 35 },
+                    { time: "03:00 - 06:00", weather: "Berawan", temp_c: 24.0, tcc_pct: 50 },
+                    { time: "06:00 - 09:00", weather: "Cerah Maksimal", temp_c: 28.0, tcc_pct: 15 },
+                    { time: "09:00 - 12:00", weather: "Cerah Berawan", temp_c: 32.0, tcc_pct: 40 },
+                    { time: "12:00 - 15:00", weather: "Berawan Tebal", temp_c: 31.0, tcc_pct: 75 },
+                    { time: "15:00 - 18:00", weather: "Hujan Ringan", temp_c: 27.0, tcc_pct: 90 },
+                    { time: "18:00 - 21:00", weather: "Hujan Sedang", temp_c: 26.0, tcc_pct: 85 },
+                    { time: "21:00 - 24:00", weather: "Berawan", temp_c: 25.0, tcc_pct: 60 }
+                ]
+            },
+            "Cerah Terik Seharian (Musim Kemarau / Peak Solar)": {
+                desc: "Kondisi puncak musim kemarau: langit biru jernih tanpa halangan awan dengan radiasi optimal sepanjang hari.",
+                slots: [
+                    { time: "00:00 - 03:00", weather: "Cerah", temp_c: 26.0, tcc_pct: 10 },
+                    { time: "03:00 - 06:00", weather: "Cerah", temp_c: 25.0, tcc_pct: 10 },
+                    { time: "06:00 - 09:00", weather: "Cerah Maksimal", temp_c: 29.0, tcc_pct: 5 },
+                    { time: "09:00 - 12:00", weather: "Cerah Maksimal", temp_c: 34.0, tcc_pct: 5 },
+                    { time: "12:00 - 15:00", weather: "Cerah Maksimal", temp_c: 35.0, tcc_pct: 5 },
+                    { time: "15:00 - 18:00", weather: "Cerah Maksimal", temp_c: 31.0, tcc_pct: 10 },
+                    { time: "18:00 - 21:00", weather: "Cerah", temp_c: 28.0, tcc_pct: 10 },
+                    { time: "21:00 - 24:00", weather: "Cerah", temp_c: 27.0, tcc_pct: 10 }
+                ]
+            },
+            "Musim Hujan Basah (Mendung & Hujan Seharian)": {
+                desc: "Kondisi monsun barat: tutupan awan tebal merata dengan hujan berkepanjangan yang mereduksi produksi PLTS.",
+                slots: [
+                    { time: "00:00 - 03:00", weather: "Hujan Ringan", temp_c: 24.0, tcc_pct: 95 },
+                    { time: "03:00 - 06:00", weather: "Hujan Ringan", temp_c: 24.0, tcc_pct: 95 },
+                    { time: "06:00 - 09:00", weather: "Berawan Tebal", temp_c: 25.0, tcc_pct: 85 },
+                    { time: "09:00 - 12:00", weather: "Hujan Sedang", temp_c: 26.0, tcc_pct: 90 },
+                    { time: "12:00 - 15:00", weather: "Hujan Lebat", temp_c: 25.0, tcc_pct: 100 },
+                    { time: "15:00 - 18:00", weather: "Hujan Ringan", temp_c: 25.0, tcc_pct: 90 },
+                    { time: "18:00 - 21:00", weather: "Berawan Tebal", temp_c: 24.0, tcc_pct: 80 },
+                    { time: "21:00 - 24:00", weather: "Berawan", temp_c: 24.0, tcc_pct: 75 }
+                ]
+            },
+            "Badai Ekstrem Siang Hari (Pagi Terik -> Badai Petir Siang)": {
+                desc: "Pagi terik memicu kenaikan suhu ekstrem, disusul badai petir mendadak pada jam 12:00-15:00 yang menurunkan tegangan tajam.",
+                slots: [
+                    { time: "00:00 - 03:00", weather: "Cerah Berawan", temp_c: 25.0, tcc_pct: 30 },
+                    { time: "03:00 - 06:00", weather: "Cerah", temp_c: 24.0, tcc_pct: 20 },
+                    { time: "06:00 - 09:00", weather: "Cerah Maksimal", temp_c: 30.0, tcc_pct: 10 },
+                    { time: "09:00 - 12:00", weather: "Cerah Maksimal", temp_c: 36.0, tcc_pct: 15 },
+                    { time: "12:00 - 15:00", weather: "Hujan Petir / Badai", temp_c: 24.0, tcc_pct: 100 },
+                    { time: "15:00 - 18:00", weather: "Hujan Sedang", temp_c: 25.0, tcc_pct: 85 },
+                    { time: "18:00 - 21:00", weather: "Berawan Tebal", temp_c: 25.0, tcc_pct: 70 },
+                    { time: "21:00 - 24:00", weather: "Berawan", temp_c: 24.5, tcc_pct: 60 }
+                ]
+            },
+            "Berawan Tebal Stabil (Diffuse Radiation)": {
+                desc: "Langit kelabu tertutup awan stratokumulus merata sepanjang hari: radiasi baur konstan tanpa fluktuasi tajam.",
+                slots: [
+                    { time: "00:00 - 03:00", weather: "Berawan Tebal", temp_c: 25.0, tcc_pct: 80 },
+                    { time: "03:00 - 06:00", weather: "Berawan Tebal", temp_c: 24.0, tcc_pct: 80 },
+                    { time: "06:00 - 09:00", weather: "Berawan Tebal", temp_c: 26.0, tcc_pct: 80 },
+                    { time: "09:00 - 12:00", weather: "Berawan Tebal", temp_c: 28.0, tcc_pct: 80 },
+                    { time: "12:00 - 15:00", weather: "Berawan Tebal", temp_c: 29.0, tcc_pct: 80 },
+                    { time: "15:00 - 18:00", weather: "Berawan Tebal", temp_c: 27.0, tcc_pct: 80 },
+                    { time: "18:00 - 21:00", weather: "Berawan Tebal", temp_c: 26.0, tcc_pct: 80 },
+                    { time: "21:00 - 24:00", weather: "Berawan", temp_c: 25.0, tcc_pct: 60 }
+                ]
+            }
+        };
+
+        let currentManualWeatherSlots = JSON.parse(JSON.stringify(PRESETS_3H_DATA["Tipikal Tropis Indonesia (Pagi Cerah -> Siang Berawan -> Sore Hujan)"].slots));
+
+        function getWeatherIcon(wDesc) {
+            const s = (wDesc || '').toLowerCase();
+            if (s.includes('petir') || s.includes('badai')) return '⛈️';
+            if (s.includes('lebat')) return '🌧️';
+            if (s.includes('sedang')) return '🌧️';
+            if (s.includes('hujan') || s.includes('gerimis')) return '🌦️';
+            if (s.includes('tebal') || s.includes('mendung')) return '☁️';
+            if (s.includes('berawan')) return '⛅';
+            if (s.includes('kabut') || s.includes('asap')) return '🌫️';
+            return '☀️';
+        }
+
+        function initManualWeather3H() {
+            renderManualRibbon();
+            renderManualSlotsTable();
+        }
+
+        function onManualPresetChange() {
+            const selPreset = document.getElementById('weather_3h_preset').value;
+            const descEl = document.getElementById('manual_preset_desc');
+            if (selPreset !== 'custom' && PRESETS_3H_DATA[selPreset]) {
+                currentManualWeatherSlots = JSON.parse(JSON.stringify(PRESETS_3H_DATA[selPreset].slots));
+                if (descEl) descEl.innerText = PRESETS_3H_DATA[selPreset].desc;
+            } else if (selPreset === 'custom') {
+                if (descEl) descEl.innerText = 'Skenario Kustom Pengguna: Atur kondisi cuaca dan suhu untuk tiap 8 periode 3 jam di bawah ini.';
+            }
+            renderManualRibbon();
+            renderManualSlotsTable();
+            executeSimulation();
+        }
+
+        function toggleManualSlotsEditor() {
+            const container = document.getElementById('manual_slots_container');
+            const icon = document.getElementById('manual_editor_toggle_icon');
+            if (container.style.display === 'none' || container.style.display === '') {
+                container.style.display = 'block';
+                if (icon) icon.innerText = '🔼';
+            } else {
+                container.style.display = 'none';
+                if (icon) icon.innerText = '🔽';
+            }
+        }
+
+        function renderManualSlotsTable() {
+            const tbody = document.getElementById('manual_slots_tbody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            currentManualWeatherSlots.forEach((slot, idx) => {
+                const tr = document.createElement('tr');
+                let optionsHtml = '';
+                WEATHER_OPTIONS_LIST.forEach(opt => {
+                    const sel = opt === slot.weather ? 'selected' : '';
+                    optionsHtml += `<option value="${opt}" ${sel}>${opt}</option>`;
+                });
+
+                tr.innerHTML = `
+                    <td style="font-family: var(--font-mono); font-size: 9.5px; color: #FFFFFF; font-weight: 600;">${slot.time.replace(':00', '').replace(':00', '')}</td>
+                    <td>
+                        <select onchange="onManualSlotWeatherChange(${idx}, this.value)" style="font-size: 10px; padding: 2px 4px;">
+                            ${optionsHtml}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="number" min="15" max="45" step="0.5" value="${slot.temp_c}" onchange="onManualSlotTempChange(${idx}, parseFloat(this.value))" style="font-size: 10px; width: 55px; text-align: center;">
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function onManualSlotWeatherChange(idx, val) {
+            currentManualWeatherSlots[idx].weather = val;
+            const presetSelect = document.getElementById('weather_3h_preset');
+            if (presetSelect) presetSelect.value = 'custom';
+            const descEl = document.getElementById('manual_preset_desc');
+            if (descEl) descEl.innerText = 'Skenario Kustom Pengguna: Disesuaikan per 3 jam.';
+            renderManualRibbon();
+            executeSimulation();
+        }
+
+        function onManualSlotTempChange(idx, val) {
+            currentManualWeatherSlots[idx].temp_c = isNaN(val) ? 28.0 : val;
+            const presetSelect = document.getElementById('weather_3h_preset');
+            if (presetSelect) presetSelect.value = 'custom';
+            renderManualRibbon();
+            executeSimulation();
+        }
+
+        function renderManualRibbon() {
+            const ribbon = document.getElementById('manual_ribbon');
+            if (!ribbon) return;
+            ribbon.innerHTML = '';
+
+            currentManualWeatherSlots.forEach(slot => {
+                const icon = getWeatherIcon(slot.weather);
+                const factor = WEATHER_FACTORS_MAP[slot.weather] || 0.85;
+                const factorPct = Math.round(factor * 100);
+                const shortTime = slot.time.replace(':00', '').replace(':00', '');
+
+                const chip = document.createElement('div');
+                chip.className = 'forecast-chip';
+                chip.innerHTML = `
+                    <div class="fc-time">${shortTime}</div>
+                    <div style="font-size: 13px; margin: 2px 0;">${icon}</div>
+                    <div class="fc-desc" title="${slot.weather}">${slot.weather}</div>
+                    <div class="fc-temp">${slot.temp_c}°C</div>
+                    <div class="fc-factor">☀️ ${factorPct}%</div>
+                `;
+                ribbon.appendChild(chip);
+            });
+        }
+
+        // -------------------------------------------------------------
+        // Cascading Wilayah BMKG (38 Provinsi, 514 Kab/Kota, 7200+ Kec)
+        // -------------------------------------------------------------
+        let allProvinces = [];
+        let currentRegencies = [];
+        let currentDistricts = [];
+        let currentBMKGProvinceName = 'Jawa Tengah';
+        let currentBMKGCityName = 'Kota Semarang';
+        let currentBMKGDistrictName = 'Semarang Tengah';
+        let currentBMKGDistrictId = '33.74.01';
+        let currentBMKGAdm4 = '33.74.06.1001';
+
+        async function initWilayahCascading() {
+            try {
+                const res = await fetch('/api/wilayah/provinces');
+                let text = await res.text();
+                text = text.replace(/:\s*NaN\b/g, ': 0.0').replace(/:\s*-?Infinity\b/g, ': 0.0');
+                allProvinces = JSON.parse(text);
+
+                const provSel = document.getElementById('bmkg_provinsi');
+                if (provSel && allProvinces.length > 0) {
+                    provSel.innerHTML = '';
+                    allProvinces.forEach(p => {
+                        const opt = document.createElement('option');
+                        opt.value = p.id;
+                        opt.textContent = p.name;
+                        if (p.id === '33' || p.name.includes('Jawa Tengah')) {
+                            opt.selected = true;
+                        }
+                        provSel.appendChild(opt);
+                    });
+                }
+
+                await onProvinceChange('33', '33.74', '33.74.01');
+            } catch (e) {
+                console.error('Error initWilayahCascading:', e);
+                loadBMKGWeather();
+            }
+        }
+
+        async function onProvinceChange(overrideProvId, overrideRegId, overrideDistId) {
+            const provEl = document.getElementById('bmkg_provinsi');
+            const provId = overrideProvId || (provEl ? provEl.value : '33');
+            const provObj = allProvinces.find(p => p.id === provId);
+            currentBMKGProvinceName = provObj ? provObj.name : 'Provinsi';
+
+            const regSel = document.getElementById('bmkg_kabkota');
+            if (regSel) regSel.innerHTML = '<option value="">Memuat Kabupaten / Kota...</option>';
+
+            try {
+                const res = await fetch(`/api/wilayah/regencies?prov_id=${encodeURIComponent(provId)}`);
+                let text = await res.text();
+                text = text.replace(/:\s*NaN\b/g, ': 0.0').replace(/:\s*-?Infinity\b/g, ': 0.0');
+                currentRegencies = JSON.parse(text);
+
+                if (regSel && currentRegencies.length > 0) {
+                    regSel.innerHTML = '';
+                    let matchedTarget = null;
+                    currentRegencies.forEach((r, idx) => {
+                        const opt = document.createElement('option');
+                        opt.value = r.id;
+                        opt.textContent = r.name;
+                        if (overrideRegId) {
+                            if (r.id === overrideRegId || r.id.replace('.', '') === overrideRegId.replace('.', '')) {
+                                opt.selected = true;
+                                matchedTarget = r.id;
+                            }
+                        } else if (idx === 0) {
+                            opt.selected = true;
+                            matchedTarget = r.id;
+                        }
+                        regSel.appendChild(opt);
+                    });
+                    const targetReg = matchedTarget || currentRegencies[0].id;
+                    await onRegencyChange(targetReg, overrideDistId);
+                }
+            } catch (e) {
+                console.error('Error onProvinceChange:', e);
+            }
+        }
+
+        async function onRegencyChange(overrideRegId, overrideDistId) {
+            const regEl = document.getElementById('bmkg_kabkota');
+            const regId = overrideRegId || (regEl ? regEl.value : '33.74');
+            const regObj = currentRegencies.find(r => r.id === regId);
+            currentBMKGCityName = regObj ? regObj.name : 'Kabupaten / Kota';
+
+            const distSel = document.getElementById('bmkg_kecamatan');
+            if (distSel) distSel.innerHTML = '<option value="">Memuat Kecamatan...</option>';
+
+            try {
+                const res = await fetch(`/api/wilayah/districts?reg_id=${encodeURIComponent(regId)}`);
+                let text = await res.text();
+                text = text.replace(/:\s*NaN\b/g, ': 0.0').replace(/:\s*-?Infinity\b/g, ': 0.0');
+                currentDistricts = JSON.parse(text);
+
+                if (distSel && currentDistricts.length > 0) {
+                    distSel.innerHTML = '';
+                    let matchedTarget = null;
+                    currentDistricts.forEach((d, idx) => {
+                        const opt = document.createElement('option');
+                        opt.value = d.id;
+                        opt.textContent = d.name;
+                        if (overrideDistId) {
+                            if (d.id === overrideDistId) {
+                                opt.selected = true;
+                                matchedTarget = d.id;
+                            }
+                        } else if (idx === 0) {
+                            opt.selected = true;
+                            matchedTarget = d.id;
+                        }
+                        distSel.appendChild(opt);
+                    });
+                    const targetDist = matchedTarget || currentDistricts[0].id;
+                    onDistrictChange(targetDist);
+                }
+            } catch (e) {
+                console.error('Error onRegencyChange:', e);
+            }
+        }
+
+        function onDistrictChange(overrideDistId) {
+            const distEl = document.getElementById('bmkg_kecamatan');
+            const distId = overrideDistId || (distEl ? distEl.value : '33.74.01');
+            const distObj = currentDistricts.find(d => d.id === distId);
+            currentBMKGDistrictName = distObj ? distObj.name : 'Kecamatan';
+            currentBMKGDistrictId = distId;
+            currentBMKGAdm4 = distId;
+
+            const badgeName = document.getElementById('bmkg_location_name');
+            if (badgeName) {
+                badgeName.innerHTML = `📍 <b>${currentBMKGDistrictName}</b>, ${currentBMKGCityName}`;
+            }
+            const tagCode = document.getElementById('bmkg_adm4_code_tag');
+            if (tagCode) {
+                tagCode.textContent = distId;
+            }
+            const badgeCity = document.getElementById('badge_bmkg_city');
+            if (badgeCity) {
+                badgeCity.innerText = `📡 BMKG: ${currentBMKGDistrictName}, ${currentBMKGCityName}`;
+            }
+
+            loadBMKGWeather();
+        }
+
+        function onWilayahQuickSearch(query) {
+            query = (query || '').trim().toLowerCase();
+            if (!query || query.length < 2) return;
+
+            const matchedDist = currentDistricts.find(d => d.name.toLowerCase().includes(query));
+            if (matchedDist) {
+                const distSel = document.getElementById('bmkg_kecamatan');
+                if (distSel) {
+                    distSel.value = matchedDist.id;
+                    onDistrictChange(matchedDist.id);
+                }
+                return;
+            }
+
+            const matchedReg = currentRegencies.find(r => r.name.toLowerCase().includes(query));
+            if (matchedReg) {
+                const regSel = document.getElementById('bmkg_kabkota');
+                if (regSel) {
+                    regSel.value = matchedReg.id;
+                    onRegencyChange(matchedReg.id);
+                }
+                return;
+            }
+
+            const matchedProv = allProvinces.find(p => p.name.toLowerCase().includes(query));
+            if (matchedProv) {
+                const provSel = document.getElementById('bmkg_provinsi');
+                if (provSel) {
+                    provSel.value = matchedProv.id;
+                    onProvinceChange(matchedProv.id);
+                }
+            }
+        }
+
+        // Ambil Data BMKG & Render Forecast Ribbon (8 Periode 3 Jam)
         async function loadBMKGWeather() {
-            const city = document.getElementById('weather_city').value;
+            const dayEl = document.getElementById('weather_bmkg_day');
+            const dayIdx = dayEl ? parseInt(dayEl.value) : 0;
             const descBox = document.getElementById('bmkg_desc_box');
             const iconBox = document.getElementById('bmkg_icon');
             const ribbon = document.getElementById('bmkg_ribbon');
             const badgeCity = document.getElementById('badge_bmkg_city');
-            badgeCity.innerText = `📡 BMKG: ${city}`;
-            descBox.innerHTML = 'Mengambil data BMKG...';
-            
+            if (badgeCity) badgeCity.innerText = `📡 BMKG: ${currentBMKGDistrictName}, ${currentBMKGCityName}`;
+            if (descBox) descBox.innerHTML = `Mengambil prakiraan BMKG untuk <b>${currentBMKGDistrictName}</b>...`;
+
             try {
-                const res = await fetch(`/api/bmkg?city=${encodeURIComponent(city)}`);
-                const data = await res.json();
-                
+                const queryParams = new URLSearchParams({
+                    city: currentBMKGCityName,
+                    day: dayIdx,
+                    district_id: currentBMKGDistrictId,
+                    adm4: currentBMKGAdm4
+                });
+                const res = await fetch(`/api/bmkg?${queryParams.toString()}`);
+                let rawText = await res.text();
+                rawText = rawText.replace(/:\s*NaN\b/g, ': 0.0').replace(/:\s*-?Infinity\b/g, ': 0.0');
+                const data = JSON.parse(rawText);
+
                 const wDesc = data.weather_desc || 'Cerah Berawan';
                 const temp = data.temp_c || 28;
-                const tcc = data.tcc_pct || 50;
-                const factor = data.effective_solar_factor || 0.85;
+                const tcc = data.tcc_pct !== undefined ? data.tcc_pct : 40;
+                const factor = data.effective_solar_factor !== undefined ? data.effective_solar_factor : 0.85;
+                const icon = getWeatherIcon(wDesc);
 
-                let icon = '☀️';
-                if (wDesc.toLowerCase().includes('hujan')) icon = '🌧️';
-                else if (wDesc.toLowerCase().includes('petir')) icon = '⛈️';
-                else if (wDesc.toLowerCase().includes('berawan')) icon = '⛅';
+                if (iconBox) iconBox.innerText = icon;
+                if (descBox) {
+                    descBox.innerHTML = `<b>${wDesc}</b> (${temp}°C)<br>Tutupan Awan (TCC): <b>${tcc}%</b> | Efisiensi Surya: <b>${Math.round(factor * 100)}%</b>`;
+                }
 
-                iconBox.innerText = icon;
-                descBox.innerHTML = `<b>${wDesc}</b> (${temp}°C)<br>Awan (TCC): ${tcc}% | Faktor Radiasi: <b>${factor}</b>`;
+                if (data.code) {
+                    currentBMKGAdm4 = data.code;
+                    const tagCode = document.getElementById('bmkg_adm4_code_tag');
+                    if (tagCode) tagCode.textContent = data.code;
+                }
 
-                // Render 6-slot forecast ribbon
-                if (data.forecast_slots && data.forecast_slots.length > 0) {
+                if (data.location_info && data.location_info.kecamatan) {
+                    const badgeName = document.getElementById('bmkg_location_name');
+                    if (badgeName) {
+                        badgeName.innerHTML = `📍 <b>${data.location_info.kecamatan}</b> (${data.location_info.desa || ''}), ${data.location_info.kotkab}`;
+                    }
+                }
+
+                // Render 8-slot 3H forecast ribbon
+                const slots = data.slots_3h || data.forecast_slots || [];
+                if (ribbon && slots.length > 0) {
                     ribbon.innerHTML = '';
-                    data.forecast_slots.forEach(slot => {
-                        let scIcon = '☀️';
-                        if (slot.weather_desc.toLowerCase().includes('hujan')) scIcon = '🌧️';
-                        else if (slot.weather_desc.toLowerCase().includes('berawan')) scIcon = '⛅';
+                    slots.forEach(slot => {
+                        const scIcon = getWeatherIcon(slot.weather_desc);
+                        const effPct = Math.round((slot.effective_factor || slot.rad_factor || 0.8) * 100);
+                        const timeStr = (slot.time_range || slot.time || '').replace(':00', '').replace(':00', '');
 
                         const div = document.createElement('div');
                         div.className = 'forecast-chip';
                         div.innerHTML = `
-                            <div class="fc-time">${slot.time}</div>
-                            <div style="font-size: 14px; margin: 2px 0;">${scIcon}</div>
+                            <div class="fc-time">${timeStr}</div>
+                            <div style="font-size: 13px; margin: 2px 0;">${scIcon}</div>
+                            <div class="fc-desc" title="${slot.weather_desc}">${slot.weather_desc}</div>
                             <div class="fc-temp">${slot.temp_c}°C</div>
+                            <div class="fc-factor">☀️ ${effPct}%</div>
                         `;
                         ribbon.appendChild(div);
                     });
                 }
             } catch (err) {
-                descBox.innerHTML = 'Mode Offline (Standar)';
+                if (descBox) descBox.innerHTML = 'Mode Offline (Estimasi Resolusi 3 Jam Standar)';
             }
         }
 
         // Jalankan Simulasi
         async function executeSimulation() {
             const overlay = document.getElementById('loading-overlay');
-            overlay.style.display = 'flex';
+            if (overlay) overlay.style.display = 'flex';
+
+            const wMode = document.getElementById('weather_mode').value;
+            const dayEl = document.getElementById('weather_bmkg_day');
+            const dayIdx = dayEl ? parseInt(dayEl.value) : 0;
+            const presetEl = document.getElementById('weather_3h_preset');
+            const wPreset = presetEl ? presetEl.value : 'Tipikal Tropis Indonesia (Pagi Cerah -> Siang Berawan -> Sore Hujan)';
 
             const payload = {
                 num_buses: parseInt(document.getElementById('num_buses').value),
@@ -2491,9 +3110,14 @@
                 pv_placement_mode: document.getElementById('pv_placement_mode').value,
                 pv_installed_buses: selectedCustomPVBuses,
                 pv_capacity_kw: parseFloat(document.getElementById('pv_capacity_kw').value),
-                weather_mode: document.getElementById('weather_mode').value,
-                weather_city: document.getElementById('weather_city').value,
-                weather_condition: document.getElementById('weather_condition').value,
+                weather_mode: wMode,
+                weather_city: currentBMKGCityName,
+                weather_district_id: currentBMKGDistrictId,
+                weather_adm4: currentBMKGAdm4,
+                weather_day: dayIdx,
+                weather_3h_preset: wPreset,
+                weather_slots_3h: currentManualWeatherSlots.map(s => s.weather),
+                temp_slots_3h: currentManualWeatherSlots.map(s => s.temp_c),
                 enable_bess: document.getElementById('enable_bess').checked,
                 bess_cap_kwh: parseFloat(document.getElementById('bess_cap_kwh') ? document.getElementById('bess_cap_kwh').value : 5.0),
                 bess_kw: parseFloat(document.getElementById('bess_kw') ? document.getElementById('bess_kw').value : 2.5),
@@ -2511,17 +3135,20 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-                const data = await res.json();
-                overlay.style.display = 'none';
+                let rawText = await res.text();
+                // Anti-NaN Guaranteed Sanitizer
+                rawText = rawText.replace(/:\s*NaN\b/g, ': 0.0').replace(/:\s*-?Infinity\b/g, ': 0.0');
+                const data = JSON.parse(rawText);
+                if (overlay) overlay.style.display = 'none';
 
                 if (data.status === 'success') {
                     currentSimulationData = data;
                     updateDashboard(data);
                 } else {
-                    alert('Gagal menjalankan simulasi: ' + data.message);
+                    alert('Gagal menjalankan simulasi: ' + (data.message || 'Terjadi kesalahan sistem'));
                 }
             } catch (err) {
-                overlay.style.display = 'none';
+                if (overlay) overlay.style.display = 'none';
                 alert('Koneksi server gagal: ' + err);
             }
         }
@@ -2649,6 +3276,17 @@
             updateTop5ConsumerInsights(data);
             const m = data.metrics;
 
+            const badgeCity = document.getElementById('badge_bmkg_city');
+            if (badgeCity && data.weather_meta) {
+                if (data.weather_mode === 'manual' || (data.weather_meta.mode && data.weather_meta.mode.includes('Manual'))) {
+                    const pName = data.weather_meta.preset_name || 'Preset 3-Jam Manual';
+                    badgeCity.innerText = `⚙️ Cuaca: ${pName.split('(')[0].trim()}`;
+                } else {
+                    const c = data.weather_meta.city || document.getElementById('weather_city').value;
+                    badgeCity.innerText = `📡 BMKG: ${c}`;
+                }
+            }
+
             // 1. KPI Cards
             document.getElementById('kpi_vmin').innerText = m.min_v_volt_pv.toFixed(1) + ' V';
             document.getElementById('kpi_vmax').innerText = m.max_v_volt_pv.toFixed(1) + ' V';
@@ -2687,6 +3325,7 @@
             renderSPLNTable(data);
             renderHeatmap2D(data);
             renderVoltageProfileChart(currentHour);
+            updatePlayerWeatherBadge(currentHour);
             render3DSurfaceChart(data);
             renderBessCharts(data);
             renderVoltVarChart(data);
@@ -2851,6 +3490,25 @@
         }
 
         // Toggle Animation Player
+        function updatePlayerWeatherBadge(hour) {
+            const iconEl = document.getElementById('lbl_player_wicon');
+            const textEl = document.getElementById('lbl_player_wtext');
+            if (!currentSimulationData) return;
+
+            const wMeta = currentSimulationData.weather_meta || {};
+            const descs = wMeta.hourly_weather_desc || [];
+            const temps = wMeta.hourly_temps || [];
+            const factors = wMeta.hourly_factors || [];
+
+            const desc = descs[hour] || (currentSimulationData.bmkg_info ? currentSimulationData.bmkg_info.weather_desc : 'Cerah Berawan');
+            const temp = temps[hour] !== undefined ? Number(temps[hour]).toFixed(1) : '28.0';
+            const factor = factors[hour] !== undefined ? Math.round(factors[hour] * 100) : 85;
+            const icon = getWeatherIcon(desc);
+
+            if (iconEl) iconEl.innerText = icon;
+            if (textEl) textEl.innerText = `${desc} (${temp}°C | Surya ${factor}%)`;
+        }
+
         function togglePlayAnimation() {
             const btn = document.getElementById('btn_play');
             if (isPlaying) {
@@ -2868,6 +3526,7 @@
                     currentHour = (currentHour + 1) % 24;
                     document.getElementById('slider_hour').value = currentHour;
                     document.getElementById('lbl_player_time').innerText = `Pukul ${currentHour < 10 ? '0' : ''}${currentHour}:00 WIB`;
+                    updatePlayerWeatherBadge(currentHour);
                     renderVoltageProfileChart(currentHour);
                 }, 750);
             }
@@ -2876,6 +3535,7 @@
         function onHourSliderChange(val) {
             currentHour = parseInt(val);
             document.getElementById('lbl_player_time').innerText = `Pukul ${currentHour < 10 ? '0' : ''}${currentHour}:00 WIB`;
+            updatePlayerWeatherBadge(currentHour);
             renderVoltageProfileChart(currentHour);
         }
 
@@ -3017,7 +3677,9 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });
-            const data = await res.json();
+            let rawText = await res.text();
+            rawText = rawText.replace(/:\s*NaN\b/g, ': 0.0').replace(/:\s*-?Infinity\b/g, ': 0.0');
+            const data = JSON.parse(rawText);
 
             if (data.status === 'success') {
                 const scan = data.scan_data;

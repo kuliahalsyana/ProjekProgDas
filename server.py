@@ -9,9 +9,10 @@ import os
 import io
 import json
 import math
+import re
 import numpy as np
 import pandas as pd
-from flask import Flask, render_template, request, jsonify, send_file
+from flask import Flask, render_template, request, jsonify, send_file, Response
 
 from core.grid_model import create_lv_network, CABLE_TYPES, TRANSFORMER_TYPES
 from core.profiles import (
@@ -19,7 +20,8 @@ from core.profiles import (
     generate_solar_profile,
     fetch_bmkg_weather,
     BMKG_CITIES,
-    WEATHER_FACTORS
+    WEATHER_FACTORS,
+    WEATHER_3H_PRESETS
 )
 from core.simulation import (
     run_time_series_comparison,
@@ -28,6 +30,12 @@ from core.simulation import (
     calculate_techno_economics,
     export_simulation_to_docx,
     export_simulation_to_excel
+)
+from core.wilayah import (
+    get_provinces,
+    get_regencies,
+    get_districts,
+    resolve_district_adm4
 )
 
 app = Flask(__name__, template_folder="templates", static_folder="static")
@@ -64,9 +72,37 @@ def sanitize_json(data, fallback_val=0.0):
     elif isinstance(data, pd.Series):
         cleaned_series = data.ffill().bfill().fillna(fallback_val)
         return sanitize_json(cleaned_series.to_dict(), fallback_val)
+    elif isinstance(data, np.ndarray):
+        return [sanitize_json(x, fallback_val) for x in data.tolist()]
     elif data is None:
         return None
     return data
+
+
+def safe_jsonify(data, status_code=200):
+    """Mengembalikan respons JSON yang dijamin 100% valid tanpa token NaN/Infinity."""
+    clean = sanitize_json(data)
+    try:
+        json_str = json.dumps(clean, allow_nan=False)
+    except Exception:
+        raw_str = json.dumps(clean, default=str)
+        cleaned = re.sub(r':\s*NaN\b', ': 0.0', raw_str)
+        cleaned = re.sub(r'\[\s*NaN\b', '[0.0', cleaned)
+        cleaned = re.sub(r',\s*NaN\b', ', 0.0', cleaned)
+        cleaned = re.sub(r':\s*-?Infinity\b', ': 0.0', cleaned)
+        cleaned = re.sub(r'\[\s*-?Infinity\b', '[0.0', cleaned)
+        cleaned = re.sub(r',\s*-?Infinity\b', ', 0.0', cleaned)
+        json_str = cleaned
+
+    if "NaN" in json_str or "Infinity" in json_str:
+        json_str = re.sub(r':\s*NaN\b', ': 0.0', json_str)
+        json_str = re.sub(r'\[\s*NaN\b', '[0.0', json_str)
+        json_str = re.sub(r',\s*NaN\b', ', 0.0', json_str)
+        json_str = re.sub(r':\s*-?Infinity\b', ': 0.0', json_str)
+        json_str = re.sub(r'\[\s*-?Infinity\b', '[0.0', json_str)
+        json_str = re.sub(r',\s*-?Infinity\b', ', 0.0', json_str)
+
+    return Response(json_str, status=status_code, mimetype="application/json")
 
 
 @app.route("/")
@@ -90,22 +126,47 @@ def get_initial_config():
         {"from": "Tiang_8", "to": "Tiang_9"},
         {"from": "Tiang_9", "to": "Tiang_10"}
     ]
-    return jsonify({
+    return safe_jsonify({
         "status": "success",
         "cables": list(CABLE_TYPES.keys()),
         "transformers": list(TRANSFORMER_TYPES.keys()),
-        "weather_presets": list(WEATHER_FACTORS.keys()),
+        "weather_presets": list(WEATHER_3H_PRESETS.keys()),
+        "weather_3h_presets": WEATHER_3H_PRESETS,
+        "weather_conditions": list(WEATHER_FACTORS.keys()),
         "bmkg_cities": list(BMKG_CITIES.keys()),
         "default_branches": default_branches
     })
 
 
+@app.route("/api/wilayah/provinces", methods=["GET"])
+def api_get_provinces():
+    """Mengembalikan daftar 38 Provinsi resmi Indonesia"""
+    return safe_jsonify(get_provinces())
+
+
+@app.route("/api/wilayah/regencies", methods=["GET"])
+def api_get_regencies():
+    """Mengembalikan daftar Kabupaten/Kota berdasarkan prov_id"""
+    prov_id = request.args.get("prov_id", "33")
+    return safe_jsonify(get_regencies(prov_id))
+
+
+@app.route("/api/wilayah/districts", methods=["GET"])
+def api_get_districts():
+    """Mengembalikan daftar Kecamatan berdasarkan reg_id"""
+    reg_id = request.args.get("reg_id", "33.74")
+    return safe_jsonify(get_districts(reg_id))
+
+
 @app.route("/api/bmkg", methods=["GET"])
 def get_bmkg_weather():
-    """Mengambil data cuaca langsung dari REST API resmi BMKG"""
-    city = request.args.get("city", "Jakarta Pusat")
-    res = fetch_bmkg_weather(city)
-    return jsonify(res)
+    """Mengambil data cuaca langsung dari REST API resmi BMKG resolusi 3 jam"""
+    city = request.args.get("city", "Kota Semarang")
+    day_idx = int(request.args.get("day", 0))
+    adm4 = request.args.get("adm4", None)
+    district_id = request.args.get("district_id", None)
+    res = fetch_bmkg_weather(city, day_index=day_idx, adm4_code=adm4, district_code=district_id)
+    return safe_jsonify(res)
 
 
 @app.route("/api/simulate", methods=["POST"])
@@ -155,19 +216,43 @@ def run_simulation():
 
         pv_capacity_kw = float(req.get("pv_capacity_kw", 2.0))
         
-        # Cuaca: BMKG vs Preset
+        # Cuaca: BMKG vs Preset Resolusi 3 Jam
         weather_mode = req.get("weather_mode", "bmkg")
         bmkg_info = None
-        effective_factor = 1.0
+        weather_meta = None
         
         if weather_mode == "bmkg":
-            city = req.get("weather_city", "Jakarta Pusat")
-            bmkg_info = fetch_bmkg_weather(city)
-            effective_factor = bmkg_info.get("effective_solar_factor", 0.85)
-            solar_series = generate_solar_profile(pv_capacity_kw=pv_capacity_kw, custom_factor=effective_factor)
+            city = req.get("weather_city", "Kota Semarang")
+            day_idx = int(req.get("weather_day", 0))
+            adm4 = req.get("weather_adm4", None)
+            district_id = req.get("weather_district_id", None)
+            bmkg_info = fetch_bmkg_weather(city, day_index=day_idx, adm4_code=adm4, district_code=district_id)
+            hourly_factors = bmkg_info.get("hourly_factors")
+            hourly_temps = bmkg_info.get("hourly_temps")
+            solar_series = generate_solar_profile(
+                pv_capacity_kw=pv_capacity_kw,
+                hourly_factors=hourly_factors,
+                hourly_temps=hourly_temps
+            )
+            weather_meta = getattr(solar_series, "attrs", {}).get("weather_info", {})
+            weather_meta["mode"] = "BMKG Open Data API (Resolusi 3 Jam)"
+            weather_meta["city"] = city
+            weather_meta["code"] = bmkg_info.get("code")
+            weather_meta["location_info"] = bmkg_info.get("location_info", {})
+            weather_meta["slots_3h"] = bmkg_info.get("slots_3h", [])
         else:
-            w_cond = req.get("weather_condition", "Cerah Maksimal")
-            solar_series = generate_solar_profile(weather_condition=w_cond, pv_capacity_kw=pv_capacity_kw)
+            w_preset = req.get("weather_3h_preset", req.get("weather_condition", "Tipikal Tropis Indonesia (Pagi Cerah -> Siang Berawan -> Sore Hujan)"))
+            weather_slots = req.get("weather_slots_3h", None)
+            temp_slots = req.get("temp_slots_3h", None)
+            solar_series = generate_solar_profile(
+                weather_condition=w_preset,
+                pv_capacity_kw=pv_capacity_kw,
+                weather_slots_3h=weather_slots,
+                temp_slots_3h=temp_slots
+            )
+            weather_meta = getattr(solar_series, "attrs", {}).get("weather_info", {})
+            weather_meta["mode"] = "Preset Standar Manual (Resolusi 3 Jam)"
+            weather_meta["preset_name"] = w_preset
 
         # BESS & Smart Inverter
         enable_bess = bool(req.get("enable_bess", False))
@@ -306,15 +391,16 @@ def run_simulation():
             },
             "techno_econ": techno_econ,
             "bmkg_info": bmkg_info,
+            "weather_meta": weather_meta,
             "active_branches": active_branches if active_branches else [{"from": f"Tiang_{i-1}" if i > 1 else "Trafo", "to": f"Tiang_{i}"} for i in range(1, num_buses + 1)]
         }
 
-        return jsonify(sanitize_json(response_data))
+        return safe_jsonify(response_data)
 
     except Exception as e:
         import traceback
         traceback.print_exc()
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return safe_jsonify({"status": "error", "message": str(e)}), 500
 
 
 @app.route("/api/hosting-capacity", methods=["POST"])
@@ -363,17 +449,17 @@ def get_hosting_capacity():
                 "status": str(row["Status"])
             })
 
-        return jsonify(sanitize_json({
+        return safe_jsonify({
             "status": "success",
             "hosting_capacity_kw": hc_res["optimal_capacity_per_house_kwp"],
             "total_feeder_capacity_kwp": hc_res["total_hosting_capacity_feeder_kwp"],
             "limiting_factor": hc_res["limiting_factor"],
             "scan_data": scan_records
-        }))
+        })
     except Exception as e:
         import traceback
         traceback.print_exc()
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return safe_jsonify({"status": "error", "message": str(e)}), 500
 
 
 @app.route("/api/export-docx", methods=["POST"])
@@ -396,6 +482,7 @@ def download_docx():
         techno_econ = sim_data.get("techno_econ", {})
         unbalance_res = sim_data.get("unbalance_res", {})
         bess_params = sim_data.get("bess_params", {})
+        weather_meta = sim_data.get("weather_meta", {})
 
         net_params = {
             "num_buses": len(sim_data.get("bus_list", [])),
@@ -419,7 +506,8 @@ def download_docx():
             monthly_bill_idr=monthly_bill_idr,
             consultant_name=consultant_name,
             bess_choice=bess_choice,
-            field_notes=field_notes
+            field_notes=field_notes,
+            weather_meta=weather_meta
         )
 
         safe_name = "".join([c if c.isalnum() else "_" for c in consumer_name]).strip("_")
@@ -435,7 +523,7 @@ def download_docx():
     except Exception as e:
         import traceback
         traceback.print_exc()
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return safe_jsonify({"status": "error", "message": str(e)}), 500
 
 
 @app.route("/api/export-excel", methods=["POST"])
@@ -453,6 +541,7 @@ def download_excel():
 
         base_v_df = pd.DataFrame.from_dict(sim_data.get("base_v_volt", {}), orient="index")
         pv_v_df = pd.DataFrame.from_dict(sim_data.get("pv_v_volt", {}), orient="index")
+        weather_meta = sim_data.get("weather_meta", {})
 
         excel_buffer = io.BytesIO()
         export_simulation_to_excel(
@@ -471,7 +560,8 @@ def download_excel():
                 "Opsi Sistem Baterai": req.get("bess_choice", "Termasuk Baterai LiFePO4 5.0 kWh"),
                 "Disusun Oleh": req.get("consultant_name", "Tim Konsultan Sistem Tenaga Surya")
             },
-            techno_econ=techno_econ
+            techno_econ=techno_econ,
+            weather_meta=weather_meta
         )
         excel_buffer.seek(0)
 
@@ -488,7 +578,7 @@ def download_excel():
     except Exception as e:
         import traceback
         traceback.print_exc()
-        return jsonify({"status": "error", "message": str(e)}), 500
+        return safe_jsonify({"status": "error", "message": str(e)}), 500
 
 
 if __name__ == "__main__":

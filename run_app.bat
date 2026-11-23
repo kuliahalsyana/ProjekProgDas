@@ -21,14 +21,19 @@ echo.
 set "PY_MODE="
 set "PY_EXE="
 
-:: Uji apakah perintah 'python' aktif dan BUKAN alias palsu Microsoft Store
-python -c "import sys" >nul 2>&1
-if !ERRORLEVEL! equ 0 (
-    set "PY_MODE=python"
-    goto CREATE_VENV
+:: 1. Uji apakah perintah 'python' aktif dan BUKAN alias palsu Microsoft Store
+for /f "delims=" %%I in ('where python.exe 2^>nul') do (
+    echo %%I | findstr /i /v "WindowsApps" >nul 2>&1
+    if !ERRORLEVEL! equ 0 (
+        "%%I" -c "import sys" >nul 2>&1
+        if !ERRORLEVEL! equ 0 (
+            set "PY_EXE=%%I"
+            goto CREATE_VENV
+        )
+    )
 )
 
-:: Uji apakah Python Launcher 'py' terpasang
+:: 2. Uji apakah Python Launcher 'py' terpasang
 py -3 -c "import sys" >nul 2>&1
 if !ERRORLEVEL! equ 0 (
     set "PY_MODE=py"

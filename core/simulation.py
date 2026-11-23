@@ -585,7 +585,8 @@ def export_simulation_to_excel(
     load_df: pd.DataFrame,
     file_path: str,
     consumer_info: dict = None,
-    techno_econ: dict = None
+    techno_econ: dict = None,
+    weather_meta: dict = None
 ):
     """
     Mengekspor seluruh hasil simulasi ke dalam file Excel berformat multi-sheet
@@ -599,7 +600,23 @@ def export_simulation_to_excel(
             ])
             df_cons.to_excel(writer, sheet_name="Profil_Konsumen", index=False)
 
-        # Sheet 2: Proyeksi Finansial 25 Tahun
+        # Sheet 2: Data Cuaca & Penyinaran Resolusi 3 Jam
+        if weather_meta and weather_meta.get("slots_3h"):
+            slots_data = []
+            for s in weather_meta["slots_3h"]:
+                slots_data.append({
+                    "Periode Waktu": s.get("time_range", ""),
+                    "Kondisi Cuaca": s.get("weather_desc", ""),
+                    "Suhu Udara (°C)": s.get("temp_c", 28.0),
+                    "Tutupan Awan (%)": s.get("tcc_pct", 50.0),
+                    "Faktor Penyinaran": s.get("solar_factor", s.get("rad_factor", 1.0)),
+                    "Faktor Efektif (Derating Suhu)": s.get("effective_factor", 0.85),
+                    "Estimasi Daya PLTS Rata-rata (kW)": s.get("avg_solar_kw", 0.0)
+                })
+            df_weather = pd.DataFrame(slots_data)
+            df_weather.to_excel(writer, sheet_name="Data_Cuaca_3Jam", index=False)
+
+        # Sheet 3: Proyeksi Finansial 25 Tahun
         if techno_econ:
             capex = techno_econ.get("total_capex_idr", techno_econ.get("total_capex_rp", 26000000.0))
             annual_save = techno_econ.get("annual_savings_idr", techno_econ.get("annual_electricity_savings_rp", 63285700.0))
@@ -806,7 +823,8 @@ def export_simulation_to_docx(
     field_notes: str = "Atap bebas bayangan arah utara sudut 15°, proteksi SPD Kelas II & grounding < 2 Ohm",
     group_name: str = None,
     class_name: str = None,
-    members: list = None
+    members: list = None,
+    weather_meta: dict = None
 ) -> bytes:
     """
     Menghasilkan dokumen resmi Word (.docx) berorientasi konsumen:
@@ -995,9 +1013,75 @@ def export_simulation_to_docx(
     doc.add_paragraph().paragraph_format.space_after = Pt(8)
 
     # ==========================
-    # 2. ANALISIS KELAYAKAN FINANSIAL
+    # 2. PROFIL CUACA & RADIASI RESOLUSI 3 JAM
     # ==========================
-    h2 = doc.add_heading("2. ANALISIS FINANSIAL & PENGHEMATAN BIAYA KONSUMEN", level=1)
+    if weather_meta and weather_meta.get("slots_3h"):
+        h_w = doc.add_heading("2. ANALISIS DATA CUACA & RADIASI RESOLUSI 3 JAM", level=1)
+        h_w.paragraph_format.space_before = Pt(12)
+        h_w.paragraph_format.space_after = Pt(4)
+        h_w.runs[0].font.name = 'Arial'
+        h_w.runs[0].font.color.rgb = RGBColor(11, 44, 90)
+
+        loc_label = weather_meta.get("city", weather_meta.get("preset_name", "Wilayah Analisis"))
+        mode_label = weather_meta.get("mode", "Prakiraan Cuaca 3 Jam")
+        p_winfo = doc.add_paragraph()
+        p_winfo.paragraph_format.space_after = Pt(6)
+        r_wlbl = p_winfo.add_run(f"Sumber Data: {mode_label} | Lokasi/Skenario: {loc_label}\n")
+        r_wlbl.font.bold = True
+        r_wlbl.font.size = Pt(9.5)
+        r_wlbl.font.color.rgb = RGBColor(15, 23, 42)
+        p_winfo.add_run(
+            "Perhitungan produksi daya aktif PLTS harian dimodelkan secara dinamis per periode 3 jam, "
+            "mengintegrasikan tutupan awan (Total Cloud Cover) dan koefisien derating suhu modul fotovoltaik (-0.4%/°C di atas STC 25°C):"
+        )
+
+        tbl_w = doc.add_table(rows=1, cols=6)
+        tbl_w.alignment = WD_TABLE_ALIGNMENT.CENTER
+        hdr_w = tbl_w.rows[0].cells
+        hdr_titles = ["Periode Waktu", "Kondisi Cuaca", "Suhu (°C)", "Awan (%)", "Efisiensi Surya", "Status Penyinaran"]
+        for idx, text in enumerate(hdr_titles):
+            hdr_w[idx].text = text
+            set_cell_background(hdr_w[idx], "0B2C5A")
+            set_cell_margins(hdr_w[idx], top=70, bottom=70, left=90, right=90)
+            p = hdr_w[idx].paragraphs[0]
+            p.runs[0].font.name = 'Arial'
+            p.runs[0].font.bold = True
+            p.runs[0].font.color.rgb = RGBColor(255, 255, 255)
+            p.runs[0].font.size = Pt(8.5)
+
+        for s in weather_meta["slots_3h"]:
+            row_c = tbl_w.add_row().cells
+            for c in row_c:
+                set_cell_margins(c, top=50, bottom=50, left=80, right=80)
+            row_c[0].text = str(s.get("time_range", ""))
+            row_c[1].text = str(s.get("weather_desc", ""))
+            row_c[2].text = f"{float(s.get('temp_c', 28.0)):.1f}°C"
+            row_c[3].text = f"{float(s.get('tcc_pct', 50.0)):.0f}%"
+            eff_val = float(s.get("effective_factor", 0.85)) * 100.0
+            row_c[4].text = f"{eff_val:.1f}%"
+            
+            s_idx = int(s.get("slot_index", 0))
+            if s_idx in [0, 1, 6, 7]:
+                row_c[5].text = "Malam (0 kW)"
+            elif eff_val > 80:
+                row_c[5].text = "Optimal (Terik)"
+            elif eff_val > 45:
+                row_c[5].text = "Sedang (Awan Baur)"
+            else:
+                row_c[5].text = "Rendah (Hujan/Mendung)"
+
+            for c in row_c:
+                p_c = c.paragraphs[0]
+                if p_c.runs:
+                    p_c.runs[0].font.name = 'Arial'
+                    p_c.runs[0].font.size = Pt(8)
+
+        doc.add_paragraph().paragraph_format.space_after = Pt(8)
+
+    # ==========================
+    # 3. ANALISIS KELAYAKAN FINANSIAL
+    # ==========================
+    h2 = doc.add_heading("3. ANALISIS FINANSIAL & PENGHEMATAN BIAYA KONSUMEN", level=1)
     h2.paragraph_format.space_before = Pt(12)
     h2.paragraph_format.space_after = Pt(4)
     h2.runs[0].font.name = 'Arial'

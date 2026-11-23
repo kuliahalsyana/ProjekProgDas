@@ -122,13 +122,13 @@ def create_lv_network(
     - pp.pandapowerNet: Objek jaringan listrik terintegrasi siap dihitung dengan Newton-Raphson.
     """
     # Inisialisasi wadah jaringan listrik kosong
-    net = pp.create_empty_network(name="JTR_Distribusi_Residensial")
+    net = pp.create_empty_network(name="JTR_Distribusi_Residensial") #buat jaringan kosong
     
     # -----------------------------------------------------------------------------------------
     # LANGKAH 1: Bus & Sumber Daya Sisi Tegangan Menengah (Grid PLN 20 kV)
     # -----------------------------------------------------------------------------------------
     # Bus tegangan menengah 20 kV sebagai sisi primer transformator
-    bus_mv = pp.create_bus(net, vn_kv=20.0, name="Bus_TM_20kV", zone="TM")
+    bus_mv = pp.create_bus(net, vn_kv=20.0, name="Bus_TM_20kV", zone="TM") #membuat bus
     # External grid merepresentasikan sumber daya tak terbatas PLN (Slack Bus / V-theta bus: V = 1.0 pu)
     pp.create_ext_grid(net, bus=bus_mv, vm_pu=1.0, name="Grid_TM_PLN")
     
