@@ -51,12 +51,12 @@ flowchart TD
 ---
 
 ## 2. PETA SELURUH FITUR FRONTEND (10 TAB & MENU NAVIGASI)
-File utama frontend berada di: [templates/index.html](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html)
+File utama frontend berada di: [Web/index.html](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html)
 
 ### A. Komponen Navigasi, Header & Sidebar
 1. **Header & Status Live**:
    * Menampilkan logo, nama aplikasi, status koneksi server, dan jam digital real-time.
-   * Lokasi kode: [templates/index.html#L110-L160](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L110-L160)
+   * Lokasi kode: [Web/index.html#L110-L160](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L110-L160)
 2. **Sidebar Panel Kontrol Parameter**:
    * Pilihan topologi (Linear Radial vs Kustom Bercabang).
    * Konfigurasi tiang (jumlah tiang, jarak gawang span length, jenis kabel LVTC PLN, kapasitas trafo Dyn5).
@@ -64,7 +64,7 @@ File utama frontend berada di: [templates/index.html](file:///c:/Nala%20Alma%20S
    * Konfigurasi PLTS Atap (penempatan, kapasitas kWp per rumah).
    * Konfigurasi cuaca (Koneksi BMKG 38 kota vs Preset Cuaca).
    * Preset Tarif Daya PLN (450 VA, 900 VA Subsidi, 900 VA RTM, 1300 VA, 2200 VA, dst.).
-   * Lokasi kode: [templates/index.html#L1250-L1490](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L1250-L1490)
+   * Lokasi kode: [Web/index.html#L1250-L1490](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L1250-L1490)
 
 ---
 
@@ -74,8 +74,8 @@ File utama frontend berada di: [templates/index.html](file:///c:/Nala%20Alma%20S
 * **Isi Fitur**:
   * 5 Menu Unggulan: Estimasi Penghematan Tagihan Bulanan, Kepatuhan Tegangan Rumah, Kapasitas Maksimal Terpasang, Waktu Balik Modal (Payback Period), dan Status Rekomendasi Baterai (BESS).
   * Kartu Edukasi Manfaat Lingkungan (Ton CO2 berkurang & setara penanaman pohon).
-* **Lokasi HTML**: [templates/index.html#L1530-L1815](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L1530-L1815)
-* **Lokasi JS Render**: [templates/index.html#L2680-L2745](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L2680-L2745)
+* **Lokasi HTML**: [Web/index.html#L1530-L1815](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L1530-L1815)
+* **Lokasi JS Render**: [Web/index.html#L2680-L2745](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L2680-L2745)
 
 #### 2. Tab 1: 📊 Ringkasan & Standar SPLN 1:1995
 * **Tujuan**: Audit kepatuhan teknis tegangan terhadap regulasi SPLN PLN (-10% s/d +5% nominal).
@@ -83,8 +83,8 @@ File utama frontend berada di: [templates/index.html](file:///c:/Nala%20Alma%20S
   * 4 KPI Cards: Drop Tegangan Maksimum, Kenaikan Tegangan PV, Total Rugi Daya (Losses), Status Kepatuhan SPLN (Lolos / Waspada).
   * Grafik Profil Tegangan Sepanjang Feeder (Base Case vs PV Case).
   * Grafik Kurva Beban Agregat vs Kurva Injeksi PLTS 24 Jam.
-* **Lokasi HTML**: [templates/index.html#L1820-L1920](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L1820-L1920)
-* **Lokasi JS Render**: [templates/index.html#L2750-L2830](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L2750-L2830)
+* **Lokasi HTML**: [Web/index.html#L1820-L1920](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L1820-L1920)
+* **Lokasi JS Render**: [Web/index.html#L2750-L2830](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L2750-L2830)
 
 #### 3. Tab 2: 🎬 Animasi Playback 24 Jam
 * **Tujuan**: Menampilkan dinamika fluktuasi tegangan dan pembebanan trafo sepanjang hari secara visual dinamis.
@@ -92,8 +92,8 @@ File utama frontend berada di: [templates/index.html](file:///c:/Nala%20Alma%20S
   * Slider waktu 00:00 - 23:00 WIB dengan tombol Play/Pause otomatis.
   * Grafik profil tegangan dinamis tiap tiang yang berubah setiap detik.
   * Bar pembebanan trafo distribusi (%) terhadap kapasitas pengenal kVA.
-* **Lokasi HTML**: [templates/index.html#L1925-L1970](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L1925-L1970)
-* **Lokasi JS Playback Loop**: [templates/index.html#L2835-L2890](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L2835-L2890)
+* **Lokasi HTML**: [Web/index.html#L1925-L1970](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L1925-L1970)
+* **Lokasi JS Playback Loop**: [Web/index.html#L2835-L2890](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L2835-L2890)
 
 #### 4. Tab 3: 🌐 Permukaan 3D (Spatiotemporal Voltage Surface)
 * **Tujuan**: Visualisasi multi-dimensi tegangan terhadap Jam (Sumbu X) dan Jarak Tiang (Sumbu Y).
@@ -104,8 +104,8 @@ File utama frontend berada di: [templates/index.html](file:///c:/Nala%20Alma%20S
     2. **🔌 Tanpa PLTS**: Menampilkan fenomena *voltage drop* di malam hari.
     3. **⚖️ Bandingan Keduanya (3D)**: Overlay bidang transparan komparasi langsung.
     4. **📈 Kenaikan Tegangan (Delta-V)**: Kontur selisih kenaikan tegangan bersih akibat PLTS.
-* **Lokasi HTML**: [templates/index.html#L1975-L2020](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L1975-L2020)
-* **Lokasi JS Plotly 3D**: [templates/index.html#L2895-L2985](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L2895-L2985)
+* **Lokasi HTML**: [Web/index.html#L1975-L2020](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L1975-L2020)
+* **Lokasi JS Plotly 3D**: [Web/index.html#L2895-L2985](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L2895-L2985)
 
 #### 5. Tab 4: ⚡ Hosting Capacity (Kapasitas Tampung Maksimum JTR)
 * **Tujuan**: Mengetahui berapa kWp PLTS maksimum yang boleh disambungkan sebelum jaringan mengalami trip/overvoltage.
@@ -113,8 +113,8 @@ File utama frontend berada di: [templates/index.html](file:///c:/Nala%20Alma%20S
   * Pemindaian otomatis bertahap dari 0 kWp hingga 8+ kWp saat radiasi puncak jam 12:00.
   * Deteksi faktor pembatas (*limiting factor*): Overvoltage kabel, Overload trafo, atau Rugi daya.
   * Grafik kurva batas penetrasi PLTS aman.
-* **Lokasi HTML**: [templates/index.html#L2025-L2075](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L2025-L2075)
-* **Lokasi JS Scan Trigger**: [templates/index.html#L2990-L3055](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L2990-L3055)
+* **Lokasi HTML**: [Web/index.html#L2025-L2075](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L2025-L2075)
+* **Lokasi JS Scan Trigger**: [Web/index.html#L2990-L3055](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L2990-L3055)
 
 #### 6. Tab 5: 🔋 BESS (Baterai) & Smart Inverter Volt-VAr
 * **Tujuan**: Solusi mitigasi kestabilan jaringan tingkat lanjut (*grid support*).
@@ -122,8 +122,8 @@ File utama frontend berada di: [templates/index.html](file:///c:/Nala%20Alma%20S
   * Simulasi Baterai LiFePO4: Charging saat surya berlebih siang hari, Discharging saat beban puncak malam.
   * Grafik State of Charge (SoC %) baterai 24 jam.
   * Kontrol Daya Reaktif Smart Inverter Volt-VAr sesuai standar **IEEE 1547-2018**.
-* **Lokasi HTML**: [templates/index.html#L2080-L2130](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L2080-L2130)
-* **Lokasi JS BESS Logic**: [templates/index.html#L3060-L3110](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L3060-L3110)
+* **Lokasi HTML**: [Web/index.html#L2080-L2130](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L2080-L2130)
+* **Lokasi JS BESS Logic**: [Web/index.html#L3060-L3110](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L3060-L3110)
 
 #### 7. Tab 6: ⚖️ Ketidakseimbangan 3-Fasa & Arus Kawat Netral
 * **Tujuan**: Analisis ketidakseimbangan beban antar fasa R, S, dan T pada jaringan distribusi 4-kawat.
@@ -132,8 +132,8 @@ File utama frontend berada di: [templates/index.html](file:///c:/Nala%20Alma%20S
   * Perhitungan *Voltage Unbalance Factor* (VUF %) standar **IEC 61000-4-30** dan **IEEE 1129**.
   * Perhitungan aliran arus pada kawat netral (In) akibat penjumlahan vektor phasor 3-fasa.
   * Perhitungan rugi daya tembaga kawat netral (In^2 * Rn).
-* **Lokasi HTML**: [templates/index.html#L2135-L2180](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L2135-L2180)
-* **Lokasi JS 3-Phase**: [templates/index.html#L3115-L3170](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L3115-L3170)
+* **Lokasi HTML**: [Web/index.html#L2135-L2180](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L2135-L2180)
+* **Lokasi JS 3-Phase**: [Web/index.html#L3115-L3170](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L3115-L3170)
 
 #### 8. Tab 7: 💰 Tekno-Ekonomi & Emisi Karbon
 * **Tujuan**: Analisis kelayakan finansial investasi PLTS Atap dan dampak reduksi emisi gas rumah kaca.
@@ -143,8 +143,8 @@ File utama frontend berada di: [templates/index.html](file:///c:/Nala%20Alma%20S
   * Perhitungan OPEX, Penghematan Tahunan, dan Periode Pengembalian Modal (*Simple Payback Period*).
   * Analisis *Net Present Value* (NPV) proyek selama 25 tahun dengan faktor diskonto (*discount rate*).
   * Perhitungan reduksi emisi CO2 (ton/tahun) berdasarkan faktor emisi grid Jawa-Madura-Bali (Jamali).
-* **Lokasi HTML**: [templates/index.html#L2185-L2240](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L2185-L2240)
-* **Lokasi JS Financial**: [templates/index.html#L3175-L3250](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L3175-L3250)
+* **Lokasi HTML**: [Web/index.html#L2185-L2240](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L2185-L2240)
+* **Lokasi JS Financial**: [Web/index.html#L3175-L3250](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L3175-L3250)
 
 #### 9. Tab 8: 🗺️ Visualisasi Topologi & Interactive Drag-Drop
 * **Tujuan**: Menggambar skematik diagram satu garis (*Single Line Diagram*) jaringan JTR secara grafis interaktif.
@@ -152,8 +152,8 @@ File utama frontend berada di: [templates/index.html](file:///c:/Nala%20Alma%20S
   * Visualisasi posisi Gardu Trafo Distribusi, kabel pilin LVTC, tiang listrik, dan rumah ber-PLTS.
   * Fitur interaktif: Geser (*drag*) tiang listrik di atas layar Canvas HTML5.
   * Dukungan topologi radial murni maupun topologi bercabang (*tree branch*).
-* **Lokasi HTML**: [templates/index.html#L2245-L2310](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L2245-L2310)
-* **Lokasi JS Canvas Engine**: [templates/index.html#L3255-L3380](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L3255-L3380)
+* **Lokasi HTML**: [Web/index.html#L2245-L2310](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L2245-L2310)
+* **Lokasi JS Canvas Engine**: [Web/index.html#L3255-L3380](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L3255-L3380)
 
 #### 10. Tab 9: 📑 Ekspor Laporan Resmi (Word & Excel)
 * **Tujuan**: Mengunduh berkas laporan rekayasa profesional siap cetak.
@@ -161,8 +161,8 @@ File utama frontend berada di: [templates/index.html](file:///c:/Nala%20Alma%20S
   * Formulir data properti konsumen (Nama Pemilik, Alamat, ID Pelanggan PLN, Nama Konsultan, Opsi Baterai).
   * Tombol **"📄 Unduh Laporan Audit Teknis (.docx)"**: Dokumen Word rapi dengan kop profesional, tabel metrik, analisis SPLN, dan tanda tangan legalitas.
   * Tombol **"📊 Unduh Lembar Kerja Analisis (.xlsx)"**: Spreadsheet Excel lengkap dengan 6 sheet (Ringkasan, 24h Time-Series, Matriks Tegangan Base, Matriks Tegangan PV, 3-Fasa Unbalance, dan Tekno-Ekonomi).
-* **Lokasi HTML**: [templates/index.html#L2315-L2370](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L2315-L2370)
-* **Lokasi JS Export Triggers**: [templates/index.html#L3385-L3460](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L3385-L3460)
+* **Lokasi HTML**: [Web/index.html#L2315-L2370](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L2315-L2370)
+* **Lokasi JS Export Triggers**: [Web/index.html#L3385-L3460](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L3385-L3460)
 
 ---
 
@@ -274,5 +274,5 @@ File backend utama berada di: [server.py](file:///c:/Nala%20Alma%20Syafif/Kuliah
 | **Laporan** | Ekspor Dokumen Microsoft Word Resmi (.docx) | `core/simulation.py` | [L683-L840](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/core/simulation.py#L683-L840) |
 | **Laporan** | Ekspor Buku Kerja Microsoft Excel 6 Sheet (.xlsx) | `core/simulation.py` | [L843-L1163](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/core/simulation.py#L843-L1163) |
 | **Web Service** | Flask REST API Routing, Serializer Anti-NaN | `server.py` | [L38-L510](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/server.py#L38-L510) |
-| **Antarmuka** | Struktur Visual 10 Tab, Top 5 Menu, Form Input | `templates/index.html` | [L1500-L2370](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L1500-L2370) |
-| **Visualisasi** | Grafik Plotly 2D/3D, Animasi 24h & Canvas Topologi | `templates/index.html` | [L2680-L3460](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/templates/index.html#L2680-L3460) |
+| **Antarmuka** | Struktur Visual 10 Tab, Top 5 Menu, Form Input | `Web/index.html` | [L1500-L2370](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L1500-L2370) |
+| **Visualisasi** | Grafik Plotly 2D/3D, Animasi 24h & Canvas Topologi | `Web/index.html` | [L2680-L3460](file:///c:/Nala%20Alma%20Syafif/Kuliah/Praktikum%20Pemrograman%20Dasar/Projek/Web/index.html#L2680-L3460) |

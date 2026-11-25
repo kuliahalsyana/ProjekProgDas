@@ -9,8 +9,12 @@ import json
 import urllib.request
 import ssl
 
-# Direktori Cache Lokal agar super cepat dan memiliki ketahanan offline (Offline Resilience)
-CACHE_DIR = os.path.join(os.path.dirname(__file__), "wilayah_cache")
+# Direktori Basis Data Wilayah & Cache BMKG Lokal agar super cepat dan memiliki ketahanan offline
+CACHE_DIR = os.path.join(os.path.dirname(__file__), "Data BMKG")
+if not os.path.exists(CACHE_DIR):
+    alt_cache = os.path.join(os.path.dirname(__file__), "wilayah_cache")
+    if os.path.exists(alt_cache):
+        CACHE_DIR = alt_cache
 os.makedirs(CACHE_DIR, exist_ok=True)
 
 # 1. DAFTAR 38 PROVINSI RESMI REPUBLIK INDONESIA

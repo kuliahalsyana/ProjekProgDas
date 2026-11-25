@@ -71,10 +71,13 @@ Projek/
 │   ├── __init__.py
 │   ├── grid_model.py          # Pemodelan JTR, trafo, kabel, beban, PLTS, & percabangan (pandapower)
 │   ├── profiles.py            # Generator profil beban 24 jam & API Cuaca BMKG
-│   └── simulation.py          # Engine Newton-Raphson, Hosting Capacity, BESS, Volt-VAr, & Ekspor Laporan
+│   ├── simulation.py          # Engine Newton-Raphson, Hosting Capacity, BESS, Volt-VAr, & Ekspor Laporan
+│   ├── wilayah.py             # Modul Resolusi Wilayah 38 Provinsi, 514 Kab/Kota, 7.285 Kecamatan
+│   └── Data BMKG/             # Basis Data Wilayah Resmi & Cache Terverifikasi Seluruh Indonesia
 │
-├── templates/
-│   └── index.html             # Antarmuka Web Dashboard Utama (HTML5, CSS3, JavaScript, Plotly.js)
+├── Web/
+│   ├── index.html             # Antarmuka Web Dashboard Utama (HTML5, JavaScript, Plotly.js)
+│   └── style.css              # Berkas Desain & Tata Letak Stylesheet CSS3
 │
 ├── server.py                  # Backend Web Server (Flask REST API & Controller)
 ├── run_app.bat                # Skrip peluncur otomatis sekali klik ke Web App HTML5 (Port 5000)

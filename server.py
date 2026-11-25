@@ -12,7 +12,7 @@ import math
 import re
 import numpy as np
 import pandas as pd
-from flask import Flask, render_template, request, jsonify, send_file, Response
+from flask import Flask, render_template, request, jsonify, send_file, send_from_directory, Response
 
 from core.grid_model import create_lv_network, CABLE_TYPES, TRANSFORMER_TYPES
 from core.profiles import (
@@ -38,7 +38,7 @@ from core.wilayah import (
     resolve_district_adm4
 )
 
-app = Flask(__name__, template_folder="templates", static_folder="static")
+app = Flask(__name__, template_folder="Web", static_folder="Web", static_url_path="")
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 app.config["SEND_FILE_MAX_AGE_DEFAULT"] = 0
 
@@ -109,6 +109,18 @@ def safe_jsonify(data, status_code=200):
 def index():
     """Halaman Utama Dashboard Web HTML5"""
     return render_template("index.html")
+
+
+@app.route("/style.css")
+def serve_css():
+    """Melayani file stylesheet style.css dari folder Web"""
+    return send_from_directory(os.path.join(app.root_path, "Web"), "style.css", mimetype="text/css")
+
+
+@app.route("/Web/<path:filename>")
+def serve_web_assets(filename):
+    """Fallback route untuk melayani aset yang diakses via path /Web/..."""
+    return send_from_directory(os.path.join(app.root_path, "Web"), filename)
 
 
 @app.route("/api/initial-config", methods=["GET"])
