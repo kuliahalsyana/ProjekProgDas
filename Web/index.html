@@ -126,7 +126,8 @@
                         <option value="Percabangan di Tiang 2 (2 Cabang)">Percabangan di Tiang 2 (2 Cabang)</option>
                         <option value="Percabangan di Tiang 3 (2 Cabang)">Percabangan di Tiang 3 (2 Cabang)</option>
                         <option value="Topologi Pohon Garpu">Topologi Pohon Garpu (Dual-Branch)</option>
-                        <option value="🎛️ Kustom Mandiri (Drag & Drop Canvas)">🎛️ Kustom Mandiri (Drag & Drop Canvas)</option>
+                        <option value="Feeder Kembar (2 Jalur dari Trafo)">Feeder Kembar (2 Jalur dari Trafo)</option>
+                        <option value="🎛️ Kustom Mandiri (Drag & Drop Canvas)">Kustom (Atur cabang sendiri)</option>
                     </select>
                 </div>
                 <div class="form-row" id="row_num_buses">
@@ -684,14 +685,49 @@
                                 <option value="LVTC 3x35 + 1x25 mm²">LVTC 3x35 + 1x25 mm²</option>
                             </select>
 
+                            <label class="setup-input-label">Topologi jaringan bus</label>
+                            <select id="wiz_topology_type" class="setup-select" onchange="onWizardTopologyChange(this.value)">
+                                <option value="Linear Radial (Standar)" selected>Linear radial (Standar)</option>
+                                <option value="Percabangan di Tiang 2 (2 Cabang)">Percabangan di Tiang 2 (2 cabang)</option>
+                                <option value="Percabangan di Tiang 3 (2 Cabang)">Percabangan di Tiang 3 (2 cabang)</option>
+                                <option value="Topologi Pohon Garpu">Topologi pohon garpu (Dual-branch)</option>
+                                <option value="Feeder Kembar (2 Jalur dari Trafo)">Feeder kembar (2 jalur dari trafo)</option>
+                                <option value="🎛️ Kustom Mandiri (Drag & Drop Canvas)">Kustom (Atur cabang bus sendiri)</option>
+                            </select>
+
+                            <div id="wiz_custom_topo_box" style="display: none; margin-bottom: 12px; background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px;">
+                                    <span style="font-size: 12px; font-weight: 500; color: var(--text-primary);">Kanvas drag &amp; drop topologi bus</span>
+                                    <button type="button" class="btn-action" style="padding: 4px 8px; font-size: 11px;" onclick="resetWizardTopology()">Reset</button>
+                                </div>
+                                <div id="wiz-canvas-blueprint" style="width: 100%; height: 210px; background: radial-gradient(rgba(238, 240, 245, 0.12) 1px, transparent 1px); background-size: 20px 20px; background-color: var(--bg-sidebar); border: 1px solid var(--border); border-radius: var(--radius-sm); position: relative; overflow: hidden; margin-bottom: 8px;">
+                                    <svg id="wiz-canvas-svg" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;"></svg>
+                                </div>
+                                <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">
+                                    Geser posisi tiang pada kanvas. Klik tiang untuk memilih induk cabang, atau klik garis untuk menghapus koneksi.
+                                </div>
+                                <div id="wiz_custom_topo_list" style="display: flex; flex-wrap: wrap; gap: 4px; max-height: 76px; overflow-y: auto; margin-bottom: 8px;">
+                                    <!-- Dinamis via JS -->
+                                </div>
+                                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                                    <select id="wiz_parent_branch" class="setup-select" style="margin-bottom: 0; padding: 6px 8px; font-size: 12px;">
+                                        <option value="Trafo">Trafo</option>
+                                    </select>
+                                    <input type="text" id="wiz_new_bus" class="setup-input" value="Tiang_11" placeholder="Nama tiang baru" style="margin-bottom: 0; padding: 6px 8px; font-size: 12px;">
+                                </div>
+                                <button type="button" class="btn-action" style="width: 100%; padding: 6px 10px; font-size: 12px;" onclick="addWizardCustomBranch()">
+                                    Tambah cabang
+                                </button>
+                            </div>
+
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-                                <div>
+                                <div id="wiz_num_buses_wrap">
                                     <label class="setup-input-label">Jumlah tiang</label>
-                                    <input type="number" id="wiz_num_buses" class="setup-input" min="3" max="20" value="10" oninput="document.getElementById('wiz_span_total_hint').innerText = (parseInt(this.value||10) * parseInt(document.getElementById('wiz_span_length_m').value||50)) + ' m'">
+                                    <input type="number" id="wiz_num_buses" class="setup-input" min="3" max="20" value="10" oninput="onWizardTopologyChange(document.getElementById('wiz_topology_type').value)">
                                 </div>
                                 <div>
                                     <label class="setup-input-label">Jarak tiang (m)</label>
-                                    <input type="number" id="wiz_span_length_m" class="setup-input" min="20" max="100" value="50" oninput="document.getElementById('wiz_span_total_hint').innerText = (parseInt(document.getElementById('wiz_num_buses').value||10) * parseInt(this.value||50)) + ' m'">
+                                    <input type="number" id="wiz_span_length_m" class="setup-input" min="20" max="100" value="50" oninput="updateWizardSpanHint()">
                                 </div>
                             </div>
 
@@ -725,13 +761,27 @@
                             <input type="range" id="wiz_pv_capacity_kw" min="0.0" max="10.0" value="1.5" step="0.25" style="margin-bottom: 12px;" oninput="document.getElementById('wiz_lbl_pv_kw').innerText = parseFloat(this.value).toFixed(2) + ' kWp'">
 
                             <label class="setup-input-label">Penempatan PLTS pada tiang</label>
-                            <select id="wiz_pv_placement_mode" class="setup-select">
+                            <select id="wiz_pv_placement_mode" class="setup-select" onchange="onWizardPvPlacementChange(this.value)">
                                 <option value="Semua Tiang (Merata)" selected>Semua tiang (Merata)</option>
                                 <option value="Ujung Saluran (Bus 6-10)">Ujung saluran (Bus 6-10)</option>
                                 <option value="Pangkal Saluran (Bus 1-5)">Pangkal dekat trafo</option>
                                 <option value="Acak / Selang-Seling">Acak / selang-seling</option>
+                                <option value="Kustom / Pilihan Manual">Kustom (Pilih tiang manual)</option>
                                 <option value="Tanpa PLTS">Tanpa PLTS</option>
                             </select>
+
+                            <div id="wiz_custom_pv_box" style="display: none; margin-bottom: 12px; background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                    <span style="font-size: 12px; font-weight: 500; color: var(--text-primary);">Pilih tiang ber-PLTS</span>
+                                    <div style="display: flex; gap: 4px;">
+                                        <button type="button" class="btn-action" style="padding: 4px 8px; font-size: 11px;" onclick="selectAllCustomPV(true)">Semua</button>
+                                        <button type="button" class="btn-action" style="padding: 4px 8px; font-size: 11px;" onclick="selectAllCustomPV(false)">Reset</button>
+                                    </div>
+                                </div>
+                                <div id="wiz_custom_pv_pills_container" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 120px; overflow-y: auto;">
+                                    <!-- Dinamis via JS -->
+                                </div>
+                            </div>
 
                             <div class="setup-toggle-row">
                                 <div>
@@ -794,6 +844,14 @@
             <!-- TAMPILAN 2: WADAH HASIL SIMULASI (RINGKASAN & DETAIL 10 TAB) -->
             <!-- ========================================================================= -->
             <div id="pane_results_container" style="display: none;">
+
+            <!-- Tombol Kembali ke Ringkasan saat membuka rincian tab -->
+            <div id="detail_back_bar" style="display: none; margin-bottom: 16px;">
+                <button type="button" class="btn-action" onclick="switchAppResultsMode('simple')">
+                    <svg class="ui-icon" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
+                    <span>Kembali ke ringkasan</span>
+                </button>
+            </div>
 
             <!-- Tab 0: Ringkasan Konsumen -->
             <div class="tab-content active" id="pane-top5">
@@ -1650,6 +1708,10 @@
             if (document.getElementById('wiz_cable_type') && document.getElementById('cable_type')) {
                 document.getElementById('wiz_cable_type').value = document.getElementById('cable_type').value;
             }
+            if (document.getElementById('wiz_topology_type') && document.getElementById('topology_type')) {
+                document.getElementById('wiz_topology_type').value = document.getElementById('topology_type').value;
+                onWizardTopologyChange(document.getElementById('wiz_topology_type').value);
+            }
             if (document.getElementById('wiz_num_buses') && document.getElementById('num_buses')) {
                 document.getElementById('wiz_num_buses').value = document.getElementById('num_buses').value;
             }
@@ -1668,6 +1730,7 @@
             }
             if (document.getElementById('wiz_pv_placement_mode') && document.getElementById('pv_placement_mode')) {
                 document.getElementById('wiz_pv_placement_mode').value = document.getElementById('pv_placement_mode').value;
+                onWizardPvPlacementChange(document.getElementById('wiz_pv_placement_mode').value);
             }
             if (document.getElementById('wiz_enable_volt_var') && document.getElementById('enable_volt_var')) {
                 document.getElementById('wiz_enable_volt_var').checked = document.getElementById('enable_volt_var').checked;
@@ -1706,6 +1769,10 @@
             }
             if (document.getElementById('wiz_cable_type') && document.getElementById('cable_type')) {
                 document.getElementById('cable_type').value = document.getElementById('wiz_cable_type').value;
+            }
+            if (document.getElementById('wiz_topology_type') && document.getElementById('topology_type')) {
+                document.getElementById('topology_type').value = document.getElementById('wiz_topology_type').value;
+                onTopologyChange(false);
             }
             if (document.getElementById('wiz_num_buses') && document.getElementById('num_buses')) {
                 const nb = parseInt(document.getElementById('wiz_num_buses').value) || 10;
@@ -1833,6 +1900,10 @@
             document.querySelectorAll('.tab-content').forEach((pane, idx) => {
                 pane.classList.toggle('active', idx === index);
             });
+            const backBar = document.getElementById('detail_back_bar');
+            if (backBar) {
+                backBar.style.display = index > 0 ? 'flex' : 'none';
+            }
             const sc = document.getElementById('main_scroll_content');
             if (sc) sc.scrollTop = 0;
             window.dispatchEvent(new Event('resize'));
@@ -1846,6 +1917,17 @@
         }
 
         // Kontrol Custom PLTS Tiang
+        function onWizardPvPlacementChange(mode) {
+            const box = document.getElementById('wiz_custom_pv_box');
+            if (!box) return;
+            if (mode === "Kustom / Pilihan Manual") {
+                box.style.display = 'block';
+                renderCustomPVPills();
+            } else {
+                box.style.display = 'none';
+            }
+        }
+
         function onPvPlacementChange() {
             const mode = document.getElementById('pv_placement_mode').value;
             const box = document.getElementById('custom_pv_box');
@@ -1857,43 +1939,91 @@
             }
         }
 
+        function getActiveBusListForPV() {
+            const wizEl = document.getElementById('wiz_num_buses');
+            const sideEl = document.getElementById('num_buses');
+            const isSetup = typeof currentAppView !== 'undefined' && currentAppView === 'setup';
+            const topoType = isSetup
+                ? (document.getElementById('wiz_topology_type')?.value || 'Linear Radial (Standar)')
+                : (document.getElementById('topology_type')?.value || 'Linear Radial (Standar)');
+
+            if (topoType !== 'Linear Radial (Standar)' && Array.isArray(activeBranches) && activeBranches.length > 0) {
+                const set = [];
+                activeBranches.forEach(br => {
+                    if (br.from && br.from !== 'Trafo' && !set.includes(br.from)) set.push(br.from);
+                    if (br.to && br.to !== 'Trafo' && !set.includes(br.to)) set.push(br.to);
+                });
+                if (set.length > 0) return set;
+            }
+
+            const count = isSetup && wizEl
+                ? parseInt(wizEl.value || 10)
+                : parseInt((sideEl && sideEl.value) || (wizEl && wizEl.value) || 10);
+            if (!isSetup && currentSimulationData && currentSimulationData.bus_list && currentSimulationData.bus_list.length === count) {
+                return currentSimulationData.bus_list;
+            }
+            return Array.from({length: Math.max(3, count)}, (_, i) => `Tiang_${i+1}`);
+        }
+
         function renderCustomPVPills() {
-            const container = document.getElementById('custom_pv_pills_container');
-            if (!container) return;
-            container.innerHTML = '';
-            const buses = (currentSimulationData && currentSimulationData.bus_list) 
-                ? currentSimulationData.bus_list 
-                : Array.from({length: parseInt(document.getElementById('num_buses').value)}, (_, i) => `Tiang_${i+1}`);
-            
+            const containers = [
+                document.getElementById('custom_pv_pills_container'),
+                document.getElementById('wiz_custom_pv_pills_container')
+            ].filter(Boolean);
+            if (containers.length === 0) return;
+
+            const buses = getActiveBusListForPV();
+            selectedCustomPVBuses = selectedCustomPVBuses.filter(b => buses.includes(b));
             if (selectedCustomPVBuses.length === 0) {
                 selectedCustomPVBuses = buses.slice(0, Math.ceil(buses.length / 2));
             }
-            
-            buses.forEach(b => {
-                const isSelected = selectedCustomPVBuses.includes(b);
-                const pill = document.createElement('div');
-                pill.className = `pv-pill ${isSelected ? 'active' : ''}`;
-                pill.innerText = isSelected ? `☀️ ${b}` : b;
-                pill.onclick = () => {
-                    if (selectedCustomPVBuses.includes(b)) {
-                        selectedCustomPVBuses = selectedCustomPVBuses.filter(item => item !== b);
-                    } else {
-                        selectedCustomPVBuses.push(b);
-                    }
-                    renderCustomPVPills();
-                };
-                container.appendChild(pill);
+
+            containers.forEach(container => {
+                container.innerHTML = '';
+                buses.forEach(b => {
+                    const isSelected = selectedCustomPVBuses.includes(b);
+                    const pill = document.createElement('button');
+                    pill.type = 'button';
+                    pill.className = `pv-pill ${isSelected ? 'active' : ''}`;
+                    pill.innerText = b;
+                    pill.onclick = () => {
+                        if (selectedCustomPVBuses.includes(b)) {
+                            selectedCustomPVBuses = selectedCustomPVBuses.filter(item => item !== b);
+                        } else {
+                            selectedCustomPVBuses.push(b);
+                        }
+                        renderCustomPVPills();
+                    };
+                    container.appendChild(pill);
+                });
             });
         }
 
         function selectAllCustomPV(selectAll) {
-            const buses = (currentSimulationData && currentSimulationData.bus_list) 
-                ? currentSimulationData.bus_list 
-                : Array.from({length: parseInt(document.getElementById('num_buses').value)}, (_, i) => `Tiang_${i+1}`);
+            const buses = getActiveBusListForPV();
             if (selectAll) {
                 selectedCustomPVBuses = [...buses];
             } else {
                 selectedCustomPVBuses = [];
+                const containers = [
+                    document.getElementById('custom_pv_pills_container'),
+                    document.getElementById('wiz_custom_pv_pills_container')
+                ].filter(Boolean);
+                containers.forEach(container => {
+                    container.innerHTML = '';
+                    buses.forEach(b => {
+                        const pill = document.createElement('button');
+                        pill.type = 'button';
+                        pill.className = 'pv-pill';
+                        pill.innerText = b;
+                        pill.onclick = () => {
+                            selectedCustomPVBuses.push(b);
+                            renderCustomPVPills();
+                        };
+                        container.appendChild(pill);
+                    });
+                });
+                return;
             }
             renderCustomPVPills();
         }
@@ -3807,20 +3937,17 @@
             });
         }
 
-        function onTopologyChange() {
-            const type = document.getElementById('topology_type').value;
-            const groupBuses = document.getElementById('row_num_buses');
-
+        function getTemplateBranches(type, numBuses) {
             if (type === 'Linear Radial (Standar)') {
-                groupBuses.style.display = 'block';
-                const n = parseInt(document.getElementById('num_buses').value);
-                activeBranches = [];
+                const n = Math.max(3, parseInt(numBuses || 10));
+                const list = [];
                 for (let i = 1; i <= n; i++) {
-                    activeBranches.push({ from: i === 1 ? 'Trafo' : `Tiang_${i-1}`, to: `Tiang_${i}` });
+                    list.push({ from: i === 1 ? 'Trafo' : `Tiang_${i-1}`, to: `Tiang_${i}` });
                 }
-            } else if (type === 'Percabangan di Tiang 2 (2 Cabang)') {
-                groupBuses.style.display = 'none';
-                activeBranches = [
+                return list;
+            }
+            if (type === 'Percabangan di Tiang 2 (2 Cabang)') {
+                return [
                     {"from": "Trafo", "to": "Tiang_1"},
                     {"from": "Tiang_1", "to": "Tiang_2"},
                     {"from": "Tiang_2", "to": "Tiang_3"},
@@ -3828,9 +3955,9 @@
                     {"from": "Tiang_2", "to": "Tiang_5"},
                     {"from": "Tiang_5", "to": "Tiang_6"}
                 ];
-            } else if (type === 'Percabangan di Tiang 3 (2 Cabang)') {
-                groupBuses.style.display = 'none';
-                activeBranches = [
+            }
+            if (type === 'Percabangan di Tiang 3 (2 Cabang)') {
+                return [
                     {"from": "Trafo", "to": "Tiang_1"},
                     {"from": "Tiang_1", "to": "Tiang_2"},
                     {"from": "Tiang_2", "to": "Tiang_3"},
@@ -3839,9 +3966,9 @@
                     {"from": "Tiang_3", "to": "Tiang_6"},
                     {"from": "Tiang_6", "to": "Tiang_7"}
                 ];
-            } else if (type === 'Topologi Pohon Garpu') {
-                groupBuses.style.display = 'none';
-                activeBranches = [
+            }
+            if (type === 'Topologi Pohon Garpu') {
+                return [
                     {"from": "Trafo", "to": "Tiang_1"},
                     {"from": "Tiang_1", "to": "Tiang_2"},
                     {"from": "Tiang_2", "to": "Tiang_3"},
@@ -3852,7 +3979,260 @@
                     {"from": "Tiang_6", "to": "Tiang_8"}
                 ];
             }
-            executeSimulation();
+            if (type === 'Feeder Kembar (2 Jalur dari Trafo)') {
+                return [
+                    {"from": "Trafo", "to": "Tiang_1"},
+                    {"from": "Tiang_1", "to": "Tiang_2"},
+                    {"from": "Tiang_2", "to": "Tiang_3"},
+                    {"from": "Tiang_3", "to": "Tiang_4"},
+                    {"from": "Tiang_4", "to": "Tiang_5"},
+                    {"from": "Trafo", "to": "Tiang_6"},
+                    {"from": "Tiang_6", "to": "Tiang_7"},
+                    {"from": "Tiang_7", "to": "Tiang_8"},
+                    {"from": "Tiang_8", "to": "Tiang_9"},
+                    {"from": "Tiang_9", "to": "Tiang_10"}
+                ];
+            }
+            return null;
+        }
+
+        function updateWizardSpanHint() {
+            const span = parseInt(document.getElementById('wiz_span_length_m')?.value || 50);
+            const topo = document.getElementById('wiz_topology_type')?.value || 'Linear Radial (Standar)';
+            const busesCount = topo === 'Linear Radial (Standar)'
+                ? (parseInt(document.getElementById('wiz_num_buses')?.value || 10))
+                : (Array.isArray(activeBranches) ? activeBranches.length : 10);
+            const hint = document.getElementById('wiz_span_total_hint');
+            if (hint) hint.innerText = `${busesCount * span} m (${busesCount} segmen)`;
+        }
+
+        function onWizardTopologyChange(type) {
+            const numWrap = document.getElementById('wiz_num_buses_wrap');
+            const customBox = document.getElementById('wiz_custom_topo_box');
+            const numBuses = parseInt(document.getElementById('wiz_num_buses')?.value || 10);
+
+            if (type === 'Linear Radial (Standar)') {
+                if (numWrap) numWrap.style.display = 'block';
+                if (customBox) customBox.style.display = 'none';
+                activeBranches = getTemplateBranches(type, numBuses);
+            } else if (type === '🎛️ Kustom Mandiri (Drag & Drop Canvas)') {
+                if (numWrap) numWrap.style.display = 'none';
+                if (customBox) customBox.style.display = 'block';
+                if (!Array.isArray(activeBranches) || activeBranches.length === 0) {
+                    activeBranches = getTemplateBranches('Linear Radial (Standar)', numBuses);
+                }
+                renderWizardCustomTopo();
+            } else {
+                if (numWrap) numWrap.style.display = 'none';
+                if (customBox) customBox.style.display = 'none';
+                const tpl = getTemplateBranches(type, numBuses);
+                if (tpl) activeBranches = tpl;
+            }
+            updateWizardSpanHint();
+            if (document.getElementById('wiz_pv_placement_mode')?.value === 'Kustom / Pilihan Manual') {
+                renderCustomPVPills();
+            }
+        }
+
+        let wizNodePositions = {};
+
+        function renderWizardCustomTopo() {
+            const listEl = document.getElementById('wiz_custom_topo_list');
+            const parentSel = document.getElementById('wiz_parent_branch');
+            const canvas = document.getElementById('wiz-canvas-blueprint');
+            if (!listEl || !parentSel) return;
+
+            listEl.innerHTML = '';
+            const nodes = ['Trafo'];
+            activeBranches.forEach((br, idx) => {
+                if (br.from && !nodes.includes(br.from)) nodes.push(br.from);
+                if (br.to && !nodes.includes(br.to)) nodes.push(br.to);
+                const chip = document.createElement('span');
+                chip.className = 'badge';
+                chip.style.fontSize = '11px';
+                chip.style.padding = '3px 8px';
+                chip.innerHTML = `<span class="tabular">${br.from} → ${br.to}</span>`;
+                if (activeBranches.length > 1) {
+                    const delBtn = document.createElement('button');
+                    delBtn.type = 'button';
+                    delBtn.innerText = '×';
+                    delBtn.style.cssText = 'background:none;border:none;color:var(--text-muted);cursor:pointer;font-size:13px;line-height:1;padding:0 0 0 4px;';
+                    delBtn.onclick = () => removeWizardCustomBranch(idx);
+                    chip.appendChild(delBtn);
+                }
+                listEl.appendChild(chip);
+            });
+
+            const prevVal = parentSel.value;
+            parentSel.innerHTML = '';
+            nodes.forEach(n => {
+                const opt = document.createElement('option');
+                opt.value = n;
+                opt.textContent = n;
+                parentSel.appendChild(opt);
+            });
+            if (nodes.includes(prevVal)) parentSel.value = prevVal;
+            const newBusInp = document.getElementById('wiz_new_bus');
+            if (newBusInp) newBusInp.value = `Tiang_${nodes.length}`;
+
+            if (!canvas) return;
+            canvas.querySelectorAll('.wiz-canvas-node').forEach(el => el.remove());
+            const w = Math.max(canvas.clientWidth || 300, 280);
+            const h = canvas.clientHeight || 210;
+
+            nodes.forEach((nodeId, idx) => {
+                if (!wizNodePositions[nodeId]) {
+                    if (nodeId === 'Trafo') {
+                        wizNodePositions[nodeId] = { x: 16, y: Math.round(h / 2 - 22) };
+                    } else {
+                        const col = ((idx - 1) % 4) + 1;
+                        const row = Math.floor((idx - 1) / 4);
+                        wizNodePositions[nodeId] = {
+                            x: Math.min(w - 56, 20 + col * 64),
+                            y: Math.min(h - 46, 20 + row * 60 + (idx % 2 === 0 ? 18 : 0))
+                        };
+                    }
+                }
+                const pos = wizNodePositions[nodeId];
+                const el = document.createElement('div');
+                el.className = 'wiz-canvas-node';
+                el.dataset.nodeId = nodeId;
+                const isTrafo = nodeId === 'Trafo';
+                const isSelectedParent = parentSel.value === nodeId;
+                el.style.cssText = `
+                    position: absolute; left: ${pos.x}px; top: ${pos.y}px;
+                    width: ${isTrafo ? 48 : 44}px; height: ${isTrafo ? 48 : 44}px;
+                    border-radius: ${isTrafo ? '8px' : '50%'};
+                    background: ${isTrafo ? 'var(--text-primary)' : 'var(--bg-card)'};
+                    color: ${isTrafo ? 'var(--bg-base)' : 'var(--text-primary)'};
+                    border: 1.5px solid ${isSelectedParent ? 'var(--accent)' : 'var(--border-strong)'};
+                    display: flex; align-items: center; justify-content: center;
+                    font-size: 10px; font-weight: 500; font-family: var(--font-mono);
+                    cursor: grab; user-select: none; z-index: 5; text-align: center; padding: 2px;
+                `;
+                el.innerText = isTrafo ? 'Trafo' : nodeId.replace('Tiang_', 'T');
+                el.title = nodeId;
+
+                let moved = false;
+                el.onmousedown = (e) => {
+                    e.preventDefault();
+                    moved = false;
+                    let startX = e.clientX;
+                    let startY = e.clientY;
+                    el.style.cursor = 'grabbing';
+                    document.onmousemove = (ev) => {
+                        const dx = ev.clientX - startX;
+                        const dy = ev.clientY - startY;
+                        if (Math.abs(dx) > 2 || Math.abs(dy) > 2) moved = true;
+                        startX = ev.clientX;
+                        startY = ev.clientY;
+                        const nx = Math.max(4, Math.min((canvas.clientWidth || w) - 52, el.offsetLeft + dx));
+                        const ny = Math.max(4, Math.min(h - 52, el.offsetTop + dy));
+                        el.style.left = nx + 'px';
+                        el.style.top = ny + 'px';
+                        wizNodePositions[nodeId] = { x: nx, y: ny };
+                        drawWizardWires();
+                    };
+                    document.onmouseup = () => {
+                        document.onmousemove = null;
+                        document.onmouseup = null;
+                        el.style.cursor = 'grab';
+                        if (!moved) {
+                            parentSel.value = nodeId;
+                            canvas.querySelectorAll('.wiz-canvas-node').forEach(n => {
+                                n.style.borderColor = n.dataset.nodeId === nodeId ? 'var(--accent)' : 'var(--border-strong)';
+                            });
+                        }
+                    };
+                };
+
+                canvas.appendChild(el);
+            });
+
+            drawWizardWires();
+        }
+
+        function drawWizardWires() {
+            const canvas = document.getElementById('wiz-canvas-blueprint');
+            const svg = document.getElementById('wiz-canvas-svg');
+            if (!canvas || !svg) return;
+            svg.innerHTML = '';
+
+            activeBranches.forEach((br, idx) => {
+                const elFrom = canvas.querySelector(`[data-node-id="${br.from}"]`);
+                const elTo = canvas.querySelector(`[data-node-id="${br.to}"]`);
+                if (!elFrom || !elTo) return;
+
+                const x1 = elFrom.offsetLeft + elFrom.offsetWidth / 2;
+                const y1 = elFrom.offsetTop + elFrom.offsetHeight / 2;
+                const x2 = elTo.offsetLeft + elTo.offsetWidth / 2;
+                const y2 = elTo.offsetTop + elTo.offsetHeight / 2;
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', x1);
+                line.setAttribute('y1', y1);
+                line.setAttribute('x2', x2);
+                line.setAttribute('y2', y2);
+                line.setAttribute('stroke', '#64748b');
+                line.setAttribute('stroke-width', '2');
+                if (activeBranches.length > 1) {
+                    line.style.cursor = 'pointer';
+                    line.innerHTML = `<title>${br.from} → ${br.to} (klik untuk hapus)</title>`;
+                    line.onclick = () => removeWizardCustomBranch(idx);
+                }
+                svg.appendChild(line);
+            });
+        }
+
+        function addWizardCustomBranch() {
+            const parent = document.getElementById('wiz_parent_branch')?.value || 'Trafo';
+            const newBus = document.getElementById('wiz_new_bus')?.value.trim();
+            if (!newBus) return;
+            activeBranches.push({ from: parent, to: newBus });
+            renderWizardCustomTopo();
+            updateWizardSpanHint();
+            if (document.getElementById('wiz_pv_placement_mode')?.value === 'Kustom / Pilihan Manual') {
+                renderCustomPVPills();
+            }
+        }
+
+        function removeWizardCustomBranch(idx) {
+            if (activeBranches.length <= 1) return;
+            activeBranches.splice(idx, 1);
+            renderWizardCustomTopo();
+            updateWizardSpanHint();
+            if (document.getElementById('wiz_pv_placement_mode')?.value === 'Kustom / Pilihan Manual') {
+                renderCustomPVPills();
+            }
+        }
+
+        function resetWizardTopology() {
+            const numBuses = parseInt(document.getElementById('wiz_num_buses')?.value || 10);
+            wizNodePositions = {};
+            activeBranches = getTemplateBranches('Linear Radial (Standar)', numBuses);
+            renderWizardCustomTopo();
+            updateWizardSpanHint();
+            if (document.getElementById('wiz_pv_placement_mode')?.value === 'Kustom / Pilihan Manual') {
+                renderCustomPVPills();
+            }
+        }
+
+        function onTopologyChange(shouldRunSim = true) {
+            const type = document.getElementById('topology_type').value;
+            const groupBuses = document.getElementById('row_num_buses');
+
+            if (type === 'Linear Radial (Standar)') {
+                if (groupBuses) groupBuses.style.display = 'block';
+                const n = parseInt(document.getElementById('num_buses').value);
+                activeBranches = getTemplateBranches(type, n);
+            } else if (type === '🎛️ Kustom Mandiri (Drag & Drop Canvas)') {
+                if (groupBuses) groupBuses.style.display = 'none';
+            } else {
+                if (groupBuses) groupBuses.style.display = 'none';
+                const tpl = getTemplateBranches(type, 10);
+                if (tpl) activeBranches = tpl;
+            }
+            if (shouldRunSim) executeSimulation();
         }
 
         function addCustomBranch() {
