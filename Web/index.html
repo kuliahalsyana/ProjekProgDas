@@ -1074,7 +1074,7 @@
                             </h4>
                             <div class="form-row">
                                 <label class="form-label">Nama Konsumen / Pemilik Properti:</label>
-                                <input type="text" id="rep_consumer_name" value="Bpk. Nala Alma Syafif" placeholder="Contoh: Bpk. Budi Santoso">
+                                <input type="text" id="rep_consumer_name" value="Nama" placeholder="Contoh: Nama">
                             </div>
                             <div class="form-row">
                                 <label class="form-label">Alamat / Lokasi Pemasangan:</label>
@@ -2983,10 +2983,10 @@
                 return;
             }
 
-            const consumerName = document.getElementById('rep_consumer_name') ? document.getElementById('rep_consumer_name').value.trim() : 'Bpk. Nala Alma Syafif';
+            const consumerName = document.getElementById('rep_consumer_name') ? document.getElementById('rep_consumer_name').value.trim() : 'Nama';
             const endpoint = format === 'docx' ? '/api/export-docx' : '/api/export-excel';
             const payload = {
-                consumer_name: consumerName || 'Bpk. Nala Alma Syafif',
+                consumer_name: consumerName || 'Nama',
                 consumer_address: document.getElementById('rep_consumer_address')?.value.trim() || 'Jl. Panorama Hijau No. 8, Semarang',
                 pln_id: document.getElementById('rep_pln_id')?.value.trim() || '5381-0924-8810',
                 tariff_group: document.getElementById('rep_tariff_group')?.value || 'R-1/TR 2.200 VA (Rp 1.444,70 / kWh)',
