@@ -19,7 +19,7 @@
     <!-- Loading Overlay -->
     <div id="loading-overlay">
         <div class="spinner-ring"></div>
-        <p style="font-size: 13px; font-weight: 500; color: var(--text-primary);">Menjalankan aliran daya Newton-Raphson 24 jam</p>
+        <p data-i18n="loading_text" style="font-size: 13px; font-weight: 500; color: var(--text-primary);">Menjalankan aliran daya Newton-Raphson 24 jam</p>
     </div>
 
     <!-- Bus Detail Inspector Modal -->
@@ -33,27 +33,27 @@
             </div>
             <div class="modal-grid">
                 <div class="modal-item">
-                    <div class="mi-label">Jarak dari Trafo</div>
+                    <div class="mi-label" data-i18n="modal_dist">Jarak dari Trafo</div>
                     <div class="mi-val" id="m_bus_dist">40 m</div>
                 </div>
                 <div class="modal-item">
-                    <div class="mi-label">Fasa Terhubung</div>
+                    <div class="mi-label" data-i18n="modal_phase">Fasa Terhubung</div>
                     <div class="mi-val" id="m_bus_phase">Fasa R</div>
                 </div>
                 <div class="modal-item">
-                    <div class="mi-label">Tegangan Siang (12:00)</div>
+                    <div class="mi-label" data-i18n="modal_v_noon">Tegangan Siang (12:00)</div>
                     <div class="mi-val" id="m_bus_v_noon">221.4 V</div>
                 </div>
                 <div class="modal-item">
-                    <div class="mi-label">Tegangan Puncak (19:00)</div>
+                    <div class="mi-label" data-i18n="modal_v_night">Tegangan Puncak (19:00)</div>
                     <div class="mi-val" id="m_bus_v_night" style="color: var(--text-secondary);">217.2 V</div>
                 </div>
                 <div class="modal-item">
-                    <div class="mi-label">Beban Puncak Pelanggan</div>
+                    <div class="mi-label" data-i18n="modal_load">Beban Puncak Pelanggan</div>
                     <div class="mi-val" id="m_bus_load">1.50 kW</div>
                 </div>
                 <div class="modal-item">
-                    <div class="mi-label">Status PLTS Atap</div>
+                    <div class="mi-label" data-i18n="modal_pv">Status PLTS Atap</div>
                     <div class="mi-val" id="m_bus_pv">2.0 kWp</div>
                 </div>
             </div>
@@ -71,7 +71,7 @@
             </div>
             <div class="brand-text">
                 <h1>VoltaSol-Sim <span class="version-tag">v4.0</span></h1>
-                <p>Simulator aliran daya JTR (220V/380V) dan integrasi PLTS atap on-grid</p>
+                <p data-i18n="app_subtitle">Simulator aliran daya JTR (220V/380V) dan integrasi PLTS atap on-grid</p>
             </div>
         </div>
         <div class="header-meta">
@@ -82,6 +82,10 @@
             <div class="meta-item">
                 <div class="status-dot"></div>
                 <span>Newton-Raphson</span>
+            </div>
+            <div class="lang-switcher" role="group" aria-label="Pilih bahasa">
+                <button type="button" id="btn_lang_id" class="lang-btn active" onclick="setLanguage('id')">ID</button>
+                <button type="button" id="btn_lang_en" class="lang-btn" onclick="setLanguage('en')">EN</button>
             </div>
         </div>
     </header>
@@ -446,18 +450,18 @@
                     <!-- Top Mode Switcher Bar -->
                     <div class="view-mode-bar" id="view_mode_bar">
                         <div class="mode-switcher-group">
-                            <button type="button" id="btn_mode_simple" class="mode-btn active" onclick="switchAppResultsMode('simple')">
+                            <button type="button" id="btn_mode_simple" class="mode-btn active" data-i18n="mode_summary" onclick="switchAppResultsMode('simple')">
                                 Ringkasan
                             </button>
-                            <button type="button" id="btn_mode_detail" class="mode-btn" onclick="switchAppResultsMode('detail')">
+                            <button type="button" id="btn_mode_detail" class="mode-btn" data-i18n="mode_technical" onclick="switchAppResultsMode('detail')">
                                 Analisis teknis
                             </button>
                         </div>
                         <div style="display: flex; align-items: center; gap: 8px;">
-                            <button type="button" class="btn-action" onclick="setAppView('setup')">
+                            <button type="button" class="btn-action" data-i18n="btn_edit_params" onclick="setAppView('setup')">
                                 Ubah parameter
                             </button>
-                            <button type="button" class="btn-action btn-primary" onclick="executeSimulation()">
+                            <button type="button" class="btn-action btn-primary" data-i18n="btn_recalculate" onclick="executeSimulation()">
                                 Hitung ulang
                             </button>
                         </div>
@@ -467,25 +471,25 @@
                     <div class="kpi-row" id="kpi_metric_row">
                         <div class="kpi-card" id="kpi_card_vmin">
                             <div class="kpi-head">
-                                <span>Tegangan minimum</span>
+                                <span data-i18n="kpi_vmin_label">Tegangan minimum</span>
                                 <span class="kpi-status-tag" id="kpi_vmin_badge">Aman</span>
                             </div>
                             <div class="kpi-num" id="kpi_vmin">218.4 V</div>
-                            <div class="kpi-foot" id="kpi_vmin_sub">Batas SPLN ≥ 198.0 V</div>
+                            <div class="kpi-foot" id="kpi_vmin_sub" data-i18n="kpi_vmin_limit">Batas SPLN ≥ 198.0 V</div>
                         </div>
 
                         <div class="kpi-card" id="kpi_card_vmax">
                             <div class="kpi-head">
-                                <span>Tegangan maksimum</span>
+                                <span data-i18n="kpi_vmax_label">Tegangan maksimum</span>
                                 <span class="kpi-status-tag" id="kpi_vmax_badge">Normal</span>
                             </div>
                             <div class="kpi-num" id="kpi_vmax">228.6 V</div>
-                            <div class="kpi-foot">Batas SPLN ≤ 231.0 V</div>
+                            <div class="kpi-foot" data-i18n="kpi_vmax_limit">Batas SPLN ≤ 231.0 V</div>
                         </div>
 
                         <div class="kpi-card">
                             <div class="kpi-head">
-                                <span>Rugi teknis</span>
+                                <span data-i18n="kpi_losses_label">Rugi teknis</span>
                                 <span class="kpi-status-tag" style="color: var(--positive);" id="kpi_loss_pct">34.2%</span>
                             </div>
                             <div class="kpi-num" id="kpi_losses">12.4 kWh</div>
@@ -494,35 +498,35 @@
 
                         <div class="kpi-card" id="kpi_card_rev">
                             <div class="kpi-head">
-                                <span>Daya balik</span>
-                                <span class="kpi-status-tag" id="kpi_rev_badge">Terdeteksi</span>
+                                <span data-i18n="kpi_rev_label">Daya balik</span>
+                                <span class="kpi-status-tag" id="kpi_rev_badge" data-i18n="kpi_rev_tag">Terdeteksi</span>
                             </div>
                             <div class="kpi-num" id="kpi_rev">3.8 kW</div>
-                            <div class="kpi-foot">Ekspor ke trafo</div>
+                            <div class="kpi-foot" data-i18n="kpi_rev_sub">Ekspor ke trafo</div>
                         </div>
 
                         <div class="kpi-card">
                             <div class="kpi-head">
-                                <span>Beban trafo puncak</span>
-                                <span class="kpi-status-tag" id="kpi_trafo_badge">Optimal</span>
+                                <span data-i18n="kpi_trafo_label">Beban trafo puncak</span>
+                                <span class="kpi-status-tag" id="kpi_trafo_badge" data-i18n="kpi_trafo_tag">Optimal</span>
                             </div>
                             <div class="kpi-num" id="kpi_trafo_load">48.2%</div>
-                            <div class="kpi-foot">Kapasitas aman &lt; 100%</div>
+                            <div class="kpi-foot" data-i18n="kpi_trafo_sub">Kapasitas aman &lt; 100%</div>
                         </div>
                     </div>
 
                     <!-- Segmented Tab Navigation -->
                     <div class="tab-bar" id="tab_bar_detailed" style="display: none; margin-top: 12px;">
-                        <button class="tab-item active" onclick="switchTab(0)">Ringkasan</button>
-                        <button class="tab-item" onclick="switchTab(1)">Tabel &amp; SPLN</button>
-                        <button class="tab-item" onclick="switchTab(2)">Profil 24 jam</button>
-                        <button class="tab-item" onclick="switchTab(3)">Permukaan 3D</button>
-                        <button class="tab-item" onclick="switchTab(4)">Hosting capacity</button>
-                        <button class="tab-item" onclick="switchTab(5)">BESS &amp; inverter</button>
-                        <button class="tab-item" onclick="switchTab(6)">3-Fasa</button>
-                        <button class="tab-item" onclick="switchTab(7)">Tekno-ekonomi</button>
-                        <button class="tab-item" onclick="switchTab(8)">Topologi</button>
-                        <button class="tab-item" onclick="switchTab(9)">Ekspor laporan</button>
+                        <button class="tab-item active" data-i18n="tab_0" onclick="switchTab(0)">Ringkasan</button>
+                        <button class="tab-item" data-i18n="tab_1" onclick="switchTab(1)">Tabel &amp; SPLN</button>
+                        <button class="tab-item" data-i18n="tab_2" onclick="switchTab(2)">Profil 24 jam</button>
+                        <button class="tab-item" data-i18n="tab_3" onclick="switchTab(3)">Permukaan 3D</button>
+                        <button class="tab-item" data-i18n="tab_4" onclick="switchTab(4)">Hosting capacity</button>
+                        <button class="tab-item" data-i18n="tab_5" onclick="switchTab(5)">BESS &amp; inverter</button>
+                        <button class="tab-item" data-i18n="tab_6" onclick="switchTab(6)">3-Fasa</button>
+                        <button class="tab-item" data-i18n="tab_7" onclick="switchTab(7)">Tekno-ekonomi</button>
+                        <button class="tab-item" data-i18n="tab_8" onclick="switchTab(8)">Topologi</button>
+                        <button class="tab-item" data-i18n="tab_9" onclick="switchTab(9)">Ekspor laporan</button>
                     </div>
 
                 </div>
@@ -539,13 +543,13 @@
                 <!-- Hero Header -->
                 <div class="setup-hero-banner">
                     <div>
-                        <h1>Simulasi Jaringan JTR &amp; PLTS Atap</h1>
-                        <p>
+                        <h1 data-i18n="hero_title">Simulasi Jaringan JTR &amp; PLTS Atap</h1>
+                        <p data-i18n="hero_desc">
                             Atur parameter jaringan distribusi tegangan rendah (220V/380V), lokasi cuaca BMKG, dan kapasitas PLTS atap untuk menguji kepatuhan tegangan SPLN 1:1995 serta estimasi penghematan.
                         </p>
                     </div>
                     <div>
-                        <button type="button" class="btn-start-simulation" onclick="startSimulationFromWizard()">
+                        <button type="button" class="btn-start-simulation" data-i18n="btn_run_sim" onclick="startSimulationFromWizard()">
                             Jalankan simulasi
                         </button>
                     </div>
@@ -554,45 +558,45 @@
                 <!-- 4 Pilihan Cepat Skenario -->
                 <div class="setup-presets-bar">
                     <div>
-                        <div class="setup-section-title">Skenario cepat</div>
-                        <div class="setup-section-sub">Pilih salah satu skenario standar untuk mengisi parameter sistem secara otomatis</div>
+                        <div class="setup-section-title" data-i18n="presets_title">Skenario cepat</div>
+                        <div class="setup-section-sub" data-i18n="presets_sub">Pilih salah satu skenario standar untuk mengisi parameter sistem secara otomatis</div>
                     </div>
 
                     <div class="wizard-preset-grid">
                         <button type="button" class="wizard-preset-btn active" id="wiz_scen_1" onclick="selectWizardPreset(1)">
                             <div class="preset-title">
                                 <svg class="ui-icon" viewBox="0 0 24 24"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-                                <span>1. Beban normal</span>
+                                <span data-i18n="scen_1_title">1. Beban normal</span>
                             </div>
                             <div class="preset-spec">1.2 kW | 1.5 kWp</div>
-                            <div class="preset-desc">Operasional standar harian</div>
+                            <div class="preset-desc" data-i18n="scen_1_desc">Operasional standar harian</div>
                         </button>
 
                         <button type="button" class="wizard-preset-btn" id="wiz_scen_2" onclick="selectWizardPreset(2)">
                             <div class="preset-title">
                                 <svg class="ui-icon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-                                <span>2. Beban puncak malam</span>
+                                <span data-i18n="scen_2_title">2. Beban puncak malam</span>
                             </div>
                             <div class="preset-spec">2.8 kW | 0 kWp</div>
-                            <div class="preset-desc">Uji batas drop tegangan</div>
+                            <div class="preset-desc" data-i18n="scen_2_desc">Uji batas drop tegangan</div>
                         </button>
 
                         <button type="button" class="wizard-preset-btn" id="wiz_scen_3" onclick="selectWizardPreset(3)">
                             <div class="preset-title">
                                 <svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-                                <span>3. Puncak terik surya</span>
+                                <span data-i18n="scen_3_title">3. Puncak terik surya</span>
                             </div>
                             <div class="preset-spec">1.0 kW | 4.5 kWp</div>
-                            <div class="preset-desc">Uji potensi overvoltage</div>
+                            <div class="preset-desc" data-i18n="scen_3_desc">Uji potensi overvoltage</div>
                         </button>
 
                         <button type="button" class="wizard-preset-btn" id="wiz_scen_4" onclick="selectWizardPreset(4)">
                             <div class="preset-title">
                                 <svg class="ui-icon" viewBox="0 0 24 24"><rect width="16" height="10" x="2" y="7" rx="2"/><line x1="22" x2="22" y1="11" y2="13"/></svg>
-                                <span>4. Smart grid feeder</span>
+                                <span data-i18n="scen_4_title">4. Smart grid feeder</span>
                             </div>
                             <div class="preset-spec">3.5 kWp + Volt-VAr + BESS</div>
-                            <div class="preset-desc">Mitigasi inverter &amp; baterai</div>
+                            <div class="preset-desc" data-i18n="scen_4_desc">Mitigasi inverter &amp; baterai</div>
                         </button>
                     </div>
                 </div>
@@ -605,35 +609,35 @@
                         <div>
                             <div class="setup-card-title">
                                 <svg class="ui-icon" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                                <span>1. Lokasi &amp; cuaca BMKG</span>
+                                <span data-i18n="card1_title">1. Lokasi &amp; cuaca BMKG</span>
                             </div>
-                            <div class="setup-card-desc">
+                            <div class="setup-card-desc" data-i18n="card1_desc">
                                 Data radiasi surya dan temperatur dari prakiraan wilayah BMKG.
                             </div>
 
-                            <label class="setup-input-label">Sumber cuaca</label>
+                            <label class="setup-input-label" data-i18n="lbl_weather_src">Sumber cuaca</label>
                             <select id="wiz_weather_mode" class="setup-select" onchange="onWizardWeatherModeChange(this.value)">
                                 <option value="bmkg" selected>BMKG Real-time (Prakiraan wilayah)</option>
                                 <option value="manual">Preset manual (8 slot 3-jam)</option>
                             </select>
 
                             <div id="wiz_bmkg_fields">
-                                <label class="setup-input-label">Provinsi</label>
+                                <label class="setup-input-label" data-i18n="lbl_province">Provinsi</label>
                                 <select id="wiz_provinsi" class="setup-select" onchange="onWizardProvinceChange(this.value)">
                                     <option value="33" selected>Jawa Tengah</option>
                                 </select>
 
-                                <label class="setup-input-label">Kabupaten / kota</label>
+                                <label class="setup-input-label" data-i18n="lbl_regency">Kabupaten / kota</label>
                                 <select id="wiz_kabkota" class="setup-select" onchange="onWizardRegencyChange(this.value)">
                                     <option value="33.74" selected>Kota Semarang</option>
                                 </select>
 
-                                <label class="setup-input-label">Kecamatan</label>
+                                <label class="setup-input-label" data-i18n="lbl_district">Kecamatan</label>
                                 <select id="wiz_kecamatan" class="setup-select" onchange="onWizardDistrictChange(this.value)">
                                     <option value="33.74.01" selected>Semarang Tengah</option>
                                 </select>
 
-                                <label class="setup-input-label">Hari prakiraan</label>
+                                <label class="setup-input-label" data-i18n="lbl_forecast_day">Hari prakiraan</label>
                                 <select id="wiz_weather_day" class="setup-select">
                                     <option value="0" selected>Hari ini</option>
                                     <option value="1">Besok</option>
@@ -642,7 +646,7 @@
                             </div>
 
                             <div id="wiz_manual_fields" style="display: none;">
-                                <label class="setup-input-label">Pola cuaca tropis</label>
+                                <label class="setup-input-label" data-i18n="lbl_weather_pattern">Pola cuaca tropis</label>
                                 <select id="wiz_manual_preset" class="setup-select">
                                     <option value="Tipikal Tropis Indonesia (Pagi Cerah -> Siang Berawan -> Sore Hujan)" selected>Tipikal tropis (Cerah siang, sore hujan)</option>
                                     <option value="Cerah Terik Seharian (Musim Kemarau / Peak Solar)">Cerah terik kemarau penuh</option>
@@ -654,7 +658,7 @@
 
                         <div class="setup-card-footer">
                             <div style="font-weight: 500; color: var(--positive);" id="wiz_location_badge">Semarang Tengah, Kota Semarang</div>
-                            <div style="color: var(--text-muted); margin-top: 2px;">Efisiensi insolasi dihitung per jam</div>
+                            <div style="color: var(--text-muted); margin-top: 2px;" data-i18n="card1_footer">Efisiensi insolasi dihitung per jam</div>
                         </div>
                     </div>
 
@@ -663,13 +667,13 @@
                         <div>
                             <div class="setup-card-title">
                                 <svg class="ui-icon" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-                                <span>2. Gardu trafo &amp; saluran JTR</span>
+                                <span data-i18n="card2_title">2. Gardu trafo &amp; saluran JTR</span>
                             </div>
-                            <div class="setup-card-desc">
+                            <div class="setup-card-desc" data-i18n="card2_desc">
                                 Konfigurasi trafo distribusi 20kV/0.4kV dan saluran tegangan rendah.
                             </div>
 
-                            <label class="setup-input-label">Kapasitas trafo distribusi</label>
+                            <label class="setup-input-label" data-i18n="lbl_trafo">Kapasitas trafo distribusi</label>
                             <select id="wiz_transformer_type" class="setup-select">
                                 <option value="100 kVA (Dyn5)" selected>100 kVA (Dyn5, In=144 A)</option>
                                 <option value="50 kVA (Dyn5)">50 kVA (Dyn5, In=72 A)</option>
@@ -678,14 +682,14 @@
                                 <option value="250 kVA (Dyn5)">250 kVA (Dyn5, In=361 A)</option>
                             </select>
 
-                            <label class="setup-input-label">Jenis kabel konduktor</label>
+                            <label class="setup-input-label" data-i18n="lbl_cable">Jenis kabel konduktor</label>
                             <select id="wiz_cable_type" class="setup-select">
                                 <option value="LVTC 3x70 + 1x50 mm²" selected>LVTC 3x70 + 1x50 mm²</option>
                                 <option value="LVTC 3x50 + 1x35 mm²">LVTC 3x50 + 1x35 mm²</option>
                                 <option value="LVTC 3x35 + 1x25 mm²">LVTC 3x35 + 1x25 mm²</option>
                             </select>
 
-                            <label class="setup-input-label">Topologi jaringan bus</label>
+                            <label class="setup-input-label" data-i18n="lbl_topology">Topologi jaringan bus</label>
                             <select id="wiz_topology_type" class="setup-select" onchange="onWizardTopologyChange(this.value)">
                                 <option value="Linear Radial (Standar)" selected>Linear radial (Standar)</option>
                                 <option value="Percabangan di Tiang 2 (2 Cabang)">Percabangan di Tiang 2 (2 cabang)</option>
@@ -697,13 +701,13 @@
 
                             <div id="wiz_custom_topo_box" style="display: none; margin-bottom: 12px; background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; gap: 8px;">
-                                    <span style="font-size: 12px; font-weight: 500; color: var(--text-primary);">Kanvas drag &amp; drop topologi bus</span>
-                                    <button type="button" class="btn-action" style="padding: 4px 8px; font-size: 11px;" onclick="resetWizardTopology()">Reset</button>
+                                    <span style="font-size: 12px; font-weight: 500; color: var(--text-primary);" data-i18n="topo_canvas_title">Kanvas drag &amp; drop topologi bus</span>
+                                    <button type="button" class="btn-action" style="padding: 4px 8px; font-size: 11px;" data-i18n="btn_reset" onclick="resetWizardTopology()">Reset</button>
                                 </div>
                                 <div id="wiz-canvas-blueprint" style="width: 100%; height: 210px; background: radial-gradient(rgba(238, 240, 245, 0.12) 1px, transparent 1px); background-size: 20px 20px; background-color: var(--bg-sidebar); border: 1px solid var(--border); border-radius: var(--radius-sm); position: relative; overflow: hidden; margin-bottom: 8px;">
                                     <svg id="wiz-canvas-svg" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1;"></svg>
                                 </div>
-                                <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">
+                                <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;" data-i18n="topo_canvas_hint">
                                     Geser posisi tiang pada kanvas. Klik tiang untuk memilih induk cabang, atau klik garis untuk menghapus koneksi.
                                 </div>
                                 <div id="wiz_custom_topo_list" style="display: flex; flex-wrap: wrap; gap: 4px; max-height: 76px; overflow-y: auto; margin-bottom: 8px;">
@@ -715,31 +719,31 @@
                                     </select>
                                     <input type="text" id="wiz_new_bus" class="setup-input" value="Tiang_11" placeholder="Nama tiang baru" style="margin-bottom: 0; padding: 6px 8px; font-size: 12px;">
                                 </div>
-                                <button type="button" class="btn-action" style="width: 100%; padding: 6px 10px; font-size: 12px;" onclick="addWizardCustomBranch()">
+                                <button type="button" class="btn-action" style="width: 100%; padding: 6px 10px; font-size: 12px;" data-i18n="btn_add_branch" onclick="addWizardCustomBranch()">
                                     Tambah cabang
                                 </button>
                             </div>
 
                             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
                                 <div id="wiz_num_buses_wrap">
-                                    <label class="setup-input-label">Jumlah tiang</label>
+                                    <label class="setup-input-label" data-i18n="lbl_num_buses">Jumlah tiang</label>
                                     <input type="number" id="wiz_num_buses" class="setup-input" min="3" max="20" value="10" oninput="onWizardTopologyChange(document.getElementById('wiz_topology_type').value)">
                                 </div>
                                 <div>
-                                    <label class="setup-input-label">Jarak tiang (m)</label>
+                                    <label class="setup-input-label" data-i18n="lbl_span_m">Jarak tiang (m)</label>
                                     <input type="number" id="wiz_span_length_m" class="setup-input" min="20" max="100" value="50" oninput="updateWizardSpanHint()">
                                 </div>
                             </div>
 
                             <div class="setup-input-label">
-                                <span>Beban per tiang</span>
+                                <span data-i18n="lbl_load_per_bus">Beban per tiang</span>
                                 <span class="tabular" style="color: var(--accent);" id="wiz_lbl_load">1.2 kW</span>
                             </div>
                             <input type="range" id="wiz_base_load_kw" min="0.2" max="6.0" value="1.2" step="0.1" style="margin-bottom: 12px;" oninput="document.getElementById('wiz_lbl_load').innerText = parseFloat(this.value).toFixed(1) + ' kW'">
                         </div>
 
                         <div class="setup-card-footer">
-                            Total panjang bentang: <span class="tabular" id="wiz_span_total_hint" style="color: var(--text-primary); font-weight: 500;">500 m</span>
+                            <span data-i18n="lbl_total_span">Total panjang bentang:</span> <span class="tabular" id="wiz_span_total_hint" style="color: var(--text-primary); font-weight: 500;">500 m</span>
                         </div>
                     </div>
 
@@ -748,19 +752,19 @@
                         <div>
                             <div class="setup-card-title">
                                 <svg class="ui-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
-                                <span>3. Kapasitas PLTS &amp; tarif</span>
+                                <span data-i18n="card3_title">3. Kapasitas PLTS &amp; tarif</span>
                             </div>
-                            <div class="setup-card-desc">
+                            <div class="setup-card-desc" data-i18n="card3_desc">
                                 Daya panel surya terpasang, baterai cadangan, dan golongan tarif PLN.
                             </div>
 
                             <div class="setup-input-label">
-                                <span>Kapasitas PLTS per rumah</span>
+                                <span data-i18n="lbl_pv_per_house">Kapasitas PLTS per rumah</span>
                                 <span class="tabular" style="color: var(--accent);" id="wiz_lbl_pv_kw">1.50 kWp</span>
                             </div>
                             <input type="range" id="wiz_pv_capacity_kw" min="0.0" max="10.0" value="1.5" step="0.25" style="margin-bottom: 12px;" oninput="document.getElementById('wiz_lbl_pv_kw').innerText = parseFloat(this.value).toFixed(2) + ' kWp'">
 
-                            <label class="setup-input-label">Penempatan PLTS pada tiang</label>
+                            <label class="setup-input-label" data-i18n="lbl_pv_placement">Penempatan PLTS pada tiang</label>
                             <select id="wiz_pv_placement_mode" class="setup-select" onchange="onWizardPvPlacementChange(this.value)">
                                 <option value="Semua Tiang (Merata)" selected>Semua tiang (Merata)</option>
                                 <option value="Ujung Saluran (Bus 6-10)">Ujung saluran (Bus 6-10)</option>
@@ -772,10 +776,10 @@
 
                             <div id="wiz_custom_pv_box" style="display: none; margin-bottom: 12px; background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-                                    <span style="font-size: 12px; font-weight: 500; color: var(--text-primary);">Pilih tiang ber-PLTS</span>
+                                    <span style="font-size: 12px; font-weight: 500; color: var(--text-primary);" data-i18n="lbl_pick_pv_poles">Pilih tiang ber-PLTS</span>
                                     <div style="display: flex; gap: 4px;">
-                                        <button type="button" class="btn-action" style="padding: 4px 8px; font-size: 11px;" onclick="selectAllCustomPV(true)">Semua</button>
-                                        <button type="button" class="btn-action" style="padding: 4px 8px; font-size: 11px;" onclick="selectAllCustomPV(false)">Reset</button>
+                                        <button type="button" class="btn-action" style="padding: 4px 8px; font-size: 11px;" data-i18n="btn_all" onclick="selectAllCustomPV(true)">Semua</button>
+                                        <button type="button" class="btn-action" style="padding: 4px 8px; font-size: 11px;" data-i18n="btn_reset" onclick="selectAllCustomPV(false)">Reset</button>
                                     </div>
                                 </div>
                                 <div id="wiz_custom_pv_pills_container" style="display: flex; flex-wrap: wrap; gap: 6px; max-height: 120px; overflow-y: auto;">
@@ -785,8 +789,8 @@
 
                             <div class="setup-toggle-row">
                                 <div>
-                                    <div style="font-weight: 500;">Inverter Volt-VAr (IEEE 1547)</div>
-                                    <div style="font-size: 12px; color: var(--text-muted);">Peredam overvoltage otomatis</div>
+                                    <div style="font-weight: 500;" data-i18n="lbl_voltvar">Inverter Volt-VAr (IEEE 1547)</div>
+                                    <div style="font-size: 12px; color: var(--text-muted);" data-i18n="lbl_voltvar_sub">Peredam overvoltage otomatis</div>
                                 </div>
                                 <label class="switch-toggle">
                                     <input type="checkbox" id="wiz_enable_volt_var">
@@ -796,8 +800,8 @@
 
                             <div class="setup-toggle-row">
                                 <div>
-                                    <div style="font-weight: 500;">Baterai rumah (BESS)</div>
-                                    <div style="font-size: 12px; color: var(--text-muted);">Simpan surplus siang untuk malam</div>
+                                    <div style="font-weight: 500;" data-i18n="lbl_bess_toggle">Baterai rumah (BESS)</div>
+                                    <div style="font-size: 12px; color: var(--text-muted);" data-i18n="lbl_bess_sub">Simpan surplus siang untuk malam</div>
                                 </div>
                                 <label class="switch-toggle">
                                     <input type="checkbox" id="wiz_enable_bess" onchange="document.getElementById('wiz_bess_box').style.display = this.checked ? 'block' : 'none'">
@@ -807,19 +811,19 @@
 
                             <div id="wiz_bess_box" style="display: none; background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 12px; margin-bottom: 12px;">
                                 <div class="setup-input-label" style="font-size: 12px;">
-                                    <span>Kapasitas baterai</span>
+                                    <span data-i18n="lbl_bess_cap">Kapasitas baterai</span>
                                     <span id="wiz_lbl_bess_cap" class="tabular" style="color: var(--positive);">5.0 kWh</span>
                                 </div>
                                 <input type="range" id="wiz_bess_cap_kwh" min="1.0" max="20.0" value="5.0" step="0.5" style="margin-bottom: 8px;" oninput="document.getElementById('wiz_lbl_bess_cap').innerText = parseFloat(this.value).toFixed(1) + ' kWh'">
 
                                 <div class="setup-input-label" style="font-size: 12px;">
-                                    <span>Daya inverter baterai</span>
-                                    <span id="wiz_lbl_bess_kw" class="tabular" style="color: var(--positive);">2.50 kW</span>
+                                    <span data-i18n="lbl_bess_pwr">Daya inverter baterai</span>
+                                    <span id="wiz_lbl_bess_pwr" class="tabular" style="color: var(--positive);">2.50 kW</span>
                                 </div>
-                                <input type="range" id="wiz_bess_kw" min="0.5" max="10.0" value="2.5" step="0.25" oninput="document.getElementById('wiz_lbl_bess_kw').innerText = parseFloat(this.value).toFixed(2) + ' kW'">
+                                <input type="range" id="wiz_bess_kw" min="0.5" max="10.0" value="2.5" step="0.25" oninput="document.getElementById('wiz_lbl_bess_pwr').innerText = parseFloat(this.value).toFixed(2) + ' kW'">
                             </div>
 
-                            <label class="setup-input-label">Tarif listrik pelanggan</label>
+                            <label class="setup-input-label" data-i18n="lbl_tariff">Tarif listrik pelanggan</label>
                             <select id="wiz_sel_tariff_preset" class="setup-select" style="margin-bottom: 0;">
                                 <option value="1444.7" selected>R-1/TR 2.200 VA (Rp 1.444,70 / kWh)</option>
                                 <option value="1444.7">R-1/TR 1.300 VA (Rp 1.444,70 / kWh)</option>
@@ -828,7 +832,7 @@
                             </select>
                         </div>
 
-                        <div class="setup-card-footer">
+                        <div class="setup-card-footer" data-i18n="card3_footer">
                             Mengacu pada standar SPLN 1:1995 &amp; Perdir PLN 0001.P/DIR/2022
                         </div>
                     </div>
@@ -849,7 +853,7 @@
             <div id="detail_back_bar" style="display: none; margin-bottom: 16px;">
                 <button type="button" class="btn-action" onclick="switchAppResultsMode('simple')">
                     <svg class="ui-icon" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg>
-                    <span>Kembali ke ringkasan</span>
+                    <span data-i18n="btn_back_summary">Kembali ke ringkasan</span>
                 </button>
             </div>
 
@@ -871,15 +875,15 @@
                     </div>
                     <div class="verdict-stats">
                         <div class="verdict-stat-box">
-                            <div class="verdict-stat-label">Status SPLN</div>
+                            <div class="verdict-stat-label" data-i18n="stat_spln">Status SPLN</div>
                             <div class="verdict-stat-val" style="color: var(--positive);" id="hero_safety">Aman</div>
                         </div>
                         <div class="verdict-stat-box">
-                            <div class="verdict-stat-label">Hemat per tahun</div>
+                            <div class="verdict-stat-label" data-i18n="stat_savings_yr">Hemat per tahun</div>
                             <div class="verdict-stat-val" id="hero_savings">Rp 15,2 Juta</div>
                         </div>
                         <div class="verdict-stat-box">
-                            <div class="verdict-stat-label">Balik modal</div>
+                            <div class="verdict-stat-label" data-i18n="stat_payback">Balik modal</div>
                             <div class="verdict-stat-val" style="color: var(--accent);" id="hero_payback">11.8 Tahun</div>
                         </div>
                     </div>
@@ -889,8 +893,8 @@
                 <div id="consumer_recommendation_card" class="content-card">
                     <div class="card-header">
                         <div class="card-title">
-                            <h3 id="rec_title">Rekomendasi operasional</h3>
-                            <p id="rec_subtitle">Panduan langkah agar PLTS beroperasi optimal dan sesuai standar PLN</p>
+                            <h3 id="rec_title" data-i18n="rec_title">Rekomendasi operasional</h3>
+                            <p id="rec_subtitle" data-i18n="rec_sub">Panduan langkah agar PLTS beroperasi optimal dan sesuai standar PLN</p>
                         </div>
                         <span id="rec_status_badge" class="badge">Sistem stabil</span>
                     </div>
@@ -902,8 +906,8 @@
                 <div class="content-card">
                     <div class="card-header">
                         <div class="card-title">
-                            <h3>5 Poin utama kelayakan sistem</h3>
-                            <p>Ringkasan kualitas tegangan, penghematan biaya, kuota daya, investasi, dan baterai</p>
+                            <h3 data-i18n="top5_heading">5 Poin utama kelayakan sistem</h3>
+                            <p data-i18n="top5_subheading">Ringkasan kualitas tegangan, penghematan biaya, kuota daya, investasi, dan baterai</p>
                         </div>
                     </div>
 
@@ -916,8 +920,8 @@
                                 <div class="top5-header">
                                     <div class="top5-badge">01</div>
                                     <div class="top5-meta">
-                                        <span class="top5-category">Kualitas tegangan</span>
-                                        <h4 class="top5-title">Keamanan voltase rumah (SPLN 1:1995)</h4>
+                                        <span class="top5-category" data-i18n="t5_1_cat">Kualitas tegangan</span>
+                                        <h4 class="top5-title" data-i18n="t5_1_title">Keamanan voltase rumah (SPLN 1:1995)</h4>
                                     </div>
                                 </div>
                                 <div class="top5-main-metric">
@@ -925,26 +929,26 @@
                                 </div>
                                 <div class="top5-data-grid" style="margin-top: 12px;">
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Siang maks</span>
+                                        <span class="top5-label" data-i18n="t5_1_l1">Siang maks</span>
                                         <span class="top5-val" id="top5_v_noon">221.4 V</span>
-                                        <span class="top5-sub">Batas 231 V</span>
+                                        <span class="top5-sub" data-i18n="t5_1_s1">Batas 231 V</span>
                                     </div>
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Malam min</span>
+                                        <span class="top5-label" data-i18n="t5_1_l2">Malam min</span>
                                         <span class="top5-val" id="top5_v_night">217.2 V</span>
-                                        <span class="top5-sub">Batas 198 V</span>
+                                        <span class="top5-sub" data-i18n="t5_1_s2">Batas 198 V</span>
                                     </div>
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Fluktuasi</span>
+                                        <span class="top5-label" data-i18n="t5_1_l3">Fluktuasi</span>
                                         <span class="top5-val" id="top5_v_delta">+2.1 V</span>
-                                        <span class="top5-sub">Stabil</span>
+                                        <span class="top5-sub" data-i18n="t5_1_s3">Stabil</span>
                                     </div>
                                 </div>
                                 <div class="top5-explanation" id="top5_voltage_explanation" style="margin-top: 12px;">
                                     Peralatan rumah tangga aman dari lonjakan tegangan dan inverter tidak trip.
                                 </div>
                             </div>
-                            <button class="btn-action" style="width: 100%;" onclick="switchTab(1)">
+                            <button class="btn-action" style="width: 100%;" data-i18n="t5_1_btn" onclick="switchTab(1)">
                                 Lihat tabel SPLN &amp; heatmap
                             </button>
                         </div>
@@ -955,8 +959,8 @@
                                 <div class="top5-header">
                                     <div class="top5-badge">02</div>
                                     <div class="top5-meta">
-                                        <span class="top5-category">Efisiensi biaya</span>
-                                        <h4 class="top5-title">Penghematan tagihan listrik</h4>
+                                        <span class="top5-category" data-i18n="t5_2_cat">Efisiensi biaya</span>
+                                        <h4 class="top5-title" data-i18n="t5_2_title">Penghematan tagihan listrik</h4>
                                     </div>
                                 </div>
                                 <div class="top5-main-metric">
@@ -964,31 +968,31 @@
                                         Rp 15.163.687 / tahun
                                     </div>
                                     <div style="font-size: 12px; color: var(--text-secondary); margin-top: 2px;">
-                                        Estimasi <span class="tabular" id="top5_savings_monthly" style="color: var(--text-primary);">Rp 1.263.640 / bulan</span>
+                                        <span data-i18n="lbl_estimate">Estimasi</span> <span class="tabular" id="top5_savings_monthly" style="color: var(--text-primary);">Rp 1.263.640 / bulan</span>
                                     </div>
                                 </div>
                                 <div class="top5-data-grid" style="margin-top: 12px;">
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Tarif PLN</span>
+                                        <span class="top5-label" data-i18n="t5_2_l1">Tarif PLN</span>
                                         <span class="top5-val" id="top5_tariff">Rp 1.445</span>
                                         <span class="top5-sub">per kWh</span>
                                     </div>
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Produksi surya</span>
+                                        <span class="top5-label" data-i18n="t5_2_l2">Produksi surya</span>
                                         <span class="top5-val" id="top5_solar_prod">10.496</span>
-                                        <span class="top5-sub">kWh / tahun</span>
+                                        <span class="top5-sub" data-i18n="t5_2_s2">kWh / tahun</span>
                                     </div>
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Rugi jaringan</span>
+                                        <span class="top5-label" data-i18n="t5_2_l3">Rugi jaringan</span>
                                         <span class="top5-val" id="top5_losses_red">34.2%</span>
-                                        <span class="top5-sub">Lebih rendah</span>
+                                        <span class="top5-sub" data-i18n="t5_2_s3">Lebih rendah</span>
                                     </div>
                                 </div>
-                                <div class="top5-explanation" style="margin-top: 12px;">
+                                <div class="top5-explanation" style="margin-top: 12px;" data-i18n="t5_2_exp">
                                     Konsumsi siang hari dipasok langsung oleh panel surya sehingga tagihan PLN berkurang.
                                 </div>
                             </div>
-                            <button class="btn-action" style="width: 100%;" onclick="switchTab(7)">
+                            <button class="btn-action" style="width: 100%;" data-i18n="t5_2_btn" onclick="switchTab(7)">
                                 Lihat rincian ekonomi
                             </button>
                         </div>
@@ -999,8 +1003,8 @@
                                 <div class="top5-header">
                                     <div class="top5-badge">03</div>
                                     <div class="top5-meta">
-                                        <span class="top5-category">Kuota sistem</span>
-                                        <h4 class="top5-title">Batas kapasitas PLTS (Hosting capacity)</h4>
+                                        <span class="top5-category" data-i18n="t5_3_cat">Kuota sistem</span>
+                                        <h4 class="top5-title" data-i18n="t5_3_title">Batas kapasitas PLTS (Hosting capacity)</h4>
                                     </div>
                                 </div>
                                 <div class="top5-main-metric">
@@ -1010,26 +1014,26 @@
                                 </div>
                                 <div class="top5-data-grid" style="margin-top: 12px;">
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Kuota feeder</span>
+                                        <span class="top5-label" data-i18n="t5_3_l1">Kuota feeder</span>
                                         <span class="top5-val" id="top5_hc_feeder">35.0 kWp</span>
-                                        <span class="top5-sub">Total feeder</span>
+                                        <span class="top5-sub" data-i18n="t5_3_s1">Total feeder</span>
                                     </div>
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Beban trafo</span>
+                                        <span class="top5-label" data-i18n="t5_3_l2">Beban trafo</span>
                                         <span class="top5-val" id="top5_trafo_loading">48.2%</span>
-                                        <span class="top5-sub">Aman &lt; 100%</span>
+                                        <span class="top5-sub" data-i18n="t5_3_s2">Aman &lt; 100%</span>
                                     </div>
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Arus balik</span>
+                                        <span class="top5-label" data-i18n="t5_3_l3">Arus balik</span>
                                         <span class="top5-val" id="top5_reverse_power">0.0 kW</span>
-                                        <span class="top5-sub">Ke trafo</span>
+                                        <span class="top5-sub" data-i18n="t5_3_s3">Ke trafo</span>
                                     </div>
                                 </div>
-                                <div class="top5-explanation" style="margin-top: 12px;">
+                                <div class="top5-explanation" style="margin-top: 12px;" data-i18n="t5_3_exp">
                                     Kapasitas ini memenuhi syarat paralel PLN dan SLO tanpa membebani trafo.
                                 </div>
                             </div>
-                            <button class="btn-action" style="width: 100%;" onclick="switchTab(4)">
+                            <button class="btn-action" style="width: 100%;" data-i18n="t5_3_btn" onclick="switchTab(4)">
                                 Lihat hosting capacity
                             </button>
                         </div>
@@ -1040,8 +1044,8 @@
                                 <div class="top5-header">
                                     <div class="top5-badge">04</div>
                                     <div class="top5-meta">
-                                        <span class="top5-category">Investasi 25 tahun</span>
-                                        <h4 class="top5-title">Waktu balik modal &amp; nilai bersih</h4>
+                                        <span class="top5-category" data-i18n="t5_4_cat">Investasi 25 tahun</span>
+                                        <h4 class="top5-title" data-i18n="t5_4_title">Waktu balik modal &amp; nilai bersih</h4>
                                     </div>
                                 </div>
                                 <div class="top5-main-metric">
@@ -1051,26 +1055,26 @@
                                 </div>
                                 <div class="top5-data-grid" style="margin-top: 12px;">
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Total CAPEX</span>
+                                        <span class="top5-label" data-i18n="t5_4_l1">Total CAPEX</span>
                                         <span class="top5-val" id="top5_capex">Rp 260 Juta</span>
-                                        <span class="top5-sub">Biaya pasang</span>
+                                        <span class="top5-sub" data-i18n="t5_4_s1">Biaya pasang</span>
                                     </div>
                                     <div class="top5-data-item">
-                                        <span class="top5-label">NPV 25 thn</span>
+                                        <span class="top5-label" data-i18n="t5_4_l2">NPV 25 thn</span>
                                         <span class="top5-val" id="top5_npv">Rp 84.5 Juta</span>
-                                        <span class="top5-sub">Nilai bersih</span>
+                                        <span class="top5-sub" data-i18n="t5_4_s2">Nilai bersih</span>
                                     </div>
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Masa pakai</span>
-                                        <span class="top5-val">25 Tahun</span>
-                                        <span class="top5-sub">Garansi 80%</span>
+                                        <span class="top5-label" data-i18n="t5_4_l3">Masa pakai</span>
+                                        <span class="top5-val" data-i18n="t5_4_v3">25 Tahun</span>
+                                        <span class="top5-sub" data-i18n="t5_4_s3">Garansi 80%</span>
                                     </div>
                                 </div>
-                                <div class="top5-explanation" style="margin-top: 12px;">
+                                <div class="top5-explanation" style="margin-top: 12px;" data-i18n="t5_4_exp">
                                     Setelah modal kembali, sisa masa pakai panel menghasilkan penghematan bersih.
                                 </div>
                             </div>
-                            <button class="btn-action" style="width: 100%;" onclick="switchTab(7)">
+                            <button class="btn-action" style="width: 100%;" data-i18n="t5_4_btn" onclick="switchTab(7)">
                                 Lihat kurva arus kas
                             </button>
                         </div>
@@ -1081,8 +1085,8 @@
                                 <div class="top5-header">
                                     <div class="top5-badge">05</div>
                                     <div class="top5-meta">
-                                        <span class="top5-category">Penyimpan energi</span>
-                                        <h4 class="top5-title">Baterai rumah (BESS)</h4>
+                                        <span class="top5-category" data-i18n="t5_5_cat">Penyimpan energi</span>
+                                        <h4 class="top5-title" data-i18n="t5_5_title">Baterai rumah (BESS)</h4>
                                     </div>
                                 </div>
                                 <div class="top5-main-metric">
@@ -1092,26 +1096,26 @@
                                 </div>
                                 <div class="top5-data-grid" style="margin-top: 12px;">
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Kapasitas</span>
+                                        <span class="top5-label" data-i18n="t5_5_l1">Kapasitas</span>
                                         <span class="top5-val" id="top5_bess_cap">5.0 kWh</span>
                                         <span class="top5-sub">LiFePO4</span>
                                     </div>
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Daya maks</span>
+                                        <span class="top5-label" data-i18n="t5_5_l2">Daya maks</span>
                                         <span class="top5-val" id="top5_bess_power">± 2.5 kW</span>
-                                        <span class="top5-sub">Isi/lepas</span>
+                                        <span class="top5-sub" data-i18n="t5_5_s2">Isi/lepas</span>
                                     </div>
                                     <div class="top5-data-item">
-                                        <span class="top5-label">Efisiensi</span>
+                                        <span class="top5-label" data-i18n="t5_5_l3">Efisiensi</span>
                                         <span class="top5-val">92.0%</span>
                                         <span class="top5-sub">DoD 80%</span>
                                     </div>
                                 </div>
-                                <div class="top5-explanation" style="margin-top: 12px;">
+                                <div class="top5-explanation" style="margin-top: 12px;" data-i18n="t5_5_exp">
                                     Menyimpan kelebihan listrik siang untuk dipakai saat beban puncak malam (17:00–22:00).
                                 </div>
                             </div>
-                            <button class="btn-action" style="width: 100%;" onclick="switchTab(5)">
+                            <button class="btn-action" style="width: 100%;" data-i18n="t5_5_btn" onclick="switchTab(5)">
                                 Lihat simulasi BESS
                             </button>
                         </div>
@@ -1122,12 +1126,12 @@
                 <!-- Environmental & Grid Benefit + Detail CTA -->
                 <div class="content-card" style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
                     <div>
-                        <div style="font-size: 14px; font-weight: 500; color: var(--text-primary);">Reduksi emisi karbon</div>
+                        <div style="font-size: 14px; font-weight: 500; color: var(--text-primary);" data-i18n="co2_title">Reduksi emisi karbon</div>
                         <div style="font-size: 13px; color: var(--text-secondary); margin-top: 2px;">
-                            Mengurangi emisi sebesar <span class="tabular" style="color: var(--positive); font-weight: 500;" id="top5_co2">8.83 Ton CO₂ / tahun</span> (setara <span class="tabular" id="top5_trees">~401 pohon</span>)
+                            <span data-i18n="co2_prefix">Mengurangi emisi sebesar</span> <span class="tabular" style="color: var(--positive); font-weight: 500;" id="top5_co2">8.83 Ton CO₂ / tahun</span> (<span data-i18n="co2_equiv">setara</span> <span class="tabular" id="top5_trees">~401 pohon</span>)
                         </div>
                     </div>
-                    <button type="button" class="btn-action btn-primary" onclick="switchAppResultsMode('detail')">
+                    <button type="button" class="btn-action btn-primary" data-i18n="btn_open_tech" onclick="switchAppResultsMode('detail')">
                         Buka analisis teknis (9 tab)
                     </button>
                 </div>
@@ -1561,11 +1565,380 @@
 
         let currentAppView = 'setup'; // 'setup' | 'results'
         let currentResultsMode = 'simple'; // 'simple' | 'detail'
+        let currentLang = localStorage.getItem('voltasol_lang') || 'id';
+
+        const I18N = {
+            id: {
+                app_subtitle: 'Simulator aliran daya JTR (220V/380V) dan integrasi PLTS atap on-grid',
+                loading_text: 'Menjalankan aliran daya Newton-Raphson 24 jam',
+                modal_dist: 'Jarak dari Trafo',
+                modal_phase: 'Fasa Terhubung',
+                modal_v_noon: 'Tegangan Siang (12:00)',
+                modal_v_night: 'Tegangan Puncak (19:00)',
+                modal_load: 'Beban Puncak Pelanggan',
+                modal_pv: 'Status PLTS Atap',
+                hero_title: 'Simulasi Jaringan JTR & PLTS Atap',
+                hero_desc: 'Atur parameter jaringan distribusi tegangan rendah (220V/380V), lokasi cuaca BMKG, dan kapasitas PLTS atap untuk menguji kepatuhan tegangan SPLN 1:1995 serta estimasi penghematan.',
+                btn_run_sim: 'Jalankan simulasi',
+                presets_title: 'Skenario cepat',
+                presets_sub: 'Pilih salah satu skenario standar untuk mengisi parameter sistem secara otomatis',
+                scen_1_title: '1. Beban normal',
+                scen_1_desc: 'Operasional standar harian',
+                scen_2_title: '2. Beban puncak malam',
+                scen_2_desc: 'Uji batas drop tegangan',
+                scen_3_title: '3. Puncak terik surya',
+                scen_3_desc: 'Uji potensi overvoltage',
+                scen_4_title: '4. Smart grid feeder',
+                scen_4_desc: 'Mitigasi inverter & baterai',
+                card1_title: '1. Lokasi & cuaca BMKG',
+                card1_desc: 'Data radiasi surya dan temperatur dari prakiraan wilayah BMKG.',
+                lbl_weather_src: 'Sumber cuaca',
+                lbl_province: 'Provinsi',
+                lbl_regency: 'Kabupaten / kota',
+                lbl_district: 'Kecamatan',
+                lbl_forecast_day: 'Hari prakiraan',
+                lbl_weather_pattern: 'Pola cuaca tropis',
+                card1_footer: 'Efisiensi insolasi dihitung per jam',
+                card2_title: '2. Gardu trafo & saluran JTR',
+                card2_desc: 'Konfigurasi trafo distribusi 20kV/0.4kV dan saluran tegangan rendah.',
+                lbl_trafo: 'Kapasitas trafo distribusi',
+                lbl_cable: 'Jenis kabel konduktor',
+                lbl_topology: 'Topologi jaringan bus',
+                topo_canvas_title: 'Kanvas drag & drop topologi bus',
+                btn_reset: 'Reset',
+                topo_canvas_hint: 'Geser posisi tiang pada kanvas. Klik tiang untuk memilih induk cabang, atau klik garis untuk menghapus koneksi.',
+                btn_add_branch: 'Tambah cabang',
+                lbl_num_buses: 'Jumlah tiang',
+                lbl_span_m: 'Jarak tiang (m)',
+                lbl_load_per_bus: 'Beban per tiang',
+                lbl_total_span: 'Total panjang bentang:',
+                card3_title: '3. Kapasitas PLTS & tarif',
+                card3_desc: 'Daya panel surya terpasang, baterai cadangan, dan golongan tarif PLN.',
+                lbl_pv_per_house: 'Kapasitas PLTS per rumah',
+                lbl_pv_placement: 'Penempatan PLTS pada tiang',
+                lbl_pick_pv_poles: 'Pilih tiang ber-PLTS',
+                btn_all: 'Semua',
+                lbl_voltvar: 'Inverter Volt-VAr (IEEE 1547)',
+                lbl_voltvar_sub: 'Peredam overvoltage otomatis',
+                lbl_bess_toggle: 'Baterai rumah (BESS)',
+                lbl_bess_sub: 'Simpan surplus siang untuk malam',
+                lbl_bess_cap: 'Kapasitas baterai',
+                lbl_bess_pwr: 'Daya inverter baterai',
+                lbl_tariff: 'Tarif listrik pelanggan',
+                card3_footer: 'Mengacu pada standar SPLN 1:1995 & Perdir PLN 0001.P/DIR/2022',
+                mode_summary: 'Ringkasan',
+                mode_technical: 'Analisis teknis',
+                btn_edit_params: 'Ubah parameter',
+                btn_recalculate: 'Hitung ulang',
+                kpi_vmin_label: 'Tegangan minimum',
+                kpi_vmin_limit: 'Batas SPLN ≥ 198.0 V',
+                kpi_vmax_label: 'Tegangan maksimum',
+                kpi_vmax_limit: 'Batas SPLN ≤ 231.0 V',
+                kpi_losses_label: 'Rugi teknis',
+                kpi_rev_label: 'Daya balik',
+                kpi_rev_tag: 'Terdeteksi',
+                kpi_rev_sub: 'Ekspor ke trafo',
+                kpi_trafo_label: 'Beban trafo puncak',
+                kpi_trafo_sub: 'Kapasitas aman < 100%',
+                tab_0: 'Ringkasan',
+                tab_1: 'Tabel & SPLN',
+                tab_2: 'Profil 24 jam',
+                tab_3: 'Permukaan 3D',
+                tab_4: 'Hosting capacity',
+                tab_5: 'BESS & inverter',
+                tab_6: '3-Fasa',
+                tab_7: 'Tekno-ekonomi',
+                tab_8: 'Topologi',
+                tab_9: 'Ekspor laporan',
+                btn_back_summary: 'Kembali ke ringkasan',
+                stat_spln: 'Status SPLN',
+                stat_savings_yr: 'Hemat per tahun',
+                stat_payback: 'Balik modal',
+                rec_title: 'Rekomendasi operasional',
+                rec_sub: 'Panduan langkah agar PLTS beroperasi optimal dan sesuai standar PLN',
+                top5_heading: '5 Poin utama kelayakan sistem',
+                top5_subheading: 'Ringkasan kualitas tegangan, penghematan biaya, kuota daya, investasi, dan baterai',
+                t5_1_cat: 'Kualitas tegangan',
+                t5_1_title: 'Keamanan voltase rumah (SPLN 1:1995)',
+                t5_1_l1: 'Siang maks',
+                t5_1_s1: 'Batas 231 V',
+                t5_1_l2: 'Malam min',
+                t5_1_s2: 'Batas 198 V',
+                t5_1_l3: 'Fluktuasi',
+                t5_1_s3: 'Stabil',
+                t5_1_btn: 'Lihat tabel SPLN & heatmap',
+                t5_2_cat: 'Efisiensi biaya',
+                t5_2_title: 'Penghematan tagihan listrik',
+                lbl_estimate: 'Estimasi',
+                t5_2_l1: 'Tarif PLN',
+                t5_2_l2: 'Produksi surya',
+                t5_2_s2: 'kWh / tahun',
+                t5_2_l3: 'Rugi jaringan',
+                t5_2_s3: 'Lebih rendah',
+                t5_2_exp: 'Konsumsi siang hari dipasok langsung oleh panel surya sehingga tagihan PLN berkurang.',
+                t5_2_btn: 'Lihat rincian ekonomi',
+                t5_3_cat: 'Kuota sistem',
+                t5_3_title: 'Batas kapasitas PLTS (Hosting capacity)',
+                t5_3_l1: 'Kuota feeder',
+                t5_3_s1: 'Total feeder',
+                t5_3_l2: 'Beban trafo',
+                t5_3_s2: 'Aman < 100%',
+                t5_3_l3: 'Arus balik',
+                t5_3_s3: 'Ke trafo',
+                t5_3_exp: 'Kapasitas ini memenuhi syarat paralel PLN dan SLO tanpa membebani trafo.',
+                t5_3_btn: 'Lihat hosting capacity',
+                t5_4_cat: 'Investasi 25 tahun',
+                t5_4_title: 'Waktu balik modal & nilai bersih',
+                t5_4_l1: 'Total CAPEX',
+                t5_4_s1: 'Biaya pasang',
+                t5_4_l2: 'NPV 25 thn',
+                t5_4_s2: 'Nilai bersih',
+                t5_4_l3: 'Masa pakai',
+                t5_4_v3: '25 Tahun',
+                t5_4_s3: 'Garansi 80%',
+                t5_4_exp: 'Setelah modal kembali, sisa masa pakai panel menghasilkan penghematan bersih.',
+                t5_4_btn: 'Lihat kurva arus kas',
+                t5_5_cat: 'Penyimpan energi',
+                t5_5_title: 'Baterai rumah (BESS)',
+                t5_5_l1: 'Kapasitas',
+                t5_5_l2: 'Daya maks',
+                t5_5_s2: 'Isi/lepas',
+                t5_5_l3: 'Efisiensi',
+                t5_5_exp: 'Menyimpan kelebihan listrik siang untuk dipakai saat beban puncak malam (17:00–22:00).',
+                t5_5_btn: 'Lihat simulasi BESS',
+                co2_title: 'Reduksi emisi karbon',
+                co2_prefix: 'Mengurangi emisi sebesar',
+                co2_equiv: 'setara',
+                btn_open_tech: 'Buka analisis teknis (9 tab)'
+            },
+            en: {
+                app_subtitle: 'Low-voltage (220V/380V) power flow & on-grid rooftop solar simulator',
+                loading_text: 'Running 24-hour Newton-Raphson power flow',
+                modal_dist: 'Distance from Transformer',
+                modal_phase: 'Connected Phase',
+                modal_v_noon: 'Noon Voltage (12:00)',
+                modal_v_night: 'Peak Load Voltage (19:00)',
+                modal_load: 'Customer Peak Load',
+                modal_pv: 'Rooftop PV Status',
+                hero_title: 'LV Distribution Grid & Rooftop Solar Simulator',
+                hero_desc: 'Configure low-voltage (220V/380V) feeder parameters, BMKG weather location, and rooftop PV capacity to evaluate SPLN 1:1995 voltage compliance and savings.',
+                btn_run_sim: 'Run simulation',
+                presets_title: 'Quick scenarios',
+                presets_sub: 'Select a standard scenario to pre-fill system parameters automatically',
+                scen_1_title: '1. Normal load',
+                scen_1_desc: 'Standard daily operation',
+                scen_2_title: '2. Evening peak',
+                scen_2_desc: 'Test undervoltage drop limit',
+                scen_3_title: '3. Solar noon peak',
+                scen_3_desc: 'Test overvoltage risk',
+                scen_4_title: '4. Smart grid feeder',
+                scen_4_desc: 'Smart inverter & BESS mitigation',
+                card1_title: '1. Location & BMKG weather',
+                card1_desc: 'Solar irradiance and temperature data from BMKG regional forecasts.',
+                lbl_weather_src: 'Weather source',
+                lbl_province: 'Province',
+                lbl_regency: 'Regency / city',
+                lbl_district: 'District',
+                lbl_forecast_day: 'Forecast day',
+                lbl_weather_pattern: 'Tropical weather pattern',
+                card1_footer: 'Insolation efficiency calculated hourly',
+                card2_title: '2. Transformer & LV feeder',
+                card2_desc: '20kV/0.4kV distribution transformer and low-voltage line configuration.',
+                lbl_trafo: 'Transformer capacity',
+                lbl_cable: 'Conductor cable type',
+                lbl_topology: 'Bus network topology',
+                topo_canvas_title: 'Drag & drop bus topology canvas',
+                btn_reset: 'Reset',
+                topo_canvas_hint: 'Drag poles on the canvas. Click a pole to set parent, or click a wire to remove connection.',
+                btn_add_branch: 'Add branch',
+                lbl_num_buses: 'Number of poles',
+                lbl_span_m: 'Span length (m)',
+                lbl_load_per_bus: 'Load per pole',
+                lbl_total_span: 'Total feeder length:',
+                card3_title: '3. Rooftop PV & tariff',
+                card3_desc: 'Installed solar capacity, battery storage, and PLN electricity tariff.',
+                lbl_pv_per_house: 'PV capacity per house',
+                lbl_pv_placement: 'PV placement on poles',
+                lbl_pick_pv_poles: 'Select poles with PV',
+                btn_all: 'All',
+                lbl_voltvar: 'Volt-VAr inverter (IEEE 1547)',
+                lbl_voltvar_sub: 'Automatic overvoltage mitigation',
+                lbl_bess_toggle: 'Home battery (BESS)',
+                lbl_bess_sub: 'Store noon surplus for evening peak',
+                lbl_bess_cap: 'Battery capacity',
+                lbl_bess_pwr: 'Battery inverter power',
+                lbl_tariff: 'Customer electricity tariff',
+                card3_footer: 'Compliant with SPLN 1:1995 & PLN Regulation 0001.P/DIR/2022',
+                mode_summary: 'Summary',
+                mode_technical: 'Technical analysis',
+                btn_edit_params: 'Edit parameters',
+                btn_recalculate: 'Recalculate',
+                kpi_vmin_label: 'Min voltage',
+                kpi_vmin_limit: 'SPLN limit ≥ 198.0 V',
+                kpi_vmax_label: 'Max voltage',
+                kpi_vmax_limit: 'SPLN limit ≤ 231.0 V',
+                kpi_losses_label: 'Technical losses',
+                kpi_rev_label: 'Reverse power',
+                kpi_rev_tag: 'Detected',
+                kpi_rev_sub: 'Export to transformer',
+                kpi_trafo_label: 'Peak transformer load',
+                kpi_trafo_sub: 'Safe capacity < 100%',
+                tab_0: 'Summary',
+                tab_1: 'Table & SPLN',
+                tab_2: '24h profile',
+                tab_3: '3D surface',
+                tab_4: 'Hosting capacity',
+                tab_5: 'BESS & inverter',
+                tab_6: '3-Phase',
+                tab_7: 'Techno-economics',
+                tab_8: 'Topology',
+                tab_9: 'Export report',
+                btn_back_summary: 'Back to summary',
+                stat_spln: 'SPLN status',
+                stat_savings_yr: 'Annual savings',
+                stat_payback: 'Payback period',
+                rec_title: 'Operational recommendations',
+                rec_sub: 'Guidance for optimal PV operation and PLN grid compliance',
+                top5_heading: '5 Key system feasibility points',
+                top5_subheading: 'Summary of voltage quality, cost savings, hosting capacity, ROI, and battery',
+                t5_1_cat: 'Voltage quality',
+                t5_1_title: 'Home voltage safety (SPLN 1:1995)',
+                t5_1_l1: 'Noon max',
+                t5_1_s1: 'Limit 231 V',
+                t5_1_l2: 'Night min',
+                t5_1_s2: 'Limit 198 V',
+                t5_1_l3: 'Fluctuation',
+                t5_1_s3: 'Stable',
+                t5_1_btn: 'View SPLN table & heatmap',
+                t5_2_cat: 'Cost efficiency',
+                t5_2_title: 'Electricity bill savings',
+                lbl_estimate: 'Estimated',
+                t5_2_l1: 'PLN tariff',
+                t5_2_l2: 'Solar yield',
+                t5_2_s2: 'kWh / year',
+                t5_2_l3: 'Grid losses',
+                t5_2_s3: 'Lower',
+                t5_2_exp: 'Daytime consumption is supplied directly by rooftop solar, reducing monthly PLN bills.',
+                t5_2_btn: 'View economic breakdown',
+                t5_3_cat: 'Grid quota',
+                t5_3_title: 'Maximum PV capacity (Hosting capacity)',
+                t5_3_l1: 'Feeder quota',
+                t5_3_s1: 'Total feeder',
+                t5_3_l2: 'Trafo load',
+                t5_3_s2: 'Safe < 100%',
+                t5_3_l3: 'Reverse flow',
+                t5_3_s3: 'To trafo',
+                t5_3_exp: 'Meets PLN parallel connection and SLO requirements without overloading the transformer.',
+                t5_3_btn: 'View hosting capacity',
+                t5_4_cat: '25-year investment',
+                t5_4_title: 'Payback period & net value',
+                t5_4_l1: 'Total CAPEX',
+                t5_4_s1: 'Install cost',
+                t5_4_l2: '25-yr NPV',
+                t5_4_s2: 'Net value',
+                t5_4_l3: 'Lifespan',
+                t5_4_v3: '25 Years',
+                t5_4_s3: '80% warranty',
+                t5_4_exp: 'After payback is reached, remaining panel lifespan generates net electricity savings.',
+                t5_4_btn: 'View cashflow curve',
+                t5_5_cat: 'Energy storage',
+                t5_5_title: 'Home battery (BESS)',
+                t5_5_l1: 'Capacity',
+                t5_5_l2: 'Max power',
+                t5_5_s2: 'Charge/disch.',
+                t5_5_l3: 'Efficiency',
+                t5_5_exp: 'Stores midday solar surplus for evening peak hours (17:00–22:00) to maximize savings.',
+                t5_5_btn: 'View BESS simulation',
+                co2_title: 'Carbon emission reduction',
+                co2_prefix: 'Reduces grid emissions by',
+                co2_equiv: 'equivalent to',
+                btn_open_tech: 'Open technical analysis (9 tabs)'
+            }
+        };
+
+        const OPTION_I18N = {
+            en: {
+                'bmkg': 'BMKG Real-time (Regional forecast)',
+                'manual': 'Manual preset (8x 3-hour slots)',
+                '0': 'Today',
+                '1': 'Tomorrow',
+                '2': 'Day after tomorrow',
+                'Linear Radial (Standar)': 'Linear radial (Standard)',
+                'Percabangan di Tiang 2 (2 Cabang)': 'Branch at Pole 2 (2 branches)',
+                'Percabangan di Tiang 3 (2 Cabang)': 'Branch at Pole 3 (2 branches)',
+                'Topologi Pohon Garpu': 'Fork tree topology (Dual-branch)',
+                'Feeder Kembar (2 Jalur dari Trafo)': 'Twin feeder (2 lines from trafo)',
+                '🎛️ Kustom Mandiri (Drag & Drop Canvas)': 'Custom (Drag & drop bus branches)',
+                'Semua Tiang (Merata)': 'All poles (Uniform)',
+                'Ujung Saluran (Bus 6-10)': 'Feeder end (Bus 6-10)',
+                'Pangkal Saluran (Bus 1-5)': 'Near transformer (Bus 1-5)',
+                'Acak / Selang-Seling': 'Random / alternating',
+                'Kustom / Pilihan Manual': 'Custom (Manual pole selection)',
+                'Tanpa PLTS': 'No PV (Load only)'
+            },
+            id: {
+                'bmkg': 'BMKG Real-time (Prakiraan wilayah)',
+                'manual': 'Preset manual (8 slot 3-jam)',
+                '0': 'Hari ini',
+                '1': 'Besok',
+                '2': 'Lusa',
+                'Linear Radial (Standar)': 'Linear radial (Standar)',
+                'Percabangan di Tiang 2 (2 Cabang)': 'Percabangan di Tiang 2 (2 cabang)',
+                'Percabangan di Tiang 3 (2 Cabang)': 'Percabangan di Tiang 3 (2 cabang)',
+                'Topologi Pohon Garpu': 'Topologi pohon garpu (Dual-branch)',
+                'Feeder Kembar (2 Jalur dari Trafo)': 'Feeder kembar (2 jalur dari trafo)',
+                '🎛️ Kustom Mandiri (Drag & Drop Canvas)': 'Kustom (Atur cabang bus sendiri)',
+                'Semua Tiang (Merata)': 'Semua tiang (Merata)',
+                'Ujung Saluran (Bus 6-10)': 'Ujung saluran (Bus 6-10)',
+                'Pangkal Saluran (Bus 1-5)': 'Pangkal dekat trafo',
+                'Acak / Selang-Seling': 'Acak / selang-seling',
+                'Kustom / Pilihan Manual': 'Kustom (Pilih tiang manual)',
+                'Tanpa PLTS': 'Tanpa PLTS'
+            }
+        };
+
+        function t(key) {
+            return (I18N[currentLang] && I18N[currentLang][key]) || (I18N.id && I18N.id[key]) || key;
+        }
+
+        function setLanguage(lang) {
+            currentLang = (lang === 'en') ? 'en' : 'id';
+            localStorage.setItem('voltasol_lang', currentLang);
+            document.documentElement.lang = currentLang;
+
+            const btnId = document.getElementById('btn_lang_id');
+            const btnEn = document.getElementById('btn_lang_en');
+            if (btnId) btnId.classList.toggle('active', currentLang === 'id');
+            if (btnEn) btnEn.classList.toggle('active', currentLang === 'en');
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (key && I18N[currentLang] && I18N[currentLang][key]) {
+                    el.textContent = I18N[currentLang][key];
+                }
+            });
+
+            const optMap = OPTION_I18N[currentLang] || {};
+            ['wiz_weather_mode', 'wiz_weather_day', 'wiz_topology_type', 'wiz_pv_placement_mode', 'topology_type', 'pv_placement_mode'].forEach(selId => {
+                const sel = document.getElementById(selId);
+                if (!sel) return;
+                Array.from(sel.options).forEach(opt => {
+                    if (optMap[opt.value]) {
+                        opt.textContent = optMap[opt.value];
+                    }
+                });
+            });
+
+            if (currentSimulationData && typeof updateDashboard === 'function') {
+                updateDashboard(currentSimulationData);
+            }
+        }
 
         // Inisialisasi Aplikasi (Pertama kali buka pengguna memasukkan data spesifikasi terlebih dahulu)
         window.addEventListener('DOMContentLoaded', () => {
             initManualWeather3H();
             initWilayahCascading();
+            setLanguage(currentLang);
 
             const urlParams = new URLSearchParams(window.location.search);
             const viewParam = urlParams.get('view');
@@ -1748,7 +2121,8 @@
             if (document.getElementById('wiz_bess_kw') && document.getElementById('bess_kw')) {
                 const pwr = parseFloat(document.getElementById('bess_kw').value) || 2.5;
                 document.getElementById('wiz_bess_kw').value = pwr;
-                document.getElementById('wiz_lbl_bess_kw').innerText = pwr.toFixed(2) + ' kW';
+                const elPwr = document.getElementById('wiz_lbl_bess_pwr') || document.getElementById('wiz_lbl_bess_kw');
+                if (elPwr) elPwr.innerText = pwr.toFixed(2) + ' kW';
             }
             if (document.getElementById('wiz_weather_mode') && document.getElementById('weather_mode')) {
                 document.getElementById('wiz_weather_mode').value = document.getElementById('weather_mode').value;
@@ -2823,17 +3197,21 @@
                     elHeroBadge.style.borderColor = 'var(--negative-border)';
                     elHeroBadge.style.color = 'var(--negative)';
                     elHeroBadge.style.background = 'var(--negative-soft)';
-                    elHeroBadge.innerText = 'Peringatan teknis';
+                    elHeroBadge.innerText = currentLang === 'en' ? 'Technical warning' : 'Peringatan teknis';
                 }
                 if (elHeroTitle) {
-                    elHeroTitle.innerHTML = `Lonjakan tegangan (${vMax.toFixed(1)} V) melampaui batas SPLN`;
+                    elHeroTitle.innerHTML = currentLang === 'en'
+                        ? `Voltage surge (${vMax.toFixed(1)} V) exceeds SPLN limit`
+                        : `Lonjakan tegangan (${vMax.toFixed(1)} V) melampaui batas SPLN`;
                 }
                 if (elHeroDesc) {
-                    elHeroDesc.innerHTML = `Kapasitas PLTS memicu voltase puncak siang hari hingga ${vMax.toFixed(1)} V (batas aman 231.0 V). Lakukan mitigasi di bawah ini.`;
+                    elHeroDesc.innerHTML = currentLang === 'en'
+                        ? `PV injection raises noon peak voltage to ${vMax.toFixed(1)} V (safe limit 231.0 V). Apply mitigation below.`
+                        : `Kapasitas PLTS memicu voltase puncak siang hari hingga ${vMax.toFixed(1)} V (batas aman 231.0 V). Lakukan mitigasi di bawah ini.`;
                 }
             } else if (vMin < 198.0) {
                 if (elHeroSafety) {
-                    elHeroSafety.innerText = 'Drop tegangan';
+                    elHeroSafety.innerText = currentLang === 'en' ? 'Undervoltage' : 'Drop tegangan';
                     elHeroSafety.style.color = 'var(--warning)';
                 }
                 if (elHeroBanner) {
@@ -2844,17 +3222,21 @@
                     elHeroBadge.style.borderColor = 'var(--warning-border)';
                     elHeroBadge.style.color = 'var(--warning)';
                     elHeroBadge.style.background = 'var(--warning-soft)';
-                    elHeroBadge.innerText = 'Peringatan drop voltase';
+                    elHeroBadge.innerText = currentLang === 'en' ? 'Voltage drop warning' : 'Peringatan drop voltase';
                 }
                 if (elHeroTitle) {
-                    elHeroTitle.innerHTML = `Drop tegangan malam (${vMin.toFixed(1)} V) di bawah batas SPLN`;
+                    elHeroTitle.innerHTML = currentLang === 'en'
+                        ? `Night voltage drop (${vMin.toFixed(1)} V) below SPLN limit`
+                        : `Drop tegangan malam (${vMin.toFixed(1)} V) di bawah batas SPLN`;
                 }
                 if (elHeroDesc) {
-                    elHeroDesc.innerHTML = `Tegangan minimum malam hari turun hingga ${vMin.toFixed(1)} V (batas toleransi 198.0 V). Diperlukan kompensasi voltase.`;
+                    elHeroDesc.innerHTML = currentLang === 'en'
+                        ? `Minimum evening voltage drops to ${vMin.toFixed(1)} V (SPLN limit 198.0 V). Voltage compensation required.`
+                        : `Tegangan minimum malam hari turun hingga ${vMin.toFixed(1)} V (batas toleransi 198.0 V). Diperlukan kompensasi voltase.`;
                 }
             } else {
                 if (elHeroSafety) {
-                    elHeroSafety.innerText = 'Aman';
+                    elHeroSafety.innerText = currentLang === 'en' ? 'Safe' : 'Aman';
                     elHeroSafety.style.color = 'var(--positive)';
                 }
                 if (elHeroBanner) {
@@ -2865,20 +3247,28 @@
                     elHeroBadge.style.borderColor = 'var(--border)';
                     elHeroBadge.style.color = 'var(--text-secondary)';
                     elHeroBadge.style.background = 'var(--bg-raised)';
-                    elHeroBadge.innerText = 'Ringkasan kelayakan';
+                    elHeroBadge.innerText = currentLang === 'en' ? 'Feasibility summary' : 'Ringkasan kelayakan';
                 }
                 if (elHeroTitle) {
-                    elHeroTitle.innerHTML = 'PLTS atap aman beroperasi dan menghemat tagihan PLN';
+                    elHeroTitle.innerHTML = currentLang === 'en'
+                        ? 'Rooftop PV operates safely and lowers PLN electricity bills'
+                        : 'PLTS atap aman beroperasi dan menghemat tagihan PLN';
                 }
                 if (elHeroDesc) {
-                    elHeroDesc.innerHTML = `Sistem JTR 220V beroperasi dalam batas aman (${vMin.toFixed(1)} V – ${vMax.toFixed(1)} V) sesuai SPLN 1:1995 dan layak secara finansial.`;
+                    elHeroDesc.innerHTML = currentLang === 'en'
+                        ? `The 220V LV feeder operates within safe limits (${vMin.toFixed(1)} V – ${vMax.toFixed(1)} V) per SPLN 1:1995 and is financially viable.`
+                        : `Sistem JTR 220V beroperasi dalam batas aman (${vMin.toFixed(1)} V – ${vMax.toFixed(1)} V) sesuai SPLN 1:1995 dan layak secara finansial.`;
                 }
             }
 
             const elHeroSavings = document.getElementById('hero_savings');
-            if (elHeroSavings) elHeroSavings.innerText = `Rp ${(annualSavings / 1000000).toFixed(1)} Juta`;
+            if (elHeroSavings) elHeroSavings.innerText = currentLang === 'en'
+                ? `Rp ${(annualSavings / 1000000).toFixed(1)} M`
+                : `Rp ${(annualSavings / 1000000).toFixed(1)} Juta`;
             const elHeroPayback = document.getElementById('hero_payback');
-            if (elHeroPayback) elHeroPayback.innerText = `${payback.toFixed(1)} Tahun`;
+            if (elHeroPayback) elHeroPayback.innerText = currentLang === 'en'
+                ? `${payback.toFixed(1)} Years`
+                : `${payback.toFixed(1)} Tahun`;
 
             // Panel Rekomendasi Solusi & Tindakan Teknis Konsumen
             const elRecCard = document.getElementById('consumer_recommendation_card');
@@ -2985,15 +3375,43 @@
                 } else {
                     if (elRecCard) elRecCard.style.borderColor = 'var(--border)';
                     if (elRecBadge) {
-                        elRecBadge.innerText = 'Sistem stabil';
+                        elRecBadge.innerText = currentLang === 'en' ? 'System stable' : 'Sistem stabil';
                         elRecBadge.style.background = 'var(--positive-soft)';
                         elRecBadge.style.borderColor = 'var(--positive-border)';
                         elRecBadge.style.color = 'var(--positive)';
                     }
-                    if (elRecTitle) elRecTitle.innerText = 'Rekomendasi operasional';
-                    if (elRecSub) elRecSub.innerText = `Voltase berada dalam batas aman (${vMin.toFixed(1)} V – ${vMax.toFixed(1)} V).`;
+                    if (elRecTitle) elRecTitle.innerText = currentLang === 'en' ? 'Operational recommendations' : 'Rekomendasi operasional';
+                    if (elRecSub) elRecSub.innerText = currentLang === 'en'
+                        ? `Grid voltage is within safe limits (${vMin.toFixed(1)} V – ${vMax.toFixed(1)} V).`
+                        : `Voltase berada dalam batas aman (${vMin.toFixed(1)} V – ${vMax.toFixed(1)} V).`;
 
-                    elActionsBox.innerHTML = `
+                    elActionsBox.innerHTML = currentLang === 'en' ? `
+                        <div style="background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px;">
+                            <h5 style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin: 0 0 6px 0;">1. Optimal inverter capacity</h5>
+                            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                                Installed PV (${pvCapPerHouse} kWp/house) operates harmoniously with cable and transformer ratings.
+                            </p>
+                        </div>
+
+                        <div style="background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px;">
+                            <div>
+                                <h5 style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin: 0 0 6px 0;">2. Ready for SLO &amp; net-metering</h5>
+                                <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                                    Complies with ESDM Reg. 2/2024 and SPLN 1:1995 standards.
+                                </p>
+                            </div>
+                            <button class="btn-action" style="align-self: flex-start;" onclick="switchTab(9)">
+                                Download proposal (.docx)
+                            </button>
+                        </div>
+
+                        <div style="background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px;">
+                            <h5 style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin: 0 0 6px 0;">3. Routine panel maintenance</h5>
+                            <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+                                Clean solar modules every 2–4 weeks to maintain projected savings of Rp ${Math.round(annualSavings).toLocaleString('id-ID')}/year.
+                            </p>
+                        </div>
+                    ` : `
                         <div style="background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius-md); padding: 16px;">
                             <h5 style="font-size: 13px; font-weight: 600; color: var(--text-primary); margin: 0 0 6px 0;">1. Kapasitas inverter sesuai</h5>
                             <p style="font-size: 12px; color: var(--text-secondary); line-height: 1.5; margin: 0;">
@@ -3109,7 +3527,9 @@
             document.getElementById('kpi_vmax').innerText = m.max_v_volt_pv.toFixed(1) + ' V';
             document.getElementById('kpi_losses').innerText = m.total_loss_pv_kwh.toFixed(1) + ' kWh';
             document.getElementById('kpi_loss_pct').innerText = `-${m.loss_reduction_pct.toFixed(1)}%`;
-            document.getElementById('kpi_loss_red').innerText = `Hemat ${(m.loss_reduction_kwh).toFixed(2)} kWh / hari`;
+            document.getElementById('kpi_loss_red').innerText = currentLang === 'en'
+                ? `Saved ${(m.loss_reduction_kwh).toFixed(2)} kWh / day`
+                : `Hemat ${(m.loss_reduction_kwh).toFixed(2)} kWh / hari`;
             document.getElementById('kpi_rev').innerText = m.max_reverse_flow_kw.toFixed(1) + ' kW';
 
             // Trafo loading
@@ -3122,11 +3542,11 @@
             const vminBadge = document.getElementById('kpi_vmin_badge');
             if (m.spln_compliant_pv) {
                 cardVmin.className = 'kpi-card';
-                vminBadge.innerText = 'Aman';
+                vminBadge.innerText = currentLang === 'en' ? 'Safe' : 'Aman';
                 vminBadge.style.color = 'var(--positive)';
             } else {
                 cardVmin.className = 'kpi-card';
-                vminBadge.innerText = 'Drop';
+                vminBadge.innerText = currentLang === 'en' ? 'Low' : 'Drop';
                 vminBadge.style.color = 'var(--negative)';
             }
 
