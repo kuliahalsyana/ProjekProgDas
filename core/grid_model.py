@@ -152,7 +152,7 @@ def create_lv_network(
         vn_hv_kv=trafo_specs["vn_hv_kv"],
         vn_lv_kv=trafo_specs["vn_lv_kv"],
         vk_percent=trafo_specs["vk_percent"],
-        vkr_percent=trafo_specs["vkr_p  ercent"],
+        vkr_percent=trafo_specs["vkr_percent"],
         pfe_kw=trafo_specs["pfe_kw"],
         i0_percent=trafo_specs["i0_percent"],
         name="Trafo_Distribusi"
