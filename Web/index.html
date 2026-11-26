@@ -500,16 +500,16 @@
             <div class="tab-content active" id="pane-top5">
                 <div class="content-card">
                     <!-- Hero Executive Verdict Banner -->
-                    <div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: var(--radius-lg); padding: 18px 22px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+                    <div id="hero_verdict_banner" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: var(--radius-lg); padding: 18px 22px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
                         <div style="flex: 1; min-width: 280px;">
                             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-                                <span style="font-size: 11px; font-weight: 800; background: rgba(255, 255, 255, 0.12); border: 1px solid #FFFFFF; color: #FFFFFF; padding: 2px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px;">RINGKASAN KELAYAKAN UTAMA KONSUMEN</span>
+                                <span id="hero_verdict_badge" style="font-size: 11px; font-weight: 800; background: rgba(255, 255, 255, 0.12); border: 1px solid #FFFFFF; color: #FFFFFF; padding: 2px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.5px;">RINGKASAN KELAYAKAN UTAMA KONSUMEN</span>
                                 <span style="font-size: 11px; color: var(--text-muted);">• Berdasarkan Standar SPLN 1:1995</span>
                             </div>
-                            <h2 style="font-size: 17.5px; font-weight: 800; color: #FFFFFF; line-height: 1.35;">
+                            <h2 id="hero_verdict_title" style="font-size: 17.5px; font-weight: 800; color: #FFFFFF; line-height: 1.35;">
                                 PLTS Atap Aman Beroperasi, Menstabilkan Voltase Rumah & Menghemat Tagihan PLN
                             </h2>
-                            <p style="font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.5;">
+                            <p id="hero_verdict_desc" style="font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.5;">
                                 Berdasarkan komputasi aliran daya standar keteknikan PLN (SPLN 1:1995), pemasangan PLTS pada sistem JTR 220V ini memenuhi batas toleransi aman, tidak memicu kerusakan peralatan elektronik rumah, dan sangat layak secara investasi finansial.
                             </p>
                         </div>
@@ -526,6 +526,25 @@
                                 <div style="font-size: 10px; font-weight: 700; color: #64748B; text-transform: uppercase;">WAKTU BALIK MODAL</div>
                                 <div style="font-size: 16px; font-weight: 800; color: #F59E0B; font-family: var(--font-mono); margin-top: 2px;" id="hero_payback">11.8 Tahun</div>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel Rekomendasi Solusi & Tindakan Teknis Konsumen -->
+                    <div id="consumer_recommendation_card" style="background: #101424; border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px 22px; margin-bottom: 24px;">
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; background: rgba(255, 255, 255, 0.08); font-size: 16px;" id="rec_icon">🛠️</div>
+                                <div>
+                                    <h4 style="font-size: 14px; font-weight: 800; color: #FFFFFF; letter-spacing: 0.3px; margin: 0;" id="rec_title">Rekomendasi Tindakan Konsumen & Operator Jaringan</h4>
+                                    <p style="font-size: 11px; color: var(--text-muted); margin: 2px 0 0 0;" id="rec_subtitle">Panduan langkah mitigasi teknis agar PLTS beroperasi optimal dan lolos verifikasi PLN</p>
+                                </div>
+                            </div>
+                            <span id="rec_status_badge" class="badge" style="background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.35); color: #10B981; font-weight: 700; padding: 5px 12px; font-size: 11px;">
+                                ✅ Kondisi Aman
+                            </span>
+                        </div>
+                        <div id="consumer_actions_container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-top: 14px;">
+                            <!-- Dinamis via JS -->
                         </div>
                     </div>
 
@@ -578,7 +597,7 @@
                                         <span class="top5-sub">Regulasi Baik</span>
                                     </div>
                                 </div>
-                                <div class="top5-explanation">
+                                <div class="top5-explanation" id="top5_voltage_explanation">
                                     💡 <b>Arti bagi Konsumen:</b> Seluruh peralatan rumah tangga (AC, kulkas, TV, pompa) terlindungi dari lonjakan tegangan berbahaya (*overvoltage*) dan terhindar dari pemadaman proteksi inverter.
                                 </div>
                             </div>
@@ -1959,11 +1978,33 @@
             const deltaV = vMax - vMin;
 
             const elSplnBadge = document.getElementById('top5_spln_badge');
+            const elVoltExpl = document.getElementById('top5_voltage_explanation');
             if (elSplnBadge) {
-                elSplnBadge.innerText = isOk ? '✅ AMAN & STABIL (Sesuai SPLN)' : '⚠️ PERHATIAN (Di Luar Batas SPLN)';
-                elSplnBadge.style.color = '#FFFFFF';
-                elSplnBadge.style.background = isOk ? '#18181B' : '#27272A';
-                elSplnBadge.style.borderColor = isOk ? '#3F3F46' : '#71717A';
+                if (vMax > 231.0) {
+                    elSplnBadge.innerText = `⚠️ BAHAYA OVERVOLTAGE (${vMax.toFixed(1)} V > 231 V)`;
+                    elSplnBadge.style.color = '#EF4444';
+                    elSplnBadge.style.background = 'rgba(239, 68, 68, 0.15)';
+                    elSplnBadge.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                    if (elVoltExpl) {
+                        elVoltExpl.innerHTML = `⚠️ <b>Peringatan Kritis bagi Konsumen:</b> Terjadi lonjakan tegangan siang hari hingga <b>${vMax.toFixed(1)} V</b> (melampaui batas SPLN 231.0 V). Kondisi ini berisiko merusak peralatan elektronik sensitif rumah dan memicu inverter trip/mati mendadak.`;
+                    }
+                } else if (vMin < 198.0) {
+                    elSplnBadge.innerText = `⚠️ DROP TEGANGAN (${vMin.toFixed(1)} V < 198 V)`;
+                    elSplnBadge.style.color = '#F59E0B';
+                    elSplnBadge.style.background = 'rgba(245, 158, 11, 0.15)';
+                    elSplnBadge.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+                    if (elVoltExpl) {
+                        elVoltExpl.innerHTML = `⚠️ <b>Peringatan bagi Konsumen:</b> Terjadi drop voltase malam hari hingga <b>${vMin.toFixed(1)} V</b> (di bawah batas toleransi SPLN 198.0 V). Peralatan motorik seperti AC dan kulkas berisiko bekerja lebih berat dan lampu redup.`;
+                    }
+                } else {
+                    elSplnBadge.innerText = '✅ AMAN & STABIL (Sesuai SPLN)';
+                    elSplnBadge.style.color = '#10B981';
+                    elSplnBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+                    elSplnBadge.style.borderColor = 'rgba(16, 185, 129, 0.4)';
+                    if (elVoltExpl) {
+                        elVoltExpl.innerHTML = `💡 <b>Arti bagi Konsumen:</b> Seluruh peralatan rumah tangga (AC, kulkas, TV, pompa) terlindungi dari lonjakan tegangan berbahaya (*overvoltage*) dan terhindar dari pemadaman proteksi inverter.`;
+                    }
+                }
             }
             const elVNoon = document.getElementById('top5_v_noon');
             if (elVNoon) elVNoon.innerText = `${vMax.toFixed(1)} V`;
@@ -2031,13 +2072,268 @@
             const elTrees = document.getElementById('top5_trees');
             if (elTrees) elTrees.innerText = `~${te.trees_equivalent || 401} pohon dewasa`;
 
-            // Hero Verdict Banner
+            // Hero Verdict Banner Sinkronisasi Dinamis Sesuai Status Tegangan Riil
+            const elHeroBanner = document.getElementById('hero_verdict_banner');
+            const elHeroTitle = document.getElementById('hero_verdict_title');
+            const elHeroDesc = document.getElementById('hero_verdict_desc');
             const elHeroSafety = document.getElementById('hero_safety');
-            if (elHeroSafety) elHeroSafety.innerText = isOk ? '✅ AMAN (SPLN)' : '⚠️ OVERVOLTAGE';
+            const elHeroBadge = document.getElementById('hero_verdict_badge');
+
+            if (vMax > 231.0) {
+                if (elHeroSafety) {
+                    elHeroSafety.innerText = '⚠️ OVERVOLTAGE';
+                    elHeroSafety.style.color = '#EF4444';
+                }
+                if (elHeroBanner) {
+                    elHeroBanner.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.16) 0%, rgba(30, 14, 18, 0.95) 100%)';
+                    elHeroBanner.style.borderColor = 'rgba(239, 68, 68, 0.45)';
+                }
+                if (elHeroBadge) {
+                    elHeroBadge.style.borderColor = '#EF4444';
+                    elHeroBadge.style.color = '#EF4444';
+                    elHeroBadge.style.background = 'rgba(239, 68, 68, 0.2)';
+                    elHeroBadge.innerText = '⚠️ PERINGATAN KELAYAKAN TEKNIS KONSUMEN';
+                }
+                if (elHeroTitle) {
+                    elHeroTitle.innerHTML = `⚠️ Terjadi Lonjakan Tegangan Berlebih (<span style="color: #EF4444;">${vMax.toFixed(1)} V</span>) Melanggar Standar SPLN!`;
+                }
+                if (elHeroDesc) {
+                    elHeroDesc.innerHTML = `Berdasarkan komputasi aliran daya standar keteknikan PLN (SPLN 1:1995), kapasitas PLTS yang dipasang memicu voltase puncak siang hari melonjak hingga <b>${vMax.toFixed(1)} V</b> (batas aman maks: <b>231.0 V</b>). Kondisi ini <b>TIDAK AMAN</b> untuk peralatan elektronik rumah tangga dan berisiko ditolak PLN. Diperlukan tindakan mitigasi di bawah ini:`;
+                }
+            } else if (vMin < 198.0) {
+                if (elHeroSafety) {
+                    elHeroSafety.innerText = '⚠️ DROP TEGANGAN';
+                    elHeroSafety.style.color = '#F59E0B';
+                }
+                if (elHeroBanner) {
+                    elHeroBanner.style.background = 'linear-gradient(135deg, rgba(245, 158, 11, 0.16) 0%, rgba(30, 22, 14, 0.95) 100%)';
+                    elHeroBanner.style.borderColor = 'rgba(245, 158, 11, 0.45)';
+                }
+                if (elHeroBadge) {
+                    elHeroBadge.style.borderColor = '#F59E0B';
+                    elHeroBadge.style.color = '#F59E0B';
+                    elHeroBadge.style.background = 'rgba(245, 158, 11, 0.2)';
+                    elHeroBadge.innerText = '⚠️ PERINGATAN DROP VOLTASE';
+                }
+                if (elHeroTitle) {
+                    elHeroTitle.innerHTML = `⚠️ Terjadi Drop Tegangan Parah (<span style="color: #F59E0B;">${vMin.toFixed(1)} V</span>) di Bawah Batas SPLN!`;
+                }
+                if (elHeroDesc) {
+                    elHeroDesc.innerHTML = `Tegangan minimum pada saat beban puncak malam hari turun hingga <b>${vMin.toFixed(1)} V</b> (batas toleransi SPLN: <b>198.0 V</b>). Kondisi ini berisiko menyebabkan peralatan elektronik bekerja tidak optimal dan memerlukan perbaikan kompensasi voltase.`;
+                }
+            } else {
+                if (elHeroSafety) {
+                    elHeroSafety.innerText = '✅ AMAN (SPLN)';
+                    elHeroSafety.style.color = '#10B981';
+                }
+                if (elHeroBanner) {
+                    elHeroBanner.style.background = 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(16, 185, 129, 0.08) 100%)';
+                    elHeroBanner.style.borderColor = 'rgba(255, 255, 255, 0.25)';
+                }
+                if (elHeroBadge) {
+                    elHeroBadge.style.borderColor = '#FFFFFF';
+                    elHeroBadge.style.color = '#FFFFFF';
+                    elHeroBadge.style.background = 'rgba(255, 255, 255, 0.12)';
+                    elHeroBadge.innerText = 'RINGKASAN KELAYAKAN UTAMA KONSUMEN';
+                }
+                if (elHeroTitle) {
+                    elHeroTitle.innerHTML = 'PLTS Atap Aman Beroperasi, Menstabilkan Voltase Rumah & Menghemat Tagihan PLN';
+                }
+                if (elHeroDesc) {
+                    elHeroDesc.innerHTML = `Berdasarkan komputasi aliran daya standar keteknikan PLN (SPLN 1:1995), pemasangan PLTS pada sistem JTR 220V ini memenuhi batas toleransi aman (${vMin.toFixed(1)} V – ${vMax.toFixed(1)} V), tidak memicu kerusakan peralatan elektronik rumah, dan sangat layak secara investasi finansial.`;
+                }
+            }
+
             const elHeroSavings = document.getElementById('hero_savings');
             if (elHeroSavings) elHeroSavings.innerText = `Rp ${(annualSavings / 1000000).toFixed(1)} Juta`;
             const elHeroPayback = document.getElementById('hero_payback');
             if (elHeroPayback) elHeroPayback.innerText = `${payback.toFixed(1)} Tahun`;
+
+            // Panel Rekomendasi Solusi & Tindakan Teknis Konsumen
+            const elRecCard = document.getElementById('consumer_recommendation_card');
+            const elRecTitle = document.getElementById('rec_title');
+            const elRecSub = document.getElementById('rec_subtitle');
+            const elRecBadge = document.getElementById('rec_status_badge');
+            const elRecIcon = document.getElementById('rec_icon');
+            const elActionsBox = document.getElementById('consumer_actions_container');
+
+            if (elActionsBox) {
+                if (vMax > 231.0) {
+                    // Kasus Overvoltage
+                    if (elRecCard) elRecCard.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                    if (elRecBadge) {
+                        elRecBadge.innerText = '🚨 Mitigasi Diperlukan: Overvoltage';
+                        elRecBadge.style.background = 'rgba(239, 68, 68, 0.15)';
+                        elRecBadge.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                        elRecBadge.style.color = '#EF4444';
+                    }
+                    if (elRecIcon) elRecIcon.innerText = '🚨';
+                    if (elRecTitle) elRecTitle.innerText = 'Rekomendasi Tindakan Mitigasi Overvoltage untuk Konsumen & Operator';
+                    if (elRecSub) elRecSub.innerText = `Tegangan mencapai ${vMax.toFixed(1)} V (melebihi batas aman 231.0 V). Lakukan salah satu atau kombinasi langkah mitigasi berikut:`;
+
+                    // Hitung estimasi kapasitas aman inverter
+                    const safeCap = Math.max(0.5, Math.min(pvCapPerHouse - 0.5, Math.floor((pvCapPerHouse * (11.0 / Math.max(11.1, (vMax - 220.0)))) * 10) / 10));
+
+                    elActionsBox.innerHTML = `
+                        <div style="background: #141928; border: 1px solid rgba(239, 68, 68, 0.35); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                    <span style="font-size: 16px;">🔻</span>
+                                    <h5 style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; margin: 0;">1. Kurangi Kapasitas Daya Inverter PLTS</h5>
+                                </div>
+                                <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 10px 0;">
+                                    Daya inverter saat ini (${pvCapPerHouse} kWp/rumah) terlalu besar untuk beban lokal. Turunkan daya inverter menjadi <b>≤ ${safeCap.toFixed(1)} kWp</b> agar injeksi siang hari tidak memicu kenaikan tegangan ekstrem.
+                                </p>
+                            </div>
+                            <button class="btn-action" style="padding: 6px 12px; font-size: 11px; background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.5); color: #FFAAAA; align-self: flex-start;" onclick="applySafeInverterCapacity(${safeCap})">
+                                ⚡ Terapkan Daya Aman (${safeCap.toFixed(1)} kWp) & Simulasi
+                            </button>
+                        </div>
+
+                        <div style="background: #141928; border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                    <span style="font-size: 16px;">🔋</span>
+                                    <h5 style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; margin: 0;">2. Pasang / Aktifkan Baterai Rumah (BESS)</h5>
+                                </div>
+                                <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 10px 0;">
+                                    Aktifkan baterai 5–10 kWh untuk menyerap surplus energi surya di jam 10:00–14:00. Baterai mencegah daya balik (*reverse power*) mengalir ke jaringan tiang dan menekan tegangan kembali ke rentang aman.
+                                </p>
+                            </div>
+                            <button class="btn-action" style="padding: 6px 12px; font-size: 11px; background: rgba(245, 158, 11, 0.2); border-color: rgba(245, 158, 11, 0.5); color: #FDE68A; align-self: flex-start;" onclick="enableBessAndRerun()">
+                                🔋 Aktifkan BESS (5 kWh) & Hitung Ulang
+                            </button>
+                        </div>
+
+                        <div style="background: #141928; border: 1px solid rgba(59, 130, 246, 0.35); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                    <span style="font-size: 16px;">⚡</span>
+                                    <h5 style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; margin: 0;">3. Aktifkan Kendali Cerdas Volt-Var Q(V)</h5>
+                                </div>
+                                <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 10px 0;">
+                                    Gunakan *Smart Inverter* dengan kurva Volt-Var Q(V). Inverter otomatis menyerap daya reaktif induktif saat tegangan melampaui 220V sehingga menurunkan voltase tiang sebesar ~3–6 Volt tanpa membuang energi aktif.
+                                </p>
+                            </div>
+                            <button class="btn-action" style="padding: 6px 12px; font-size: 11px; background: rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.5); color: #BFDBFE; align-self: flex-start;" onclick="enableVoltVarAndRerun()">
+                                ⚡ Aktifkan Volt-Var Q(V) & Hitung Ulang
+                            </button>
+                        </div>
+
+                        <div style="background: #141928; border: 1px solid var(--border); border-radius: 8px; padding: 14px; display: flex; flex-direction: column; justify-content: space-between;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                    <span style="font-size: 16px;">📍</span>
+                                    <h5 style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; margin: 0;">4. Relokasi PV atau Upgrading Konduktor</h5>
+                                </div>
+                                <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 10px 0;">
+                                    Hindari menumpuk seluruh PLTS pada tiang ujung saluran. Pindahkan lokasi PV mendekati trafo distribusi, atau usulkan ke PLN untuk memperbesar penampang kabel JTR (misal LVTC 3x70 mm²) untuk mengurangi resistansi.
+                                </p>
+                            </div>
+                            <button class="btn-action" style="padding: 6px 12px; font-size: 11px; align-self: flex-start;" onclick="switchTab(8)">
+                                🗺️ Buka Editor Topologi Tiang
+                            </button>
+                        </div>
+                    `;
+                } else if (vMin < 198.0) {
+                    // Kasus Undervoltage
+                    if (elRecCard) elRecCard.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+                    if (elRecBadge) {
+                        elRecBadge.innerText = '⚠️ Mitigasi Diperlukan: Drop Tegangan';
+                        elRecBadge.style.background = 'rgba(245, 158, 11, 0.15)';
+                        elRecBadge.style.borderColor = 'rgba(245, 158, 11, 0.4)';
+                        elRecBadge.style.color = '#F59E0B';
+                    }
+                    if (elRecIcon) elRecIcon.innerText = '⚠️';
+                    if (elRecTitle) elRecTitle.innerText = 'Rekomendasi Tindakan Mitigasi Drop Tegangan Malam Hari';
+                    if (elRecSub) elRecSub.innerText = `Tegangan terendah turun hingga ${vMin.toFixed(1)} V (di bawah batas toleransi SPLN 198.0 V). Lakukan langkah berikut:`;
+
+                    elActionsBox.innerHTML = `
+                        <div style="background: #141928; border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 8px; padding: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <span style="font-size: 16px;">🔋</span>
+                                <h5 style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; margin: 0;">1. Injeksi Baterai BESS Saat Beban Puncak (18:00 - 21:00)</h5>
+                            </div>
+                            <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 10px 0;">
+                                Manfaatkan energi baterai yang disimpan siang hari untuk memasok beban malam hari (*Peak Shaving*). Injeksi daya ini menahan tegangan ujung feeder agar tidak anjlok di bawah 198 V.
+                            </p>
+                            <button class="btn-action" style="padding: 6px 12px; font-size: 11px;" onclick="enableBessAndRerun()">
+                                🔋 Aktifkan BESS & Hitung Ulang
+                            </button>
+                        </div>
+
+                        <div style="background: #141928; border: 1px solid var(--border); border-radius: 8px; padding: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <span style="font-size: 16px;">🔄</span>
+                                <h5 style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; margin: 0;">2. Usulkan Penyesuaian Tap Trafo Distribusi</h5>
+                            </div>
+                            <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.45; margin: 0;">
+                                Koordinasikan dengan PLN ULP setempat untuk menaikkan sadapan (*tap setting*) trafo sebesar +2.5% atau +5% guna mendongkrak profil tegangan dasar di seluruh rumah.
+                            </p>
+                        </div>
+
+                        <div style="background: #141928; border: 1px solid var(--border); border-radius: 8px; padding: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <span style="font-size: 16px;">⚖️</span>
+                                <h5 style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; margin: 0;">3. Seimbangkan Beban Antar Fasa (R-S-T)</h5>
+                            </div>
+                            <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 10px 0;">
+                                Periksa apakah drop tegangan terkonsentrasi di fasa tertentu akibat ketidakseimbangan sambungan beban rumah tangga.
+                            </p>
+                            <button class="btn-action" style="padding: 6px 12px; font-size: 11px;" onclick="switchTab(6)">
+                                ⚖️ Buka Tab Ketidakseimbangan 3-Fasa
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    // Kasus Aman SPLN
+                    if (elRecCard) elRecCard.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+                    if (elRecBadge) {
+                        elRecBadge.innerText = '✅ Sistem Stabil & Sesuai SPLN';
+                        elRecBadge.style.background = 'rgba(16, 185, 129, 0.15)';
+                        elRecBadge.style.borderColor = 'rgba(16, 185, 129, 0.35)';
+                        elRecBadge.style.color = '#10B981';
+                    }
+                    if (elRecIcon) elRecIcon.innerText = '✅';
+                    if (elRecTitle) elRecTitle.innerText = 'Rekomendasi Operasional & Kelaikan Sistem Konsumen';
+                    if (elRecSub) elRecSub.innerText = `Voltase jaringan berada dalam batas toleransi aman (${vMin.toFixed(1)} V – ${vMax.toFixed(1)} V). Langkah yang disarankan:`;
+
+                    elActionsBox.innerHTML = `
+                        <div style="background: #141928; border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <span style="font-size: 16px;">✅</span>
+                                <h5 style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; margin: 0;">1. Kapasitas Inverter Sangat Ideal & Stabil</h5>
+                            </div>
+                            <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.45; margin: 0;">
+                                Daya inverter terpasang (${pvCapPerHouse} kWp/rumah) bekerja harmonis dengan kapasitas kabel dan trafo. Tidak ada risiko kerusakan alat elektronik rumah tangga.
+                            </p>
+                        </div>
+
+                        <div style="background: #141928; border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <span style="font-size: 16px;">📋</span>
+                                <h5 style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; margin: 0;">2. Siap Pengajuan Izin SLO & Net-Metering PLN</h5>
+                            </div>
+                            <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.45; margin: 0 0 10px 0;">
+                                Hasil simulasi memenuhi seluruh standar regulasi Permen ESDM No. 2/2024 dan SPLN 1:1995. Konsumen dapat mengunduh proposal teknis untuk berkas permohonan ke PLN.
+                            </p>
+                            <button class="btn-action btn-success" style="padding: 6px 12px; font-size: 11px;" onclick="switchTab(9)">
+                                📄 Unduh Laporan Proposal Konsumen (.docx)
+                            </button>
+                        </div>
+
+                        <div style="background: #141928; border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 14px;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <span style="font-size: 16px;">🧹</span>
+                                <h5 style="font-size: 12.5px; font-weight: 700; color: #FFFFFF; margin: 0;">3. Pemeliharaan Rutin Panel Surya</h5>
+                            </div>
+                            <p style="font-size: 11.5px; color: var(--text-muted); line-height: 1.45; margin: 0;">
+                                Lakukan pembersihan modul surya setiap 2–4 minggu dari debu agar efisiensi konversi daya tetap maksimal sesuai proyeksi penghematan Rp ${Math.round(annualSavings).toLocaleString('id-ID')}/tahun.
+                            </p>
+                        </div>
+                    `;
+                }
+            }
 
             // Update Live Preview di Tab 9 (Ekspor Proposal Konsumen)
             const elPrevMonthly = document.getElementById('rep_prev_monthly_save');
@@ -2057,9 +2353,50 @@
             if (elPrevCo2) elPrevCo2.innerText = `🌱 ${(te.annual_co2_reduction_tons || 37.05).toFixed(2)} Ton CO₂ / Thn`;
             if (elPrevTrees) elPrevTrees.innerText = `~${te.trees_equivalent || 1684} Pohon Dewasa`;
             if (elPrevStatus) {
-                elPrevStatus.innerText = isOk ? '✅ KEPUTUSAN: LAYAK & AMAN SPLN' : '⚠️ PERLU PENYESUAIAN TEGANGAN';
-                elPrevStatus.style.borderColor = isOk ? '#10B981' : '#F59E0B';
-                elPrevStatus.style.color = isOk ? '#10B981' : '#F59E0B';
+                if (vMax > 231.0) {
+                    elPrevStatus.innerText = '⚠️ OVERVOLTAGE: PERLU MITIGASI TEGANGAN';
+                    elPrevStatus.style.borderColor = '#EF4444';
+                    elPrevStatus.style.color = '#EF4444';
+                } else if (vMin < 198.0) {
+                    elPrevStatus.innerText = '⚠️ DROP TEGANGAN: PERLU KOMPENSASI';
+                    elPrevStatus.style.borderColor = '#F59E0B';
+                    elPrevStatus.style.color = '#F59E0B';
+                } else {
+                    elPrevStatus.innerText = '✅ KEPUTUSAN: LAYAK & AMAN SPLN';
+                    elPrevStatus.style.borderColor = '#10B981';
+                    elPrevStatus.style.color = '#10B981';
+                }
+            }
+        }
+
+        // Fungsi Aksi Cepat Mitigasi Konsumen
+        function applySafeInverterCapacity(targetKwp) {
+            const inp = document.getElementById('pv_capacity_kw');
+            if (inp) {
+                inp.value = targetKwp;
+                const lbl = document.getElementById('lbl_pv_kw');
+                if (lbl) lbl.innerText = targetKwp.toFixed(1) + " kWp";
+                alert(`Kapasitas inverter per rumah disesuaikan menjadi ${targetKwp.toFixed(1)} kWp. Menjalankan simulasi ulang...`);
+                executeSimulation();
+            }
+        }
+
+        function enableBessAndRerun() {
+            const chkBess = document.getElementById('enable_bess');
+            if (chkBess) {
+                chkBess.checked = true;
+                toggleBessControls();
+                alert('Sistem Baterai Rumah (BESS) telah diaktifkan! Menjalankan simulasi ulang mitigasi...');
+                executeSimulation();
+            }
+        }
+
+        function enableVoltVarAndRerun() {
+            const chkQv = document.getElementById('enable_volt_var');
+            if (chkQv) {
+                chkQv.checked = true;
+                alert('Kendali Cerdas Inverter Volt-Var Q(V) telah diaktifkan! Menjalankan simulasi ulang mitigasi...');
+                executeSimulation();
             }
         }
 
