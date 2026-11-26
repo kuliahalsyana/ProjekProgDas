@@ -1,10 +1,10 @@
 @echo off
 setlocal enabledelayedexpansion
 cd /d "%~dp0"
-title VoltSolar-Sim Pro Enterprise (Web Server HTML5)
+title VoltaSol-Sim v4.0 (Web Server HTML5)
 
 echo ===================================================================
-echo   VoltSolar-Sim Pro Enterprise: Simulator JTR ^& PLTS Atap On-Grid
+echo   VoltaSol-Sim v4.0: Simulator JTR ^& PLTS Atap On-Grid
 echo   Web Dashboard Interaktif HTML5 / JavaScript + Flask REST API
 echo   Projek Praktikum Pemrograman Dasar / Teknologi Rekayasa Elektro
 echo ===================================================================

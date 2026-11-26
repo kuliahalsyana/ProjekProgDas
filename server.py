@@ -1,5 +1,5 @@
 """
-VoltSolar-Sim Pro Enterprise - Backend Server (Flask REST API)
+VoltaSol-Sim v4.0 - Backend Server (Flask REST API)
 Melayani Antarmuka Web HTML5 Interaktif & Komputasi Sistem Tenaga Listrik
 Program Studi: Teknologi Rekayasa Elektro
 Praktikum Pemrograman Dasar
@@ -349,6 +349,8 @@ def run_simulation():
         techno_econ["lifetime_yr"] = lifetime_yr
         techno_econ["tariff_pln"] = tariff_pln
         techno_econ["capex_kwp"] = capex_kwp
+        techno_econ["capex_per_kwp"] = capex_kwp
+        techno_econ["total_pv_capacity_kwp"] = len(pv_installed_buses) * pv_capacity_kw
         techno_econ["emission_factor"] = emission_factor
 
         # Ekstrak Jarak Bus Fisik menggunakan NetworkX
@@ -596,7 +598,7 @@ def download_excel():
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     print("\n" + "="*65)
-    print("  ⚡ VoltSolar-Sim Pro Enterprise (Web Server HTML5 & Flask)")
+    print("  ⚡ VoltaSol-Sim v4.0 (Web Server HTML5 & Flask)")
     print("  Projek Praktikum Pemrograman Dasar - Teknologi Rekayasa Elektro")
     print(f"  Server berjalan pada port: {port}")
     print("="*65 + "\n")

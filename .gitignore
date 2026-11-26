@@ -10,6 +10,7 @@ __pycache__/
 *$py.class
 
 # Temporary / Output Files
+scratch/
 *.csv
 *.xlsx
 *.docx

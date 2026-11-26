@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VoltSolar-Sim Pro Enterprise v2.5 | Simulator Sistem Tenaga Distribusi JTR & PLTS Atap On-Grid</title>
+    <title>VoltaSol-Sim v4.0 | Simulator Sistem Tenaga Distribusi JTR & PLTS Atap On-Grid</title>
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -11,7 +11,7 @@
     <!-- Plotly.js -->
     <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 
-        <!-- Stylesheet Eksternal VoltSolar -->
+        <!-- Stylesheet Eksternal VoltaSol-Sim -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -66,7 +66,7 @@
         <div class="brand-container">
             <div class="brand-logo">⚡</div>
             <div class="brand-text">
-                <h1>VoltSolar-Sim Pro Enterprise <span style="font-size: 11px; background: #18181B; border: 1px solid #3F3F46; color: #FFFFFF; padding: 1px 7px; border-radius: 10px; font-weight: 700;">v3.0</span></h1>
+                <h1>VoltaSol-Sim <span style="font-size: 11px; background: #18181B; border: 1px solid #3F3F46; color: #FFFFFF; padding: 1px 7px; border-radius: 10px; font-weight: 700;">v4.0</span></h1>
                 <p>Platform Komputasi Aliran Daya JTR (220V/380V) & Integrasi PLTS Atap On-Grid</p>
             </div>
         </div>
@@ -1180,7 +1180,7 @@
 
             <!-- Footer di bagian bawah konten tab yang dapat di-scroll -->
             <footer>
-                <div>VoltSolar-Sim Pro Enterprise v3.0 | Web App HTML5 + Flask REST API</div>
+                <div>VoltaSol-Sim v4.0 | Web App HTML5 + Flask REST API</div>
                 <div>Projek Praktikum Pemrograman Dasar | Teknologi Rekayasa Elektro</div>
             </footer>
             <!-- TUTUP AREA WARNA KUNING: Workspace Tab Content Area -->
@@ -2726,20 +2726,28 @@
             Plotly.newPlot('chart_cashflow', [traceCF, traceZero], layout, {responsive: true});
 
             const sumBox = document.getElementById('econ_summary_box');
+            const totalKwp = te.total_pv_capacity_kwp || (te.capex_per_kwp ? te.total_capex_idr / te.capex_per_kwp : (te.capex_kwp ? te.total_capex_idr / te.capex_kwp : 0));
+            const isNpvPositive = te.npv_25yr_idr >= 0;
+
             sumBox.innerHTML = `
                 <div style="background: #141928; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border);">
                     <div style="font-size: 10px; color: #94A3B8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">BIAYA INVESTASI AWAL (CAPEX)</div>
-                    <div style="font-size: 19px; font-weight: 800; color: #FFFFFF; font-family: var(--font-mono); margin-top: 4px;">Rp ${(te.total_capex_idr).toLocaleString('id-ID')}</div>
-                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Kapasitas Total: ${te.capex_per_kwp ? (te.total_capex_idr / te.capex_per_kwp).toFixed(1) : ''} kWp</div>
+                    <div style="font-size: 19px; font-weight: 800; color: #FFFFFF; font-family: var(--font-mono); margin-top: 4px;">Rp ${Math.round(te.total_capex_idr).toLocaleString('id-ID')}</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Kapasitas Total: ${totalKwp > 0 ? totalKwp.toFixed(1) : '-'} kWp</div>
                 </div>
                 <div style="background: #141928; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border);">
                     <div style="font-size: 10px; color: #94A3B8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">PENGHEMATAN LISTRIK / TAHUN</div>
-                    <div style="font-size: 19px; font-weight: 800; color: #10B981; font-family: var(--font-mono); margin-top: 4px;">Rp ${(te.annual_savings_idr).toLocaleString('id-ID')}</div>
-                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Tarif PLN: Rp ${(te.electricity_tariff_per_kwh || 1444.7).toLocaleString('id-ID')} / kWh</div>
+                    <div style="font-size: 19px; font-weight: 800; color: #10B981; font-family: var(--font-mono); margin-top: 4px;">Rp ${Math.round(te.annual_savings_idr).toLocaleString('id-ID')}</div>
+                    <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Tarif PLN: Rp ${(te.electricity_tariff_per_kwh || te.tariff_pln || 1444.7).toLocaleString('id-ID')} / kWh</div>
                 </div>
                 <div style="background: #141928; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border);">
-                    <div style="font-size: 10px; color: #94A3B8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">NET PRESENT VALUE (NPV 25 TAHUN)</div>
-                    <div style="font-size: 19px; font-weight: 800; color: #FFFFFF; font-family: var(--font-mono); margin-top: 4px;">Rp ${(te.npv_25yr_idr).toLocaleString('id-ID')}</div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div style="font-size: 10px; color: #94A3B8; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">NET PRESENT VALUE (NPV ${te.lifetime_yr || 25} TAHUN)</div>
+                        <span style="font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; ${isNpvPositive ? 'background: rgba(16,185,129,0.15); color: #10B981;' : 'background: rgba(239,68,68,0.15); color: #EF4444;'}">
+                            ${isNpvPositive ? '✅ Layak Finansial' : '⚠️ Defisit Terdiskonto'}
+                        </span>
+                    </div>
+                    <div style="font-size: 19px; font-weight: 800; color: ${isNpvPositive ? '#10B981' : '#EF4444'}; font-family: var(--font-mono); margin-top: 4px;">Rp ${Math.round(te.npv_25yr_idr).toLocaleString('id-ID')}</div>
                     <div style="font-size: 11px; color: var(--text-muted); margin-top: 2px;">Discount Rate: ${(te.discount_rate_pct || 8.0).toFixed(1)}% (${te.lifetime_yr || 25} Tahun)</div>
                 </div>
                 <div style="background: #141928; padding: 14px 16px; border-radius: 8px; border: 1px solid var(--border);">

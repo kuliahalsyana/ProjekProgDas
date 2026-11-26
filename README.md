@@ -1,4 +1,4 @@
-# ⚡ VoltSolar-Sim Pro Enterprise: Web App Simulator JTR & PLTS Atap On-Grid
+# ⚡ VoltaSol-Sim v4.0: Web App Simulator JTR & PLTS Atap On-Grid
 
 Aplikasi web interaktif Teknologi Rekayasa Elektro berbasis **HTML5, CSS3, JavaScript, dan Python (Flask REST API & Pandapower)** untuk menganalisis pengaruh variasi beban rumah tangga terhadap profil tegangan (*voltage profile*) dan rugi-rugi daya (*power losses*) pada Jaringan Tegangan Rendah (JTR 220V/380V), serta mengevaluasi perbaikan kualitas daya melalui integrasi PLTS atap on-grid sesuai standar **SPLN 1:1995** (-10% s.d. +5%).
 

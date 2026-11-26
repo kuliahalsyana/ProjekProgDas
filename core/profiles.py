@@ -1,6 +1,6 @@
 """
 =============================================================================================
-VoltSolar-Sim Pro Enterprise - Modul Profil Kurva Beban & Radiasi Surya 24 Jam
+VoltaSol-Sim v4.0 - Modul Profil Kurva Beban & Radiasi Surya 24 Jam
 Program Studi: Teknologi Rekayasa Elektro | Praktikum Pemrograman Dasar
 =============================================================================================
 Fungsi Utama Modul:
